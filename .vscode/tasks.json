@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Portable: Linux x64 erstellen",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "publish",
+                "${workspaceFolder}/OpSecAuditTool.csproj",
+                "-p:PublishProfile=LinuxPortable",
+                "--nologo"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "detail": "Erstellt den selbstenthaltenen Linux-x64-Build unter artifacts/linux-portable."
+        },
+        {
+            "label": "Portable: Windows x64 erstellen",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "publish",
+                "${workspaceFolder}/OpSecAuditTool.csproj",
+                "-p:PublishProfile=WindowsPortable",
+                "--nologo"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$msCompile",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "detail": "Erstellt den selbstenthaltenen Windows-x64-Build unter artifacts/windows-portable."
+        },
+        {
+            "label": "Portable: Windows + Linux erstellen",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Portable: Windows x64 erstellen",
+                "Portable: Linux x64 erstellen"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Aktualisiert beide portablen Release-Versionen nacheinander."
+        }
+    ]
+}

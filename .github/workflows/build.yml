@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64
+            os: ubuntu-latest
+            profile: LinuxPortable
+          - name: Windows x64
+            os: windows-latest
+            profile: WindowsPortable
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v6
+
+      - name: .NET 10 installieren
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Abhängigkeiten wiederherstellen
+        run: dotnet restore OpSecAuditTool.csproj
+
+      - name: Release-Build prüfen
+        run: dotnet build OpSecAuditTool.csproj --configuration Release --no-restore
+
+      - name: Portables Publish-Profil prüfen
+        run: dotnet publish OpSecAuditTool.csproj -p:PublishProfile=${{ matrix.profile }} --nologo

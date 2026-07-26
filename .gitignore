@@ -1,0 +1,25 @@
+# .NET build and publish output
+bin/
+obj/
+artifacts/
+
+# Portable runtime data (generated next to the executable)
+Settings/
+Logs/
+Reports/
+
+# User-specific IDE state
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Operating-system and editor leftovers
+.DS_Store
+Thumbs.db
+*~
+*.tmp
+*.bak
+*.swp

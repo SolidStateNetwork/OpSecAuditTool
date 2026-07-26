@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="OpSecAuditTool.Views.EasterEggWindow"
+        Title="Easter Egg"
+        Width="760"
+        Height="540"
+        MinWidth="480"
+        MinHeight="360"
+        CanResize="True"
+        ShowInTaskbar="True"
+        WindowStartupLocation="CenterScreen"
+        Background="#0B0D0C">
+
+    <Grid Margin="24">
+        <Border Background="#101412"
+                BorderBrush="#00FF66"
+                BorderThickness="1"
+                CornerRadius="12"
+                BoxShadow="0 0 24 2 #3300FF66"
+                ClipToBounds="True">
+            <Grid>
+                <!-- Beim späteren Einbau des Bildes hier die Source setzen. -->
+                <Image x:Name="EasterEggImage"
+                       Stretch="Uniform"
+                       Margin="18"/>
+
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                    <TextBlock Text="EASTER EGG FREIGESCHALTET"
+                               Foreground="#00FF66"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Der Bildplatzhalter ist vorbereitet."
+                               Foreground="#8A968F"
+                               FontSize="13"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

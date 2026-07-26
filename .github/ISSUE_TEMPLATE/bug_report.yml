@@ -1,0 +1,56 @@
+name: Fehlerbericht
+description: Einen reproduzierbaren Fehler melden
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für den Bericht. Bitte entferne IP-Adressen, Hostnamen, Benutzernamen
+        und andere sensible Daten aus Screenshots und Protokollen.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: z. B. 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Betriebssystem
+      options:
+        - Linux
+        - Windows
+        - Anderes
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Beschreibung
+      description: Was ist passiert und was wurde stattdessen erwartet?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Schritte zum Reproduzieren
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Bereinigte Logs
+      description: Optional. Keine Zugangsdaten oder personenbezogenen Informationen veröffentlichen.
+      render: text

@@ -1,0 +1,259 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OpSecAuditTool.ViewModels"
+        x:DataType="vm:OpSecBibleViewModel"
+        x:Class="OpSecAuditTool.Views.OpSecBibleWindow"
+        Title="OpSec-Bibel – Der Leitfaden"
+        Width="1050" Height="720"
+        WindowStartupLocation="CenterOwner"
+        Background="#121212">
+
+    <Design.DataContext>
+        <vm:OpSecBibleViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+
+        <!-- FluentTheme GANZ OBEN -->
+        <FluentTheme />
+
+        <!-- Linke ListBox-Einträge im Karten-Design -->
+        <Style Selector="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="ItemBorder"
+                            Background="#161616"
+                            BorderBrush="#2A2A2A"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="12"
+                            ClipToBounds="True">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- Hover-Effekt für ListBox -->
+        <Style Selector="ListBoxItem:pointerover /template/ Border#ItemBorder">
+            <Setter Property="Background" Value="#1C1C1C"/>
+            <Setter Property="BorderBrush" Value="#383838"/>
+        </Style>
+
+        <!-- Ausgewählte Box -->
+        <Style Selector="ListBoxItem:selected /template/ Border#ItemBorder">
+            <Setter Property="Background" Value="#1E3D28"/>
+            <Setter Property="BorderBrush" Value="#00FF66"/>
+        </Style>
+
+        <!-- Titel im ausgewählten Zustand -->
+        <Style Selector="ListBoxItem:selected TextBlock.ChapterTitle">
+            <Setter Property="Foreground" Value="#00FF66"/>
+        </Style>
+
+        <!-- Verhindert, dass die Scrollbar komplett unsichtbar wird -->
+        <Style Selector="ScrollViewer">
+            <Setter Property="AllowAutoHide" Value="False"/>
+        </Style>
+
+        <!-- SCROLLBAR ULTIMATE FIX: 10px Hitbox, sichtbarer 2px-Balken exakt zentriert -->
+        <Style Selector="ScrollBar:vertical">
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="MinWidth" Value="10"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="Transparent">
+                        <Track Name="PART_Track"
+                               Minimum="{TemplateBinding Minimum}"
+                               Maximum="{TemplateBinding Maximum}"
+                               Value="{TemplateBinding Value, Mode=TwoWay}"
+                               ViewportSize="{TemplateBinding ViewportSize}"
+                               Orientation="Vertical"
+                               IsDirectionReversed="True">
+
+                            <Thumb Name="PART_Thumb" Cursor="Hand" MinWidth="0" MinHeight="15">
+                                <Thumb.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent" HorizontalAlignment="Stretch">
+                                            <Border x:Name="ThumbBorder"
+                                                    Width="2"
+                                                    HorizontalAlignment="Center"
+                                                    Background="#444444"
+                                                    CornerRadius="1"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
+
+                        </Track>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- Farbübergang für den Thumb -->
+        <Style Selector="ScrollBar:vertical /template/ Thumb /template/ Border#ThumbBorder">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <!-- Hover = Grün -->
+        <Style Selector="ScrollBar:vertical /template/ Thumb:pointerover /template/ Border#ThumbBorder">
+            <Setter Property="Background" Value="#00FF66"/>
+        </Style>
+
+        <!-- Geklickt = Grün -->
+        <Style Selector="ScrollBar:vertical /template/ Thumb:pressed /template/ Border#ThumbBorder">
+            <Setter Property="Background" Value="#00FF66"/>
+        </Style>
+
+    </Window.Styles>
+
+    <Grid ColumnDefinitions="320, *" Margin="15">
+
+        <!-- Linke Spalte: Inhaltsverzeichnis (Rechter Innenabstand auf 6px) -->
+        <Border Grid.Column="0" Background="#1E1E1E" CornerRadius="8" Padding="15,15,6,15" BorderBrush="#333333" BorderThickness="1" Margin="0,0,10,0">
+            <Grid RowDefinitions="Auto, *">
+
+                <!-- Linker Header (Zentriert mit 9px Ausgleichs-Margin) -->
+                <Grid Grid.Row="0" Height="50" VerticalAlignment="Top" Margin="0,0,9,0">
+                    <TextBlock Text="Inhaltsverzeichnis" FontSize="17" FontWeight="Bold" Foreground="#00FF66" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+                    <Rectangle Height="1" Fill="#2A2A2A" VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <ScrollViewer x:Name="TocScrollViewer" Classes="ContentBox" VerticalScrollBarVisibility="Auto">
+                        <ListBox ItemsSource="{Binding Chapters}"
+                                 SelectedItem="{Binding SelectedChapter}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="0"
+                                 Margin="0,0,6,0">
+
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Spacing="8"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="ChapterTitle" Text="{Binding Title}" FontWeight="Bold" Foreground="#FFFFFF" FontSize="13"/>
+                                        <ItemsControl ItemsSource="{Binding SubTopics}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding StringFormat='• {0}'}" Foreground="#AAAAAA" FontSize="11" Margin="8,0,0,0"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+
+                    <!-- Oberer Fade-Out links -->
+                    <Rectangle x:Name="TocTopFade" Height="20" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="0,0,10,0">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                <GradientStop Color="#1E1E1E" Offset="0.0"/>
+                                <GradientStop Color="#001E1E1E" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+
+                    <!-- Unterer Fade-Out links -->
+                    <Rectangle x:Name="TocBottomFade" Height="20" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="0,0,10,0">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                <GradientStop Color="#001E1E1E" Offset="0.0"/>
+                                <GradientStop Color="#1E1E1E" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Rechte Spalte: Inhalt / Strukturierte Karten-Ansicht -->
+        <Border Grid.Column="1" Background="#1E1E1E" CornerRadius="8" Padding="15,15,6,15" BorderBrush="#333333" BorderThickness="1">
+            <Grid RowDefinitions="Auto, *, Auto">
+
+                <!-- Rechter Header -->
+                <Grid Grid.Row="0" Height="50" VerticalAlignment="Top" Margin="0,0,9,0">
+                    <TextBlock Text="{Binding SelectedChapter.Title}" FontSize="17" FontWeight="Bold" Foreground="#00FF66" HorizontalAlignment="Left" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
+                    <Rectangle Height="1" Fill="#2A2A2A" VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <!-- Strukturierte Sektionen als Karten -->
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <ScrollViewer x:Name="ContentScrollViewer" Classes="ContentBox" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding SelectedChapter.Sections}" Margin="0,0,6,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Spacing="12"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#161616"
+                                            BorderBrush="#2A2A2A"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="15">
+                                        <StackPanel Spacing="6">
+                                            <!-- Sektions-Titel -->
+                                            <TextBlock Text="{Binding Title}"
+                                                       FontSize="13"
+                                                       FontWeight="Bold"
+                                                       Foreground="#00FF66"/>
+
+                                            <!-- Textkörper -->
+                                            <TextBlock Text="{Binding Body}"
+                                                       FontSize="12.5"
+                                                       Foreground="#CCCCCC"
+                                                       LineHeight="20"
+                                                       TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Oberer Fade-Out rechts -->
+                    <Rectangle x:Name="TopFadeRectangle" Height="25" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="0,0,10,0">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                <GradientStop Color="#1E1E1E" Offset="0.0"/>
+                                <GradientStop Color="#001E1E1E" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+
+                    <!-- Unterer Fade-Out rechts -->
+                    <Rectangle x:Name="BottomFadeRectangle" Height="25" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="0,0,10,0">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                <GradientStop Color="#001E1E1E" Offset="0.0"/>
+                                <GradientStop Color="#1E1E1E" Offset="1.0"/>
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Grid>
+
+                <!-- Footer / Schließen Button -->
+                <Button Grid.Row="2" Content="Schließen" HorizontalAlignment="Right" Click="CloseButton_Click" Background="#2D2D2D" Foreground="#00FF66" BorderBrush="#333333" BorderThickness="1" CornerRadius="6" Padding="15,6" Margin="0,15,9,0" Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
