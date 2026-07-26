@@ -42,11 +42,11 @@ bereit.
 
 ### Lokales OpSec-Kontrollzentrum
 
-![Aktuelle Übersicht im Cyber-Terminal-Design mit animiertem Radar und lokalem OpSec-Kontrollzentrum](docs/images/overview.png)
+![Aktuelle Übersicht im Cyber-Terminal-Design mit animiertem Radar und lokalem OpSec-Kontrollzentrum](docs/images/overview-cyber-terminal.png)
 
 ### System- und Sicherheits-Audit
 
-![Ausgeführter System- und Sicherheits-Audit mit Bewertung, Signalfarben und kompakten Ergebniskarten](docs/images/audit.png)
+![Vollständig ausgeführter und ausgeklappter System- und Sicherheits-Audit mit Bewertung, Signalfarben und mehreren Reihen kompakter Ergebniskarten](docs/images/audit-expanded-results.png)
 
 ## Eigenschaften
 
