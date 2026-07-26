@@ -417,15 +417,56 @@
                                                     Background="#1E3D2A"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"/>
+                                            <!--
+                                                Der Radarstrahl liegt hinter den Treffermarkierungen.
+                                                Sein schmaler Lichtkegel bleibt vollständig im äußeren
+                                                Kreis und wird nur auf der Übersichtsseite animiert.
+                                            -->
+                                            <Canvas x:Name="RadarSweepLayer"
+                                                    Width="166"
+                                                    Height="166"
+                                                    RenderTransformOrigin="50%,50%"
+                                                    IsHitTestVisible="False">
+                                                <!--
+                                                    Ein konischer Verlauf erzeugt eine stufenlose
+                                                    Lichtfahne. Der größte Teil des Kreises bleibt
+                                                    vollständig transparent; nur die letzten rund
+                                                    55 Grad vor der Vorderkante werden eingeblendet.
+                                                -->
+                                                <Ellipse Canvas.Left="1"
+                                                         Canvas.Top="1"
+                                                         Width="164"
+                                                         Height="164">
+                                                    <Ellipse.Fill>
+                                                        <ConicGradientBrush Center="50%,50%" Angle="90">
+                                                            <GradientStop Offset="0" Color="#0000FF66"/>
+                                                            <GradientStop Offset="0.84" Color="#0000FF66"/>
+                                                            <GradientStop Offset="0.92" Color="#0D00FF66"/>
+                                                            <GradientStop Offset="0.97" Color="#2400FF66"/>
+                                                            <GradientStop Offset="1" Color="#4800FF66"/>
+                                                        </ConicGradientBrush>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <Line StartPoint="83,83"
+                                                      EndPoint="165,83"
+                                                      Stroke="#A800FF66"
+                                                      StrokeThickness="1.4"/>
+                                            </Canvas>
                                             <Canvas Width="166" Height="166">
-                                                <Ellipse Canvas.Left="30" Canvas.Top="48"
+                                                <Ellipse x:Name="RadarDotOne"
+                                                         Canvas.Left="30" Canvas.Top="48"
                                                          Width="6" Height="6"
+                                                         RenderTransformOrigin="50%,50%"
                                                          Fill="#00FF66"/>
-                                                <Ellipse Canvas.Left="129" Canvas.Top="73"
+                                                <Ellipse x:Name="RadarDotTwo"
+                                                         Canvas.Left="129" Canvas.Top="73"
                                                          Width="4" Height="4"
+                                                         RenderTransformOrigin="50%,50%"
                                                          Fill="#79E89D"/>
-                                                <Ellipse Canvas.Left="105" Canvas.Top="129"
+                                                <Ellipse x:Name="RadarDotThree"
+                                                         Canvas.Left="105" Canvas.Top="129"
                                                          Width="5" Height="5"
+                                                         RenderTransformOrigin="50%,50%"
                                                          Fill="#00B847"/>
                                             </Canvas>
                                             <Border Width="72"
@@ -437,14 +478,26 @@
                                                     BoxShadow="0 0 16 2 #4400FF66"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center">
-                                                <Path Classes="Lucide"
-                                                      Width="36"
-                                                      Height="36"
-                                                      Stroke="#00FF66"
-                                                      StrokeThickness="1.8"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4"/>
+                                                <!--
+                                                    Eine feste 24x24-Zeichenfläche erhält den
+                                                    ursprünglichen Lucide-Mittelpunkt (12/12).
+                                                    Ein direkt gestreckter Path würde dagegen nur
+                                                    seine asymmetrische sichtbare Kontur zentrieren.
+                                                -->
+                                                <Viewbox Width="36"
+                                                         Height="36"
+                                                         Stretch="Uniform"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center">
+                                                    <Canvas Width="24" Height="24">
+                                                        <Path Fill="Transparent"
+                                                              Stroke="#00FF66"
+                                                              StrokeThickness="1.8"
+                                                              StrokeLineCap="Round"
+                                                              StrokeJoin="Round"
+                                                              Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4"/>
+                                                    </Canvas>
+                                                </Viewbox>
                                             </Border>
                                         </Grid>
 
@@ -477,12 +530,21 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,0,0,0">
+                                    <!--
+                                        Zwei gleich breite Aktionsflächen bilden eine ruhige,
+                                        symmetrische Abschlusszeile – unabhängig von der
+                                        jeweiligen Länge der Beschriftung.
+                                    -->
+                                    <Grid Grid.Row="2"
+                                          ColumnDefinitions="*,*"
+                                          ColumnSpacing="10">
                                         <Button Grid.Column="0"
-                                                Margin="0,0,5,0"
                                                 Command="{Binding StartAuditCommand}"
+                                                Click="OverviewAuditButton_Click"
                                                 IsEnabled="{Binding !IsAuditRunning}"
                                                 Classes="CopyBtn"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
                                                 Height="40"
                                                 CornerRadius="6">
                                             <StackPanel Orientation="Horizontal"
@@ -502,9 +564,11 @@
                                             </StackPanel>
                                         </Button>
                                         <Button Grid.Column="1"
-                                                Margin="5,0,0,0"
                                                 Command="{Binding RefreshSystemCommand}"
+                                                Click="OverviewSystemButton_Click"
                                                 Classes="CopyBtn"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
                                                 Height="40"
                                                 CornerRadius="6">
                                             <StackPanel Orientation="Horizontal"

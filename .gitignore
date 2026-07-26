@@ -11,6 +11,8 @@ Reports/
 # User-specific IDE state
 .vs/
 .idea/
+.agents/
+.codex/
 *.suo
 *.user
 *.userosscache

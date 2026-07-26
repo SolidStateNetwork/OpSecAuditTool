@@ -42,11 +42,11 @@ bereit.
 
 ### Lokales OpSec-Kontrollzentrum
 
-![Übersicht des OpSec Audit Tools mit lokalem Kontrollzentrum](docs/images/overview.png)
+![Übersicht mit animiertem Radar und lokalem OpSec-Kontrollzentrum](docs/images/overview.png)
 
 ### System- und Sicherheits-Audit
 
-![Audit-Ansicht des OpSec Audit Tools vor dem ersten Prüflauf](docs/images/audit.png)
+![Audit-Ansicht mit Sicherheitsbewertung vor dem ersten Prüflauf](docs/images/audit.png)
 
 ## Eigenschaften
 
@@ -54,6 +54,7 @@ bereit.
 - Betrieb als normaler Benutzer ohne angeforderte Administrator- oder Root-Rechte
 - portable, selbstenthaltene Builds für Linux x64 und Windows x64
 - nachvollziehbare Bewertung mit Pass-, Warnungs- und Fehlerstatus
+- interaktives Kontrollzentrum mit animiertem Radar und direkten Schnellaktionen
 - lokale Protokolle und exportierbare Audit-Berichte
 - keine Werbung, keine extern geladenen Medien und keine Analyse-Telemetrie
 

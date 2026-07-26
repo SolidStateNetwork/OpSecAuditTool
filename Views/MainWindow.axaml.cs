@@ -34,13 +34,19 @@ public sealed partial class MainWindow : Window
     private static readonly IBrush ExceptionBrush = CreateBrush("#FF8A8A");
 
     private DispatcherTimer? _waveTimer;
+    private DispatcherTimer? _radarTimer;
     private DispatcherTimer? _starTimer;
     private DispatcherTimer? _logFlushTimer;
     private DispatcherTimer? _profileTiltTimer;
     private readonly ConcurrentQueue<LogEntry> _pendingLogEntries = new();
     private readonly RotateTransform _profileRotateTransform = new();
     private readonly TranslateTransform _profileTranslateTransform = new();
+    private readonly RotateTransform _radarRotateTransform = new();
+    private readonly ScaleTransform _radarDotOneScale = new();
+    private readonly ScaleTransform _radarDotTwoScale = new();
+    private readonly ScaleTransform _radarDotThreeScale = new();
     private double _waveOffset;
+    private double _radarAngle;
     private TranslateTransform? _waveTranslate;
     private Action<LogEntry>? _logEntryHandler;
     private bool _followConsoleOutput;
@@ -59,6 +65,8 @@ public sealed partial class MainWindow : Window
         profileTransforms.Children.Add(_profileRotateTransform);
         profileTransforms.Children.Add(_profileTranslateTransform);
         ProfileImageFrameControl.RenderTransform = profileTransforms;
+
+        InitializeRadarAnimation();
 
         // Das Fenster erstellt sein ViewModel einmalig und verwendet es für alle Tabs.
         var vm = new MainViewModel();
@@ -299,7 +307,48 @@ public sealed partial class MainWindow : Window
     private void UpdateTabAnimations(int selectedTabIndex)
     {
         SetTimerState(_waveTimer, selectedTabIndex == 1);
+        SetTimerState(_radarTimer, selectedTabIndex == 0);
         SetTimerState(_starTimer, selectedTabIndex == 6);
+    }
+
+    /// <summary>
+    /// Dreht den Radarstrahl und lässt eine Markierung kurz aufleuchten, sobald
+    /// die Vorderkante des Strahls ihre Winkelposition erreicht. Die Animation
+    /// pausiert automatisch, sobald die Übersichtsseite nicht sichtbar ist.
+    /// </summary>
+    private void InitializeRadarAnimation()
+    {
+        RadarSweepLayer.RenderTransform = _radarRotateTransform;
+        RadarDotOne.RenderTransform = _radarDotOneScale;
+        RadarDotTwo.RenderTransform = _radarDotTwoScale;
+        RadarDotThree.RenderTransform = _radarDotThreeScale;
+
+        _radarTimer = new DispatcherTimer
+        {
+            // Rund 30 FPS reichen für den ruhigen Radar-Effekt und halten die
+            // Belastung des UI-Threads bewusst niedrig.
+            Interval = TimeSpan.FromMilliseconds(33)
+        };
+        _radarTimer.Tick += (_, _) =>
+        {
+            _radarAngle = (_radarAngle + 1.35) % 360;
+            _radarRotateTransform.Angle = _radarAngle;
+
+            UpdateRadarDot(RadarDotOne, _radarDotOneScale, 212.6);
+            UpdateRadarDot(RadarDotTwo, _radarDotTwoScale, 350.5);
+            UpdateRadarDot(RadarDotThree, _radarDotThreeScale, 63.2);
+        };
+    }
+
+    private void UpdateRadarDot(Ellipse dot, ScaleTransform scale, double dotAngle)
+    {
+        double distance = Math.Abs((_radarAngle - dotAngle + 540) % 360 - 180);
+        double pulse = Math.Max(0, 1 - distance / 18);
+        double renderedScale = 1 + pulse * 1.15;
+
+        scale.ScaleX = renderedScale;
+        scale.ScaleY = renderedScale;
+        dot.Opacity = 0.68 + pulse * 0.32;
     }
 
     private static void SetTimerState(DispatcherTimer? timer, bool shouldRun)
@@ -316,6 +365,26 @@ public sealed partial class MainWindow : Window
         else
         {
             timer.Stop();
+        }
+    }
+
+    /// <summary>
+    /// Die Schnellaktionen der Übersicht führen weiterhin ihren bisherigen
+    /// Befehl aus und öffnen zusätzlich den Bereich mit den zugehörigen Details.
+    /// </summary>
+    private void OverviewAuditButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (MainTabs != null)
+        {
+            MainTabs.SelectedIndex = 1;
+        }
+    }
+
+    private void OverviewSystemButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (MainTabs != null)
+        {
+            MainTabs.SelectedIndex = 2;
         }
     }
 
@@ -727,6 +796,7 @@ public sealed partial class MainWindow : Window
     {
         // DispatcherTimer laufen andernfalls weiter und halten das geschlossene Fenster am Leben.
         _waveTimer?.Stop();
+        _radarTimer?.Stop();
         _starTimer?.Stop();
         _logFlushTimer?.Stop();
         _profileTiltTimer?.Stop();
