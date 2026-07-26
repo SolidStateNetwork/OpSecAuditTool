@@ -25,7 +25,7 @@ public static class ProcessInspectionService
             .ToArray();
     }
 
-    private static IReadOnlyList<string> GetRunningNames()
+    private static string[] GetRunningNames()
     {
         Process[] processes = Process.GetProcesses();
 

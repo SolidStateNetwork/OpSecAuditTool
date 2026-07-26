@@ -46,7 +46,7 @@ public static class SystemInfoService
             LogicalProcessorCount: Environment.ProcessorCount,
             TotalMemory: GetTotalRamInfo(),
             Hostname: Environment.MachineName,
-            ApplicationVersion: Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unbekannt",
+            ApplicationVersion: GetApplicationVersion(),
             DotnetRuntime: Environment.Version.ToString(),
             RuntimeIdentifier: RuntimeInformation.RuntimeIdentifier,
             GlibcVersion: GetGlibcVersion(),
@@ -153,7 +153,9 @@ public static class SystemInfoService
             if (firstUpInterface != null)
             {
                 var macBytes = firstUpInterface.GetPhysicalAddress().GetAddressBytes();
-                return string.Join(":", macBytes.Select(b => b.ToString("X2")));
+                return string.Join(
+                    ":",
+                    macBytes.Select(value => value.ToString("X2", global::System.Globalization.CultureInfo.InvariantCulture)));
             }
         }
         catch (Exception ex)
@@ -175,9 +177,9 @@ public static class SystemInfoService
                 var lines = File.ReadAllLines("/etc/os-release");
                 foreach (var line in lines)
                 {
-                    if (line.StartsWith("PRETTY_NAME="))
+                    if (line.StartsWith("PRETTY_NAME=", StringComparison.Ordinal))
                     {
-                        return line.Replace("PRETTY_NAME=", "").Trim('"', ' ');
+                        return line["PRETTY_NAME=".Length..].Trim('"', ' ');
                     }
                 }
             }
@@ -207,7 +209,7 @@ public static class SystemInfoService
                 var lines = File.ReadAllLines("/proc/meminfo");
                 foreach (var line in lines)
                 {
-                    if (line.StartsWith("MemTotal:"))
+                    if (line.StartsWith("MemTotal:", StringComparison.Ordinal))
                     {
                         var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                         if (parts.Length >= 2 && long.TryParse(parts[1], out long kb))
@@ -225,6 +227,28 @@ public static class SystemInfoService
         }
 
         return "Unbekannt";
+    }
+
+    /// <summary>
+    /// Verwendet die öffentliche Produktversion ohne Build-Metadaten oder die
+    /// für .NET typische vierte Assembly-Versionsstelle.
+    /// </summary>
+    private static string GetApplicationVersion()
+    {
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string? informationalVersion = assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion;
+
+        if (!string.IsNullOrWhiteSpace(informationalVersion))
+        {
+            return informationalVersion.Split('+', 2)[0];
+        }
+
+        Version? assemblyVersion = assembly.GetName().Version;
+        return assemblyVersion == null
+            ? "Unbekannt"
+            : $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
     }
 
     [SupportedOSPlatform("windows")]
@@ -281,11 +305,13 @@ public static class SystemInfoService
     }
 
     [SupportedOSPlatform("windows")]
+    [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GlobalMemoryStatusEx(
         [In, Out] MemoryStatusEx buffer);
 
+    [DefaultDllImportSearchPaths(DllImportSearchPath.SafeDirectories)]
     [DllImport("libc", CallingConvention = CallingConvention.Cdecl)]
     private static extern IntPtr gnu_get_libc_version();
 }

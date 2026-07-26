@@ -24,15 +24,15 @@ namespace OpSecAuditTool.Views;
 public sealed partial class MainWindow : Window
 {
     private static readonly IBrush TimestampBrush = UiPalette.TextMuted;
-    private static readonly IBrush TraceBrush = CreateBrush("#A0ABA4");
+    private static readonly IBrush TraceBrush = CreateBrush("#9CA29F");
     private static readonly IBrush InfoBrush = UiPalette.Info;
     private static readonly IBrush WarningBrush = UiPalette.Warning;
     private static readonly IBrush ErrorBrush = UiPalette.Error;
     private static readonly IBrush CriticalBrush = UiPalette.Critical;
-    private static readonly IBrush ComponentBrush = CreateBrush("#B7A2F8");
-    private static readonly IBrush TraceMessageBrush = CreateBrush("#AAB5AE");
-    private static readonly IBrush MessageBrush = CreateBrush("#DCE4DE");
-    private static readonly IBrush ExceptionBrush = CreateBrush("#FFA0A7");
+    private static readonly IBrush ComponentBrush = CreateBrush("#B79CFF");
+    private static readonly IBrush TraceMessageBrush = CreateBrush("#A8ADAA");
+    private static readonly IBrush MessageBrush = CreateBrush("#E1E3E2");
+    private static readonly IBrush ExceptionBrush = CreateBrush("#FF8A8A");
 
     private DispatcherTimer? _waveTimer;
     private DispatcherTimer? _radarTimer;
@@ -500,9 +500,9 @@ public sealed partial class MainWindow : Window
             int colorVariant = random.Next(0, 4);
             Color starColor = colorVariant switch
             {
-                0 => Color.FromRgb(218, 255, 230),
-                1 or 2 => Color.FromRgb(53, 232, 120),
-                _ => Color.FromRgb(32, 185, 92)
+                0 => Color.FromRgb(220, 255, 230),
+                1 or 2 => Color.FromRgb(0, 255, 102),
+                _ => Color.FromRgb(0, 190, 75)
             };
 
             var starBorder = new Border
@@ -511,7 +511,7 @@ public sealed partial class MainWindow : Window
                 Height = size,
                 CornerRadius = new CornerRadius(8),
                 Background = new SolidColorBrush(starColor),
-                BoxShadow = BoxShadows.Parse("0 0 8 2 #35E878")
+                BoxShadow = BoxShadows.Parse("0 0 8 2 #00FF66")
             };
 
             // Sektoren-basierte Verteilung: Garantiert keine leeren Ecken oder Anhäufungen

@@ -73,7 +73,7 @@ public static class PowerShellService
 
             try
             {
-                await process.WaitForExitAsync(timeoutCancellation.Token);
+                await process.WaitForExitAsync(timeoutCancellation.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -89,18 +89,18 @@ public static class PowerShellService
                 return new PowerShellResult(
                     -1,
                     standardOutput.IsCompletedSuccessfully
-                        ? standardOutput.Result
+                        ? await standardOutput.ConfigureAwait(false)
                         : string.Empty,
                     standardError.IsCompletedSuccessfully
-                        ? standardError.Result
+                        ? await standardError.ConfigureAwait(false)
                         : "Die PowerShell-Abfrage wurde nach dem Zeitlimit beendet.",
                     true);
             }
 
             return new PowerShellResult(
                 process.ExitCode,
-                await standardOutput,
-                await standardError,
+                await standardOutput.ConfigureAwait(false),
+                await standardError.ConfigureAwait(false),
                 false);
         }
         catch (Exception ex)

@@ -9,19 +9,22 @@ namespace OpSecAuditTool.Theme;
 /// </summary>
 public static class UiPalette
 {
-    public static readonly IBrush TextPrimary = Brush("#F1F5F2");
-    public static readonly IBrush TextSecondary = Brush("#BEC8C1");
-    public static readonly IBrush TextMuted = Brush("#8D9991");
+    public static readonly IBrush TextPrimary = Brush("#F4F4F4");
+    public static readonly IBrush TextSecondary = Brush("#C2C5C3");
+    public static readonly IBrush TextMuted = Brush("#89908C");
 
-    public static readonly IBrush Accent = Brush("#35E878");
-    public static readonly IBrush AccentSoft = Brush("#7FE5A1");
-    public static readonly IBrush Info = Brush("#53BDEA");
-    public static readonly IBrush Warning = Brush("#F2B84B");
-    public static readonly IBrush Error = Brush("#FF7781");
-    public static readonly IBrush Critical = Brush("#FF5F6D");
+    // Neon-Grün kennzeichnet ausschließlich Fokus, Auswahl und Aktionen.
+    // Sekundäre Hervorhebungen bleiben bewusst neutral, damit längere Texte
+    // ruhig lesbar sind und der Akzent nicht die gesamte Oberfläche einfärbt.
+    public static readonly IBrush Accent = Brush("#00FF66");
+    public static readonly IBrush AccentSoft = Brush("#D7D9D8");
+    public static readonly IBrush Info = Brush("#48CAE4");
+    public static readonly IBrush Warning = Brush("#FF9D00");
+    public static readonly IBrush Error = Brush("#FF6363");
+    public static readonly IBrush Critical = Brush("#FF2020");
 
-    public static readonly IBrush OfflineBackground = Brush("#192A20");
-    public static readonly IBrush OfflineBorder = Brush("#3D5C48");
+    public static readonly IBrush OfflineBackground = Brush("#1C1C1C");
+    public static readonly IBrush OfflineBorder = Brush("#505050");
     public static readonly IBrush OnlineBackground = Brush("#2B2418");
     public static readonly IBrush OnlineBorder = Brush("#705426");
 

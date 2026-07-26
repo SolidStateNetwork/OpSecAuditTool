@@ -34,7 +34,8 @@ public sealed class SwapMemoryChecker : IOpSecChecker
             }
 
             var lines = File.ReadAllLines("/proc/swaps")
-                .Where(line => !line.StartsWith("Filename") && !string.IsNullOrWhiteSpace(line))
+                .Where(line => !line.StartsWith("Filename", StringComparison.Ordinal) &&
+                               !string.IsNullOrWhiteSpace(line))
                 .ToList();
 
             if (lines.Count == 0)
@@ -53,7 +54,10 @@ public sealed class SwapMemoryChecker : IOpSecChecker
             bool isEncrypted = false;
             var swapDetails = string.Join("\n", lines);
 
-            if (lines.All(l => l.Contains("/dev/mapper/") || l.Contains("/dev/dm-") || l.Contains("/dev/zram")))
+            if (lines.All(line =>
+                    line.Contains("/dev/mapper/", StringComparison.Ordinal) ||
+                    line.Contains("/dev/dm-", StringComparison.Ordinal) ||
+                    line.Contains("/dev/zram", StringComparison.Ordinal)))
             {
                 isEncrypted = true;
             }

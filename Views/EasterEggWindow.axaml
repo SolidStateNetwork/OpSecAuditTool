@@ -10,14 +10,14 @@
         CanResize="True"
         ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen"
-        Background="#090D0B">
+        Background="#090909">
 
     <Grid Margin="24">
-        <Border Background="#101612"
-                BorderBrush="#35E878"
+        <Border Background="#0E0E0E"
+                BorderBrush="#00FF66"
                 BorderThickness="1"
                 CornerRadius="12"
-                BoxShadow="0 0 24 2 #3335E878"
+                BoxShadow="0 0 24 2 #3300FF66"
                 ClipToBounds="True">
             <Grid>
                 <!-- Beim späteren Einbau des Bildes hier die Source setzen. -->
@@ -29,12 +29,12 @@
                             VerticalAlignment="Center"
                             Spacing="10">
                     <TextBlock Text="EASTER EGG FREIGESCHALTET"
-                               Foreground="#35E878"
+                               Foreground="#00FF66"
                                FontSize="22"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"/>
                     <TextBlock Text="Der Bildplatzhalter ist vorbereitet."
-                               Foreground="#8D9991"
+                               Foreground="#89908C"
                                FontSize="13"
                                HorizontalAlignment="Center"/>
                 </StackPanel>

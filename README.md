@@ -42,11 +42,11 @@ bereit.
 
 ### Lokales OpSec-Kontrollzentrum
 
-![Übersicht mit animiertem Radar und lokalem OpSec-Kontrollzentrum](docs/images/overview.png)
+![Aktuelle Übersicht im Cyber-Terminal-Design mit animiertem Radar und lokalem OpSec-Kontrollzentrum](docs/images/overview.png)
 
 ### System- und Sicherheits-Audit
 
-![Ausgeführter System- und Sicherheits-Audit mit Bewertung und kompakten Detailkarten](docs/images/audit.png)
+![Ausgeführter System- und Sicherheits-Audit mit Bewertung, Signalfarben und kompakten Ergebniskarten](docs/images/audit.png)
 
 ## Eigenschaften
 
@@ -57,7 +57,8 @@ bereit.
 - kompakte, aufklappbare Ergebniskarten mit stabiler Mehrspaltenansicht
 - interaktives Kontrollzentrum mit animiertem Radar und direkten Schnellaktionen
 - einheitliches, responsives Layout von der kompakten Standardgröße bis Vollbild
-- harmonisiertes Dark-Theme mit klar getrennten Erfolgs-, Warn- und Fehlerfarben
+- kontrastreiches Cyber-Terminal-Theme mit neutral-schwarzen Flächen, Neon-Akzenten
+  und klar getrennten Erfolgs-, Warn- und Fehlerfarben
 - kompakte Projekt- und Kontaktübersicht mit XMPP- und öffentlichem PGP-Schlüssel
 - lokale Protokolle und exportierbare Audit-Berichte
 - keine Werbung, keine extern geladenen Medien und keine Analyse-Telemetrie

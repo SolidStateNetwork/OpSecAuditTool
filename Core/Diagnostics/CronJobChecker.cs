@@ -90,7 +90,7 @@ public sealed class CronJobChecker : IOpSecChecker
         foreach (string line in File.ReadLines(filePath))
         {
             string trimmed = line.Trim();
-            if (!trimmed.StartsWith("#") && !string.IsNullOrWhiteSpace(trimmed))
+            if (!trimmed.StartsWith('#') && !string.IsNullOrWhiteSpace(trimmed))
             {
                 return true;
             }

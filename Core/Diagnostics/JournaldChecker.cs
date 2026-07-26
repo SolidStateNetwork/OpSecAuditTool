@@ -28,7 +28,7 @@ public sealed class JournaldChecker : IOpSecChecker
                 foreach (var line in lines)
                 {
                     string trimmed = line.Trim();
-                    if (trimmed.StartsWith("#") || string.IsNullOrWhiteSpace(trimmed)) continue;
+                    if (trimmed.StartsWith('#') || string.IsNullOrWhiteSpace(trimmed)) continue;
 
                     if (trimmed.StartsWith("Storage=volatile", StringComparison.OrdinalIgnoreCase) ||
                         trimmed.StartsWith("Storage=none", StringComparison.OrdinalIgnoreCase))
