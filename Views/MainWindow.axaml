@@ -4,6 +4,7 @@
         x:DataType="vm:MainViewModel"
         x:Class="OpSecAuditTool.Views.MainWindow"
         Title="OpSec Audit Tool"
+        Icon="/Assets/AppIcon.png"
         CanResize="True"
         Width="1000" Height="720"
         WindowStartupLocation="CenterScreen"

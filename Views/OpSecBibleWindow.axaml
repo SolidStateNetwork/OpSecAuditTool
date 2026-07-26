@@ -4,6 +4,7 @@
         x:DataType="vm:OpSecBibleViewModel"
         x:Class="OpSecAuditTool.Views.OpSecBibleWindow"
         Title="OpSec-Bibel – Der Leitfaden"
+        Icon="/Assets/AppIcon.png"
         Width="1050"
         Height="720"
         MinWidth="820"

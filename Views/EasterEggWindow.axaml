@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="OpSecAuditTool.Views.EasterEggWindow"
         Title="Easter Egg"
+        Icon="/Assets/AppIcon.png"
         Width="760"
         Height="540"
         MinWidth="480"

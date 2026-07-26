@@ -4,6 +4,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Mehrgrößen-ICO für die Windows-EXE; die Fenster selbst verwenden das
+         plattformübergreifende PNG-Asset. -->
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
     <!-- Öffentliche Projektmetadaten verwenden bewusst das Entwicklerpseudonym. -->
     <Authors>SolidStateNetwork</Authors>
     <Product>OpSec Audit Tool</Product>
@@ -24,6 +27,7 @@
     </PackageReference>
     <!-- Nur tatsächlich verwendete Bilder in das Anwendungspaket aufnehmen. -->
     <AvaloniaResource Include="Assets\Profile.png" />
+    <AvaloniaResource Include="Assets\AppIcon.png" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
   </ItemGroup>
 </Project>

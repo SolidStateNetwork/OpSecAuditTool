@@ -1,13 +1,42 @@
-# OpSec Audit Tool
+<p align="center">
+  <img src="Assets/AppIcon.png" width="150" alt="SolidStateNetwork App-Icon">
+</p>
 
-Portable Desktop-Anwendung auf Basis von .NET und Avalonia zur lokalen Prüfung
-typischer OpSec-, Datenschutz- und Systemhärtungs-Einstellungen unter Linux und
-Windows.
+<h1 align="center">OpSec Audit Tool</h1>
+
+<p align="center">
+  Portable OpSec-, Datenschutz-, Forensik- und Systemhärtungsprüfung für Linux
+  und Windows.
+</p>
+
+<p align="center">
+  <a href="https://github.com/SolidStateNetwork/OpSecAuditTool/releases/latest">
+    <img src="https://img.shields.io/github/v/release/SolidStateNetwork/OpSecAuditTool?style=flat-square&amp;color=00ff66" alt="Aktueller Release">
+  </a>
+  <a href="https://github.com/SolidStateNetwork/OpSecAuditTool/actions/workflows/build.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/SolidStateNetwork/OpSecAuditTool/build.yml?branch=main&amp;style=flat-square&amp;label=build" alt="Build-Status">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/SolidStateNetwork/OpSecAuditTool?style=flat-square" alt="MIT-Lizenz">
+  </a>
+</p>
 
 > [!IMPORTANT]
 > Die Anwendung liefert technische Hinweise, ersetzt aber keine professionelle
 > Sicherheitsbewertung. Ergebnisse sollten immer im Kontext des verwendeten
 > Systems geprüft werden.
+
+## Download
+
+| Plattform | Portables Paket |
+|---|---|
+| Linux x64 | [OpSecAuditTool-v1.0.0-linux-x64.tar.gz](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.0.0/OpSecAuditTool-v1.0.0-linux-x64.tar.gz) |
+| Windows x64 | [OpSecAuditTool-v1.0.0-windows-x64.zip](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.0.0/OpSecAuditTool-v1.0.0-windows-x64.zip) |
+
+Beide Pakete sind selbstenthalten und benötigen keine separate .NET-Installation.
+Die zugehörigen [SHA-256-Prüfsummen](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.0.0/SHA256SUMS.txt)
+stehen beim [aktuellen Release](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/latest)
+bereit.
 
 ## Screenshots
 
