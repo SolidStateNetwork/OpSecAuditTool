@@ -46,7 +46,7 @@ bereit.
 
 ### System- und Sicherheits-Audit
 
-![Audit-Ansicht mit Sicherheitsbewertung vor dem ersten Prüflauf](docs/images/audit.png)
+![Ausgeführter System- und Sicherheits-Audit mit Bewertung und kompakten Detailkarten](docs/images/audit.png)
 
 ## Eigenschaften
 
@@ -54,7 +54,9 @@ bereit.
 - Betrieb als normaler Benutzer ohne angeforderte Administrator- oder Root-Rechte
 - portable, selbstenthaltene Builds für Linux x64 und Windows x64
 - nachvollziehbare Bewertung mit Pass-, Warnungs- und Fehlerstatus
+- kompakte, aufklappbare Ergebniskarten mit stabiler Mehrspaltenansicht
 - interaktives Kontrollzentrum mit animiertem Radar und direkten Schnellaktionen
+- einheitliches, responsives Layout von der kompakten Standardgröße bis Vollbild
 - lokale Protokolle und exportierbare Audit-Berichte
 - keine Werbung, keine extern geladenen Medien und keine Analyse-Telemetrie
 

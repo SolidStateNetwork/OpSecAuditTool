@@ -6,13 +6,15 @@
         Title="OpSec Audit Tool"
         Icon="/Assets/AppIcon.png"
         CanResize="True"
-        Width="1000" Height="720"
+        Width="1000" Height="726"
+        MinWidth="1000" MinHeight="726"
         WindowStartupLocation="CenterScreen"
         Background="#121212">
 
     <!-- Überschreibt den blauen Standard-Balken des Fluent-Themes global -->
     <Window.Resources>
-        <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00FF66</SolidColorBrush>
+        <!-- Die aktive Seite wird als geschlossene Auswahlbox dargestellt. -->
+        <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">Transparent</SolidColorBrush>
     </Window.Resources>
 
     <Window.Styles>
@@ -55,6 +57,11 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Padding" Value="15"/>
+        </Style>
+        <Style Selector="Border.SystemCard">
+            <!-- Alle sechs Diagnosemodule bilden wieder ein ruhiges 2x3-Raster. -->
+            <Setter Property="Height" Value="155"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
         </Style>
         <Style Selector="Border.IconTile">
             <Setter Property="Width" Value="38"/>
@@ -104,10 +111,76 @@
         </Style>
 
         <Style Selector="TabItem">
-            <Setter Property="Foreground" Value="#AAAAAA" />
+            <Setter Property="Foreground" Value="#929B95"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <!-- Die Auswahl bleibt vollständig innerhalb der 48px Navigation.
+                 So werden weder Border noch CornerRadius am Fensterrand geclippt. -->
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Margin" Value="0,2,3,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Foreground" Value="#E7F2EA"/>
+            <Setter Property="Background" Value="#243028"/>
+            <Setter Property="BorderBrush" Value="#31523D"/>
         </Style>
         <Style Selector="TabItem:selected">
-            <Setter Property="Foreground" Value="#00FF66" />
+            <Setter Property="Foreground" Value="#00FF66"/>
+            <Setter Property="Background" Value="#1B2A20"/>
+            <Setter Property="BorderBrush" Value="#31523D"/>
+        </Style>
+        <Style Selector="TabItem:selected:pointerover">
+            <!-- Ein aktiver Tab bleibt beim Hover deutlich kräftiger als
+                 die nur vorgewählte, inaktive Hoverfläche. -->
+            <Setter Property="Background" Value="#284A32"/>
+            <Setter Property="BorderBrush" Value="#00C851"/>
+        </Style>
+        <!-- Nur die Kopfzeile wird als Gruppe zentriert; der eigentliche
+             Seiteninhalt bleibt weiterhin über die volle Breite gestreckt. -->
+        <Style Selector="TabControl#MainTabs /template/ ItemsPresenter#PART_ItemsPresenter">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Chromloser Kopf einer Audit-Ergebniskarte. -->
+        <Style Selector="ToggleButton.AuditResultToggle">
+            <!-- Kategorie, Titel und Zusammenfassung dürfen jeweils unterschiedlich
+                 viele Zeilen belegen. Eine feste Kopfhöhe hält geschlossene Karten
+                 trotzdem bündig; nur der optionale Detailbereich wächst darunter. -->
+            <Setter Property="Height" Value="108"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+        <Style Selector="ToggleButton.AuditResultToggle /template/ ContentPresenter">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="ToggleButton.AuditResultToggle:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1D2720"/>
+        </Style>
+        <Style Selector="ToggleButton.AuditResultToggle:checked /template/ ContentPresenter">
+            <!-- Der aufgeklappte Zustand darf keine zweite, nur auf den Kopf
+                 begrenzte Fläche erzeugen. Der Hintergrund der wachsenden
+                 Mutterkarte bleibt dadurch über die gesamte Höhe durchgehend. -->
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+        <Style Selector="ToggleButton.AuditResultToggle:checked Viewbox.AuditResultChevron">
+            <Setter Property="RenderTransform">
+                <RotateTransform Angle="180"/>
+            </Setter>
         </Style>
         <Style Selector="CheckBox">
             <Setter Property="Cursor" Value="Hand" />
@@ -139,6 +212,35 @@
         </Style>
         <Style Selector="Button.CopyBtn:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="#142019"/>
+        </Style>
+
+        <!-- Projekt-Disclosure für lange Kontaktinformationen. -->
+        <Style Selector="ToggleButton.DisclosureBtn">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+        <Style Selector="ToggleButton.DisclosureBtn /template/ ContentPresenter">
+            <Setter Property="Background" Value="#18201B"/>
+            <Setter Property="Foreground" Value="#79E89D"/>
+            <Setter Property="BorderBrush" Value="#2A3A30"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="11,7"/>
+        </Style>
+        <Style Selector="ToggleButton.DisclosureBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#243028"/>
+            <Setter Property="BorderBrush" Value="#31523D"/>
+        </Style>
+        <Style Selector="ToggleButton.DisclosureBtn:checked /template/ ContentPresenter">
+            <Setter Property="Background" Value="#142019"/>
+            <Setter Property="BorderBrush" Value="#00FF66"/>
+        </Style>
+        <Style Selector="ToggleButton.DisclosureBtn:checked Viewbox.DisclosureChevron">
+            <Setter Property="RenderTransform">
+                <RotateTransform Angle="180"/>
+            </Setter>
         </Style>
 
         <!-- Nahtloser Header Block Button -->
@@ -318,8 +420,37 @@
     </Window.Styles>
 
     <Grid RowDefinitions="*">
+        <Grid.Background>
+            <!-- Ruhige Bühne für Ultrawide: Die Mitte erhält nur einen sehr
+                 dezenten grünen Ton, während die Außenbereiche abdunkeln. -->
+            <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+                <GradientStop Offset="0" Color="#101010"/>
+                <GradientStop Offset="0.28" Color="#111411"/>
+                <GradientStop Offset="0.5" Color="#121813"/>
+                <GradientStop Offset="0.72" Color="#111411"/>
+                <GradientStop Offset="1" Color="#101010"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <!-- Geschlossene Navigationsfläche hinter den Tab-Köpfen. -->
+        <Border Height="48"
+                Margin="16,16,16,0"
+                MaxWidth="1500"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Background="#151916"
+                BorderBrush="#29322C"
+                BorderThickness="1"
+                CornerRadius="8"
+                IsHitTestVisible="False"
+                ZIndex="0"/>
         <!-- Margin Rechts = 0. Scrollbar füllt die letzten 16px exakt aus -->
-        <TabControl x:Name="MainTabs" Margin="16,16,0,16" Background="Transparent" SelectedIndex="{Binding SelectedTabIndex}">
+        <TabControl x:Name="MainTabs"
+                    Margin="16,16,0,16"
+                    MaxWidth="1500"
+                    HorizontalAlignment="Stretch"
+                    Background="Transparent"
+                    ZIndex="1"
+                    SelectedIndex="{Binding SelectedTabIndex}">
 
             <!-- TAB 1: Übersicht -->
             <TabItem Header="Übersicht" FontSize="14" FontWeight="Bold">
@@ -350,6 +481,8 @@
                     -->
                     <Border Grid.Row="1"
                             Margin="0,15,16,15"
+                            MaxHeight="650"
+                            VerticalAlignment="Top"
                             Background="#171A18"
                             BorderBrush="#334038"
                             BorderThickness="1"
@@ -376,13 +509,14 @@
                                                        FontWeight="Bold"/>
                                         </StackPanel>
                                         <Border Grid.Column="1"
-                                                Background="#18251D"
-                                                BorderBrush="#31523D"
+                                                Background="{Binding InternetModeBackground}"
+                                                BorderBrush="{Binding InternetModeBorderBrush}"
                                                 BorderThickness="1"
                                                 CornerRadius="10"
-                                                Padding="9,3">
-                                            <TextBlock Text="OFFLINE-BEREIT"
-                                                       Foreground="#79E89D"
+                                                Padding="9,3"
+                                                ToolTip.Tip="Aktueller Status der erlaubten Online-Funktionen">
+                                            <TextBlock Text="{Binding InternetModeText}"
+                                                       Foreground="{Binding InternetModeForeground}"
                                                        FontSize="10"
                                                        FontWeight="SemiBold"/>
                                         </Border>
@@ -407,16 +541,39 @@
                                             <Ellipse Margin="52"
                                                      Stroke="#1E3D2A"
                                                      StrokeThickness="1"/>
+                                            <!--
+                                                Die Achsen reichen bis kurz vor den Außenring.
+                                                Ein kompakter Verlauf blendet nur ihre letzten
+                                                rund zehn Pixel weich aus.
+                                            -->
                                             <Border Width="1"
-                                                    Height="142"
-                                                    Background="#1E3D2A"
+                                                    Height="164"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
-                                            <Border Width="142"
+                                                    VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="50%,0%"
+                                                                         EndPoint="50%,100%">
+                                                        <GradientStop Offset="0" Color="#001E3D2A"/>
+                                                        <GradientStop Offset="0.07" Color="#1E3D2A"/>
+                                                        <GradientStop Offset="0.93" Color="#1E3D2A"/>
+                                                        <GradientStop Offset="1" Color="#001E3D2A"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <Border Width="164"
                                                     Height="1"
-                                                    Background="#1E3D2A"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>
+                                                    VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0%,50%"
+                                                                         EndPoint="100%,50%">
+                                                        <GradientStop Offset="0" Color="#001E3D2A"/>
+                                                        <GradientStop Offset="0.07" Color="#1E3D2A"/>
+                                                        <GradientStop Offset="0.93" Color="#1E3D2A"/>
+                                                        <GradientStop Offset="1" Color="#001E3D2A"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
                                             <!--
                                                 Der Radarstrahl liegt hinter den Treffermarkierungen.
                                                 Sein schmaler Lichtkegel bleibt vollständig im äußeren
@@ -724,16 +881,44 @@
                     </Border>
 
                     <Grid Grid.Row="1" Margin="0,15,0,15">
-                        <Border Classes="PageSurface" Margin="0,0,16,0" VerticalAlignment="Stretch"/>
-
                         <!-- ScrollViewer nutzt den kompletten Platz. Scrollbar (16px) schwebt exakt über der leeren Lücke -->
                         <ScrollViewer x:Name="AuditScrollViewer"
                                       Classes="ContentBox"
-                                      Margin="0,9,0,9"
+                                      Margin="0"
+                                      VerticalContentAlignment="Top"
+                                      HorizontalContentAlignment="Stretch"
+                                      HorizontalScrollBarVisibility="Disabled"
                                       ClipToBounds="True">
-                            <StackPanel Spacing="15" HorizontalAlignment="Center" Width="450" Margin="0,20">
+                            <!-- Die Mutterbox wächst nur mit dem sichtbaren Audit-Inhalt.
+                                 Bei Detailergebnissen übernimmt der äußere ScrollViewer.
+                                 HorizontalContentAlignment=Stretch hält ihre Breite ohne
+                                 eine rückgekoppelte Viewport-Bindung stabil. -->
+                            <Border Background="#171A18"
+                                    BorderBrush="#334038"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    Padding="20"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top">
+                            <StackPanel Spacing="15"
+                                        HorizontalAlignment="Stretch">
 
-                                <Border Width="150" Height="150" CornerRadius="75" Background="#141A16" BorderBrush="#334038" BorderThickness="2" ClipToBounds="True" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <!-- Kompaktes Audit-Cockpit nutzt breite Fenster, ohne unkontrolliert mitzuwachsen. -->
+                                <Border Background="#121713"
+                                        BorderBrush="#2A3A30"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        Padding="26"
+                                        BoxShadow="0 0 22 0 #1800FF66">
+                                    <Grid ColumnDefinitions="220,*" ColumnSpacing="30">
+                                        <StackPanel Grid.Column="0"
+                                                    Spacing="10"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock Text="SECURITY SCORE"
+                                                       Classes="Eyebrow"
+                                                       HorizontalAlignment="Center"/>
+                                <Border Width="150" Height="150" CornerRadius="75" Background="#141A16" BorderBrush="#334038" BorderThickness="2" ClipToBounds="True" HorizontalAlignment="Center">
                                     <Grid Margin="-2">
                                         <Border VerticalAlignment="Bottom" Height="{Binding Height, ElementName=ScoreFillBorder}" ClipToBounds="True" ZIndex="1">
                                             <Grid RowDefinitions="Auto, *" ClipToBounds="False">
@@ -786,92 +971,266 @@
                                         </Border>
                                     </Grid>
                                 </Border>
+                                            <TextBlock Text="LOKALE BEWERTUNG"
+                                                       Foreground="#68736C"
+                                                       FontSize="10"
+                                                       FontWeight="SemiBold"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
 
-                                <Button Command="{Binding StartAuditCommand}" IsEnabled="{Binding !IsAuditRunning}" HorizontalAlignment="Stretch" Height="38" Classes="CopyBtn" CornerRadius="6">
-                                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Path Classes="Lucide" Stroke="#00FF66" Width="16" Height="16" Data="{Binding AuditButtonIcon}"/>
-                                        <TextBlock Text="{Binding AuditButtonText}" FontSize="13" FontWeight="Bold" Foreground="#00FF66" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="13"
+                                                    VerticalAlignment="Center">
+                                            <StackPanel Spacing="5">
+                                                <TextBlock Text="Dein lokaler Sicherheits-Snapshot"
+                                                           Foreground="#FFFFFF"
+                                                           FontSize="20"
+                                                           FontWeight="Bold"/>
+                                                <TextBlock Text="Die Audit Engine prüft Systemhärtung, Netzwerkspuren und forensische Rückstände ausschließlich lesend."
+                                                           Foreground="#AEB7B1"
+                                                           FontSize="12"
+                                                           LineHeight="18"
+                                                           TextWrapping="Wrap"/>
+                                            </StackPanel>
 
-                                <Button Command="{Binding ExportReportCommand}" IsVisible="{Binding HasAuditFinished}" HorizontalAlignment="Stretch" Height="38" Classes="CopyBtn" CornerRadius="6">
-                                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Path Classes="Lucide" Stroke="#00FF66" Width="16" Height="16" Data="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"/>
-                                        <TextBlock Text="Bericht Speichern" FontSize="13" FontWeight="SemiBold" Foreground="#00FF66" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Button>
+                                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                                                <Border Grid.Column="0" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  READ-ONLY" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <Border Grid.Column="1" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  LOCAL" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <Border Grid.Column="2" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  PORTABLE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+
+                                            <!-- Primär- und Folgeaktion bleiben direkt beieinander.
+                                                 Der Export erscheint erst nach einem abgeschlossenen Audit. -->
+                                            <StackPanel Spacing="8">
+                                                <Button Command="{Binding StartAuditCommand}"
+                                                        IsEnabled="{Binding !IsAuditRunning}"
+                                                        HorizontalAlignment="Stretch"
+                                                        Height="38"
+                                                        Classes="CopyBtn"
+                                                        CornerRadius="6">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center">
+                                                        <Path Classes="Lucide"
+                                                              Stroke="#00FF66"
+                                                              Width="16"
+                                                              Height="16"
+                                                              Data="{Binding AuditButtonIcon}"/>
+                                                        <TextBlock Text="{Binding AuditButtonText}"
+                                                                   FontSize="13"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#00FF66"
+                                                                   VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+
+                                                <Button Command="{Binding ExportReportCommand}"
+                                                        IsVisible="{Binding HasAuditFinished}"
+                                                        HorizontalAlignment="Stretch"
+                                                        Height="38"
+                                                        Classes="CopyBtn"
+                                                        CornerRadius="6">
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center">
+                                                        <Path Classes="Lucide"
+                                                              Stroke="#00FF66"
+                                                              Width="16"
+                                                              Height="16"
+                                                              Data="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"/>
+                                                        <TextBlock Text="Bericht Speichern"
+                                                                   FontSize="13"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#00FF66"
+                                                                   VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
 
                                 <Border Background="#101310" CornerRadius="8" Padding="15" BorderBrush="#2A3A30" BorderThickness="1" IsVisible="{Binding HasAuditFinished}">
-                                    <StackPanel Spacing="10">
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <UniformGrid Columns="4">
+                                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                             <Ellipse Width="8" Height="8" Fill="#1E90FF" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding StatTotalText}" Foreground="#CCCCCC" FontSize="13"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                             <Ellipse Width="8" Height="8" Fill="#00FF66" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding StatPassedText}" Foreground="#CCCCCC" FontSize="13"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                             <Ellipse Width="8" Height="8" Fill="Orange" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding StatWarningText}" Foreground="#CCCCCC" FontSize="13"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                                             <Ellipse Width="8" Height="8" Fill="Red" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding StatFailText}" Foreground="#CCCCCC" FontSize="13"/>
                                         </StackPanel>
-                                    </StackPanel>
+                                    </UniformGrid>
                                 </Border>
 
                                 <Button Command="{Binding ToggleDetailsCommand}" Content="{Binding ToggleDetailsButtonText}" IsVisible="{Binding HasAuditFinished}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#18201B" Foreground="#9EAAA2" BorderBrush="#2A3A30" BorderThickness="1" FontSize="12" CornerRadius="6" Padding="8,6" Cursor="Hand"/>
 
-                                <ItemsControl ItemsSource="{Binding AuditResults}" IsVisible="{Binding AreDetailsVisible}">
+                                <!-- Kompakte Ergebnisübersicht: Je nach Breite
+                                     erscheinen eine, zwei oder drei Karten pro
+                                     Zeile. Lange technische Details werden erst
+                                     in der jeweils gewählten Karte geöffnet. -->
+                                <ItemsControl ItemsSource="{Binding AuditResults}"
+                                              IsVisible="{Binding AreDetailsVisible}"
+                                              HorizontalAlignment="Stretch">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"
+                                                       ItemWidth="430"
+                                                       ItemSpacing="10"
+                                                       LineSpacing="10"
+                                                       ItemsAlignment="Center"
+                                                       UseLayoutRounding="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Background="#161C18" BorderBrush="{Binding BorderColor}" BorderThickness="1.5" CornerRadius="6" Padding="14" Margin="0,0,0,8">
-                                                <StackPanel Spacing="6">
-                                                    <TextBlock Text="{Binding Category}" Foreground="#888888" FontSize="11" FontWeight="SemiBold"/>
-                                                    <TextBlock Text="{Binding Name}" Foreground="#FFFFFF" FontSize="14" FontWeight="Bold"/>
-                                                    <Rectangle Height="1" Fill="#303A33" Margin="0,2,0,2"/>
-                                                    <TextBlock Text="{Binding Summary}" Foreground="{Binding BorderColor}" FontSize="12" FontWeight="SemiBold" TextWrapping="Wrap"/>
-                                                    <TextBlock Text="{Binding Details}" Foreground="#CCCCCC" FontSize="12" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                                                </StackPanel>
+                                            <Border Background="#151B17"
+                                                    BorderBrush="#303A33"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8"
+                                                    ClipToBounds="True"
+                                                    VerticalAlignment="Top">
+                                                <Grid RowDefinitions="Auto,Auto">
+                                                    <!-- Die farbige Statusleiste ist
+                                                         auch beim schnellen Scrollen sichtbar und
+                                                         wächst mit aufgeklappten Details mit. -->
+                                                    <Border Width="4"
+                                                            Grid.RowSpan="2"
+                                                            HorizontalAlignment="Left"
+                                                            Background="{Binding BorderColor}"
+                                                            CornerRadius="8,0,0,8"
+                                                            ZIndex="2"/>
+
+                                                    <ToggleButton x:Name="AuditResultDisclosure"
+                                                                  Classes="AuditResultToggle">
+                                                        <Grid ColumnDefinitions="*,Auto"
+                                                              ColumnSpacing="12"
+                                                              Margin="16,13,13,13">
+                                                            <StackPanel Spacing="5">
+                                                                <TextBlock Text="{Binding Category}"
+                                                                           Foreground="#87928B"
+                                                                           FontSize="10"
+                                                                           FontWeight="SemiBold"
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="{Binding Name}"
+                                                                           Foreground="#FFFFFF"
+                                                                           FontSize="13"
+                                                                           FontWeight="Bold"
+                                                                           TextWrapping="Wrap"
+                                                                           MaxLines="2"
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                                <TextBlock Text="{Binding Summary}"
+                                                                           Foreground="#B9C3BC"
+                                                                           FontSize="11"
+                                                                           TextWrapping="Wrap"
+                                                                           MaxLines="2"
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                            </StackPanel>
+
+                                                            <StackPanel Grid.Column="1"
+                                                                        Spacing="10"
+                                                                        HorizontalAlignment="Right">
+                                                                <Border Background="#101310"
+                                                                        BorderBrush="{Binding BorderColor}"
+                                                                        BorderThickness="1"
+                                                                        CornerRadius="9"
+                                                                        Padding="8,3">
+                                                                    <TextBlock Text="{Binding StatusLabel}"
+                                                                               Foreground="{Binding BorderColor}"
+                                                                               FontSize="9"
+                                                                               FontWeight="Bold"/>
+                                                                </Border>
+                                                                <Viewbox Classes="AuditResultChevron"
+                                                                         Width="14"
+                                                                         Height="14"
+                                                                         HorizontalAlignment="Center"
+                                                                         RenderTransformOrigin="50%,50%">
+                                                                    <Canvas Width="24" Height="24">
+                                                                        <Path Fill="Transparent"
+                                                                              Stroke="#87928B"
+                                                                              StrokeThickness="2"
+                                                                              StrokeLineCap="Round"
+                                                                              StrokeJoin="Round"
+                                                                              Data="M6 9l6 6 6-6"/>
+                                                                    </Canvas>
+                                                                </Viewbox>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </ToggleButton>
+
+                                                    <Border Grid.Row="1"
+                                                            Margin="16,0,13,13"
+                                                            Padding="12"
+                                                            Background="#101310"
+                                                            BorderBrush="#28332C"
+                                                            BorderThickness="1"
+                                                            CornerRadius="6"
+                                                            IsVisible="{Binding IsChecked, ElementName=AuditResultDisclosure}">
+                                                        <StackPanel Spacing="6">
+                                                            <TextBlock Text="TECHNISCHE DETAILS"
+                                                                       Classes="Eyebrow"/>
+                                                            <TextBlock Text="{Binding Details}"
+                                                                       Foreground="#C4CDC7"
+                                                                       FontSize="11"
+                                                                       LineHeight="17"
+                                                                       TextWrapping="Wrap"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </Grid>
                                             </Border>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
                             </StackPanel>
+                            </Border>
                         </ScrollViewer>
 
-                        <!-- Fade-Effekt nur über der 450px breiten Audit-Inhaltsspalte. -->
+                        <!-- Die Verläufe überdecken die komplette Audit-Mutterbox.
+                             Dadurch verschwinden sowohl Inhalt als auch Boxkante weich
+                             im Seitenhintergrund, sobald weitergescrollt werden kann. -->
                         <Rectangle x:Name="AuditTopFade"
-                                   Width="450"
-                                   Height="28"
-                                   HorizontalAlignment="Center"
+                                   Height="64"
+                                   HorizontalAlignment="Stretch"
                                    VerticalAlignment="Top"
                                    IsHitTestVisible="False"
                                    Opacity="0.0"
-                                   Margin="0,9,16,0">
+                                   ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#171A18" Offset="0.0"/>
-                                    <GradientStop Color="#00171A18" Offset="1.0"/>
+                                    <GradientStop Color="#121212" Offset="0.0"/>
+                                    <GradientStop Color="#00121212" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
 
                         <Rectangle x:Name="AuditBottomFade"
-                                   Width="450"
-                                   Height="28"
-                                   HorizontalAlignment="Center"
+                                   Height="64"
+                                   HorizontalAlignment="Stretch"
                                    VerticalAlignment="Bottom"
                                    IsHitTestVisible="False"
                                    Opacity="0.0"
-                                   Margin="0,0,16,9">
+                                   ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#00171A18" Offset="0.0"/>
-                                    <GradientStop Color="#171A18" Offset="1.0"/>
+                                    <GradientStop Color="#00121212" Offset="0.0"/>
+                                    <GradientStop Color="#121212" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -901,16 +1260,19 @@
                         </Grid>
                     </Border>
 
-                    <Grid Grid.Row="1" Margin="0,15,0,15" ClipToBounds="True">
-                        <ScrollViewer x:Name="SystemScrollViewer"
-                                      Classes="ContentBox"
-                                      VerticalAlignment="Stretch">
-                            <!-- Die beiden Spalten richten wir exakt aus. Links 8px Abstand zur Mitte, Rechts 8px zur Mitte -->
-                            <!-- Der rechte Rand hat Margin="0" weil der 16px Scrollbalken diesen Raum permanent auffüllt! -->
-                            <UniformGrid Columns="2" Margin="0">
+                    <!-- Die Systemseite ist bei der festen Mindestgröße vollständig
+                         sichtbar und benötigt deshalb bewusst keinen ScrollViewer.
+                         Das explizite Raster hält alle Außen- und Kartenabstände ruhig. -->
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,*"
+                          RowDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="16"
+                          RowSpacing="16"
+                          Margin="0,15,16,15"
+                          VerticalAlignment="Top">
                             <!-- Linke Karten -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="0,0,8,16" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <Border Grid.Row="0" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M4 17l6-6-6-6 M12 19h8"/>
                                         <TextBlock Text="Betriebssystem" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -934,9 +1296,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- Rechte Karten (Schließen bündig an den 16px Scrollbalken an) -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="8,0,0,16" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <!-- Rechte Karten -->
+                            <Border Grid.Row="0" Grid.Column="1" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z M9 9h6v6H9z M9 1v3 M15 1v3 M9 20v3 M15 20v3 M20 9h3 M20 14h3 M1 9h3 M1 14h3"/>
                                         <TextBlock Text="Hardware &amp; Leistung" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -953,8 +1315,8 @@
                             </Border>
 
                             <!-- 3. Software (Links) -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="0,0,8,16" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <Border Grid.Row="1" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M4.93 19.07l1.41-1.41 M17.66 6.34l1.41-1.41 M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                         <TextBlock Text="Software &amp; Runtime" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -975,8 +1337,8 @@
                             </Border>
 
                             <!-- 4. Graphic (Rechts) -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="8,0,0,16" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <Border Grid.Row="1" Grid.Column="1" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5z M12 17v4 M8 21h8"/>
                                         <TextBlock Text="Grafik &amp; Desktop" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -997,8 +1359,8 @@
                             </Border>
 
                             <!-- 5. Netzwerk (Links) -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="0,0,8,0" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <Border Grid.Row="2" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                                         <TextBlock Text="Netzwerk &amp; Routing" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -1019,8 +1381,15 @@
                             </Border>
 
                             <!-- 6. OpSec (Rechts) -->
-                            <Border Background="#1B201D" CornerRadius="8" Padding="15" Margin="8,0,0,0" BorderBrush="#303A33" BorderThickness="1">
-                                <StackPanel Spacing="8">
+                            <Border Grid.Row="2"
+                                    Grid.Column="1"
+                                    Classes="SystemCard"
+                                    Background="#1B201D"
+                                    CornerRadius="8"
+                                    Padding="15"
+                                    BorderBrush="#303A33"
+                                    BorderThickness="1">
+                                <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                         <TextBlock Text="OpSec &amp; Sicherheit" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
@@ -1043,38 +1412,6 @@
                                     </Grid>
                                 </StackPanel>
                             </Border>
-
-                            </UniformGrid>
-                        </ScrollViewer>
-
-                        <!-- Fade-Overlays liegen nur über dem Karteninhalt; die Scrollbar bleibt frei. -->
-                        <Rectangle x:Name="SystemTopFade"
-                                   Height="25"
-                                   VerticalAlignment="Top"
-                                   IsHitTestVisible="False"
-                                   Opacity="0.0"
-                                   Margin="0,0,16,0">
-                            <Rectangle.Fill>
-                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#121212" Offset="0.0"/>
-                                    <GradientStop Color="#00121212" Offset="1.0"/>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
-
-                        <Rectangle x:Name="SystemBottomFade"
-                                   Height="25"
-                                   VerticalAlignment="Bottom"
-                                   IsHitTestVisible="False"
-                                   Opacity="1.0"
-                                   Margin="0,0,16,0">
-                            <Rectangle.Fill>
-                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#00121212" Offset="0.0"/>
-                                    <GradientStop Color="#121212" Offset="1.0"/>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -1354,10 +1691,12 @@
                         </Grid>
                     </Border>
 
-                    <Grid Grid.Row="1" Margin="0,15,0,15">
-                        <Border Classes="PageSurface" Margin="0,0,16,0" VerticalAlignment="Stretch"/>
-                        <ScrollViewer Classes="ContentBox" Margin="0">
-                            <StackPanel Spacing="12" VerticalAlignment="Top" Margin="18,18,34,18">
+                    <Border Grid.Row="1"
+                            Classes="PageSurface"
+                            Margin="0,15,16,15"
+                            Padding="18"
+                            VerticalAlignment="Top">
+                            <StackPanel Spacing="12">
                                 <Border Background="#101310"
                                         BorderBrush="#2A3A30"
                                         BorderThickness="1"
@@ -1434,8 +1773,7 @@
                                     </Grid>
                                 </Border>
                             </StackPanel>
-                        </ScrollViewer>
-                    </Grid>
+                    </Border>
                 </Grid>
             </TabItem>
 
@@ -1458,11 +1796,31 @@
                         </Grid>
                     </Border>
 
-                    <ScrollViewer Grid.Row="1" Classes="ContentBox" Margin="0,15,0,15" VerticalAlignment="Stretch">
-                        <StackPanel Spacing="15" Margin="0">
-                            <Border Background="#1B201D" CornerRadius="8" Padding="20" BorderBrush="#303A33" BorderThickness="1" Margin="0,0,0,0">
-                                <StackPanel Spacing="15" HorizontalAlignment="Center">
-                                    <StackPanel Spacing="8" HorizontalAlignment="Center">
+                    <!-- Der Scroll-Inhalt und seine Fades teilen dieselbe Fläche.
+                         Die Scrollbar reserviert rechts bereits ihre 16px; ein
+                         zweiter Inhaltsrand würde die Karten sichtbar verkürzen. -->
+                    <Grid Grid.Row="1"
+                          Margin="0,15,0,15"
+                          ClipToBounds="True">
+                        <ScrollViewer x:Name="AboutScrollViewer"
+                                      Classes="ContentBox"
+                                      VerticalAlignment="Stretch"
+                                      VerticalContentAlignment="Center"
+                                      HorizontalContentAlignment="Stretch">
+                            <StackPanel Spacing="15"
+                                        HorizontalAlignment="Stretch">
+                            <!-- Projektidentität als kompakter Hero statt einer überbreiten Leerfläche. -->
+                            <Border Background="#121713"
+                                    CornerRadius="10"
+                                    Padding="26"
+                                    BorderBrush="#2A3A30"
+                                    BorderThickness="1"
+                                    BoxShadow="0 0 22 0 #1800FF66">
+                                <Grid ColumnDefinitions="180,*" ColumnSpacing="28">
+                                    <StackPanel Grid.Column="0"
+                                                Spacing="7"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
                                         <Grid Width="130"
                                               Height="130"
                                               HorizontalAlignment="Center"
@@ -1488,51 +1846,200 @@
                                                 </Border>
                                             </Button>
                                         </Grid>
-                                        <TextBlock Text="SolidStateNetwork" FontWeight="Bold" Foreground="#00FF66" FontSize="18" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="SolidStateNetwork"
+                                                   FontWeight="Bold"
+                                                   Foreground="#00FF66"
+                                                   FontSize="15"
+                                                   HorizontalAlignment="Center"/>
                                     </StackPanel>
-                                    <TextBlock Text="Ein portables MIT-lizenziertes Projekt zur Stärkung der lokalen Privatsphäre, Systemsicherheit und Anti-Forensik unter Linux und Windows. Entwickelt für maximale Kontrolle, Transparenz und einen Betrieb ohne Administratorrechte." Foreground="#CCCCCC" TextWrapping="Wrap" FontSize="13" TextAlignment="Center" MaxWidth="600"/>
-                                </StackPanel>
+
+                                    <StackPanel Grid.Column="1"
+                                                Spacing="12"
+                                                VerticalAlignment="Center">
+                                        <StackPanel Spacing="5">
+                                            <TextBlock Classes="Eyebrow" Text="MISSION // USER-CONTROLLED SECURITY"/>
+                                            <TextBlock Text="Sicherheit, die auf deinem System bleibt."
+                                                       Foreground="#FFFFFF"
+                                                       FontSize="22"
+                                                       FontWeight="Bold"/>
+                                            <TextBlock Text="Ein portables MIT-lizenziertes Projekt zur Stärkung der lokalen Privatsphäre, Systemsicherheit und Anti-Forensik unter Linux und Windows. Entwickelt für maximale Kontrolle, Transparenz und einen Betrieb ohne Administratorrechte."
+                                                       Foreground="#AEB7B1"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="13"
+                                                       LineHeight="19"/>
+                                        </StackPanel>
+
+                                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                                            <Border Grid.Column="0" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
+                                                <TextBlock Text="OPEN SOURCE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <Border Grid.Column="1" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
+                                                <TextBlock Text="MIT LICENSE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <Border Grid.Column="2" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
+                                                <TextBlock Text="NO TELEMETRY" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
-                            <Grid ColumnDefinitions="*, *" Margin="0">
-                                <!-- XMPP Box -->
-                                <Border Grid.Column="0" Background="#1B201D" CornerRadius="8" Padding="15" Margin="0,0,8,0" BorderBrush="#303A33" BorderThickness="1">
-                                    <StackPanel Spacing="8">
-                                        <Grid ColumnDefinitions="*, Auto">
-                                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                <Path Classes="Lucide" Stroke="#79E89D" Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                                <TextBlock Text="XMPP / Jabber" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                            <StackPanel Spacing="10">
+                                <!-- XMPP wird als kompakte Kontaktzeile statt als leeres Textfeld dargestellt. -->
+                                <Border Classes="ModuleCard" Padding="16">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                                        <Border Classes="IconTile">
+                                            <Path Classes="Lucide"
+                                                  Stroke="#79E89D"
+                                                  Width="19"
+                                                  Height="19"
+                                                  Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                                            <TextBlock Text="Direkter Kontakt über XMPP"
+                                                       Foreground="#FFFFFF"
+                                                       FontSize="14"
+                                                       FontWeight="Bold"/>
+                                            <SelectableTextBlock Text="{Binding XmppAddress}"
+                                                                 Foreground="#79E89D"
+                                                                 FontFamily="Consolas, Monospace"
+                                                                 FontSize="12"/>
+                                        </StackPanel>
+                                        <Button Grid.Column="2"
+                                                Command="{Binding CopyXmppCommand}"
+                                                Classes="CopyBtn"
+                                                Padding="12,8"
+                                                VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14"
+                                                      Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                                                <TextBlock Text="Adresse kopieren" Foreground="#00FF66" FontSize="11"/>
                                             </StackPanel>
-                                            <Button Grid.Column="1" Command="{Binding CopyXmppCommand}" Classes="CopyBtn">
-                                                <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
-                                                    <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14" Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
-                                                    <TextBlock Text="Kopieren" FontSize="11" Foreground="#00FF66" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Der lange Schlüssel bleibt verfügbar, dominiert die Seite aber
+                                     erst, wenn er bewusst aufgeklappt wird. -->
+                                <Border Classes="ModuleCard" Padding="16">
+                                    <Grid RowDefinitions="Auto,Auto">
+                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                                            <Border Classes="IconTile">
+                                                <Path Classes="Lucide"
+                                                      Stroke="#79E89D"
+                                                      Width="19"
+                                                      Height="19"
+                                                      Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                                            </Border>
+                                            <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                                                <TextBlock Text="Öffentlicher PGP-Schlüssel"
+                                                           Foreground="#FFFFFF"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"/>
+                                                <TextBlock Text="Für verschlüsselte Nachrichten und die Verifikation meiner Identität."
+                                                           Classes="Muted"
+                                                           FontSize="11"/>
+                                            </StackPanel>
+                                            <Button Grid.Column="2"
+                                                    Command="{Binding CopyPgpCommand}"
+                                                    Classes="CopyBtn"
+                                                    Padding="12,8"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14"
+                                                          Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                                                    <TextBlock Text="Key kopieren" Foreground="#00FF66" FontSize="11"/>
                                                 </StackPanel>
                                             </Button>
                                         </Grid>
-                                        <TextBox Classes="DataField" Text="{Binding XmppAddress}" IsReadOnly="True" FontFamily="Consolas, Monospace" FontSize="11" Height="110"/>
-                                    </StackPanel>
-                                </Border>
-                                <!-- PGP Box -->
-                                <Border Grid.Column="1" Background="#1B201D" CornerRadius="8" Padding="15" Margin="8,0,0,0" BorderBrush="#303A33" BorderThickness="1">
-                                    <StackPanel Spacing="8">
-                                        <Grid ColumnDefinitions="*, Auto">
-                                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                                <Path Classes="Lucide" Stroke="#79E89D" Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-                                                <TextBlock Text="Public PGP Key" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                            <Button Grid.Column="1" Command="{Binding CopyPgpCommand}" Classes="CopyBtn">
-                                                <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
-                                                    <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14" Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
-                                                    <TextBlock Text="Kopieren" FontSize="11" Foreground="#00FF66" VerticalAlignment="Center"/>
+
+                                        <StackPanel Grid.Row="1"
+                                                    Margin="52,10,0,0"
+                                                    Spacing="8">
+                                            <ToggleButton x:Name="PgpKeyDisclosure"
+                                                          Classes="DisclosureBtn">
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="8"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="Public Key Details"
+                                                               Foreground="#79E89D"
+                                                               FontSize="11"
+                                                               FontWeight="SemiBold"/>
+                                                    <!-- Feste 24x24-Fläche verhindert, dass die
+                                                         sichtbare Chevron-Kontur optisch verrutscht. -->
+                                                    <Viewbox Classes="DisclosureChevron"
+                                                             Width="14"
+                                                             Height="14"
+                                                             Stretch="Uniform"
+                                                             VerticalAlignment="Center"
+                                                             HorizontalAlignment="Center"
+                                                             RenderTransformOrigin="50%,50%">
+                                                        <Canvas Width="24" Height="24">
+                                                            <Path Fill="Transparent"
+                                                                  Stroke="#79E89D"
+                                                                  StrokeThickness="2"
+                                                                  StrokeLineCap="Round"
+                                                                  StrokeJoin="Round"
+                                                                  Data="M6 9l6 6 6-6"/>
+                                                        </Canvas>
+                                                    </Viewbox>
                                                 </StackPanel>
-                                            </Button>
-                                        </Grid>
-                                        <TextBox Classes="DataField" Text="{Binding PgpKey}" AcceptsReturn="True" TextWrapping="NoWrap" Height="110" IsReadOnly="True" FontFamily="Consolas, Monospace" FontSize="11"/>
-                                    </StackPanel>
+                                            </ToggleButton>
+                                            <Border Background="#101310"
+                                                    BorderBrush="#26362B"
+                                                    BorderThickness="1"
+                                                    CornerRadius="6"
+                                                    Padding="12"
+                                                    IsVisible="{Binding IsChecked, ElementName=PgpKeyDisclosure}">
+                                                <ScrollViewer Height="150"
+                                                              VerticalScrollBarVisibility="Auto"
+                                                              HorizontalScrollBarVisibility="Auto"
+                                                              AllowAutoHide="True">
+                                                    <SelectableTextBlock Text="{Binding PgpKey}"
+                                                                         Foreground="#79E89D"
+                                                                         FontFamily="Consolas, Monospace"
+                                                                         FontSize="11"
+                                                                         TextWrapping="NoWrap"/>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
                                 </Border>
-                            </Grid>
-                        </StackPanel>
-                    </ScrollViewer>
+                            </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Bleed-Out bleibt innerhalb des Inhaltsbereichs; die
+                             rechts außen liegende Scrollbar wird nicht übermalt. -->
+                        <Rectangle x:Name="AboutTopFade"
+                                   Height="32"
+                                   VerticalAlignment="Top"
+                                   IsHitTestVisible="False"
+                                   Opacity="0.0"
+                                   Margin="0,0,16,0"
+                                   ZIndex="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                    <GradientStop Color="#121512" Offset="0.0"/>
+                                    <GradientStop Color="#00121512" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+
+                        <Rectangle x:Name="AboutBottomFade"
+                                   Height="32"
+                                   VerticalAlignment="Bottom"
+                                   IsHitTestVisible="False"
+                                   Opacity="0.0"
+                                   Margin="0,0,16,0"
+                                   ZIndex="10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                    <GradientStop Color="#00121512" Offset="0.0"/>
+                                    <GradientStop Color="#121512" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

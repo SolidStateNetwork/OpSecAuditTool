@@ -2,6 +2,7 @@
 bin/
 obj/
 artifacts/
+release/
 
 # Portable runtime data (generated next to the executable)
 Settings/

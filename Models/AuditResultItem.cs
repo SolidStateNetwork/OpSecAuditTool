@@ -15,4 +15,15 @@ public sealed class AuditResultItem
     public string Details { get; init; } = string.Empty;
     public IBrush BorderColor { get; init; } = Brushes.Gray;
     public CheckStatus Status { get; init; }
+
+    /// <summary>
+    /// Kurzes, sprachlich einheitliches Label für die kompakte Ergebniskarte.
+    /// </summary>
+    public string StatusLabel => Status switch
+    {
+        CheckStatus.Pass => "BESTANDEN",
+        CheckStatus.Warning => "WARNUNG",
+        CheckStatus.Fail => "KRITISCH",
+        _ => "UNBEKANNT"
+    };
 }

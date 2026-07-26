@@ -27,6 +27,12 @@ namespace OpSecAuditTool.ViewModels;
 public sealed partial class MainViewModel : ViewModelBase, IDisposable
 {
     private static readonly Uri PublicIpEndpoint = new("https://api.ipify.org");
+    private static readonly IBrush OfflineStatusBackground = CreateBrush("#18251D");
+    private static readonly IBrush OfflineStatusBorder = CreateBrush("#31523D");
+    private static readonly IBrush OfflineStatusForeground = CreateBrush("#79E89D");
+    private static readonly IBrush OnlineStatusBackground = CreateBrush("#2A2112");
+    private static readonly IBrush OnlineStatusBorder = CreateBrush("#6A4A18");
+    private static readonly IBrush OnlineStatusForeground = CreateBrush("#FFB020");
     private static readonly HttpClient PublicIpClient = new(
         new HttpClientHandler { CheckCertificateRevocationList = true })
     {
@@ -111,8 +117,26 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
             Logger.LogInfo($"Einstellung 'Internet Access' geändert auf: {value}");
 
             OnPropertyChanged(nameof(AllowInternetAccess));
+            OnPropertyChanged(nameof(InternetModeText));
+            OnPropertyChanged(nameof(InternetModeBackground));
+            OnPropertyChanged(nameof(InternetModeBorderBrush));
+            OnPropertyChanged(nameof(InternetModeForeground));
         }
     }
+
+    // Der Status-Chip spiegelt die persistente Netzwerkeinstellung bereits
+    // beim Programmstart und unmittelbar nach jedem Umschalten wider.
+    public string InternetModeText =>
+        AllowInternetAccess ? "ONLINE AKTIV" : "OFFLINE-BEREIT";
+
+    public IBrush InternetModeBackground =>
+        AllowInternetAccess ? OnlineStatusBackground : OfflineStatusBackground;
+
+    public IBrush InternetModeBorderBrush =>
+        AllowInternetAccess ? OnlineStatusBorder : OfflineStatusBorder;
+
+    public IBrush InternetModeForeground =>
+        AllowInternetAccess ? OnlineStatusForeground : OfflineStatusForeground;
 
     public bool AutoStartAuditOnLaunch
     {
@@ -184,7 +208,8 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
             tempResults.Add(CreateAuditResultItem(result));
         }
 
-        foreach (AuditResultItem item in tempResults.OrderBy(item => item.Status.SortOrder()))
+        // Handlungsrelevante Befunde stehen oben: kritisch, Warnung, bestanden.
+        foreach (AuditResultItem item in tempResults.OrderByDescending(item => item.Status.SortOrder()))
         {
             AuditResults.Add(item);
         }
@@ -247,9 +272,9 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
 
         return new AuditResultItem
         {
-            Category = $"[{result.Category}]",
+            Category = result.Category,
             Name = result.Name,
-            Summary = $"Status: {result.Summary}",
+            Summary = result.Summary,
             Details = result.Details,
             BorderColor = borderColor,
             Status = result.Status
@@ -594,4 +619,6 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
+    private static IBrush CreateBrush(string hexColor) =>
+        new SolidColorBrush(Color.Parse(hexColor));
 }

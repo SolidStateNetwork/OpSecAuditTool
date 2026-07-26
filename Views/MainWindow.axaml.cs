@@ -18,7 +18,7 @@ namespace OpSecAuditTool.Views;
 
 /// <summary>
 /// Hauptfenster und ausschließlich UI-nahe Koordination für Animationen,
-/// Scroll-Effekte, dynamische Fenstergröße und die farbige Live-Konsole.
+/// Scroll-Effekte und die farbige Live-Konsole.
 /// </summary>
 public sealed partial class MainWindow : Window
 {
@@ -56,7 +56,6 @@ public sealed partial class MainWindow : Window
     private double _targetProfileRotation;
     private double _targetProfileOffsetX;
     private double _targetProfileOffsetY;
-
     public MainWindow()
     {
         InitializeComponent();
@@ -103,10 +102,6 @@ public sealed partial class MainWindow : Window
         }, RoutingStrategies.Bubble);
 
         // Referenzen auf die Scrollbereiche mit dynamischen Fade-Effekten.
-        var systemScroll = this.FindControl<ScrollViewer>("SystemScrollViewer");
-        var systemTopFade = this.FindControl<Rectangle>("SystemTopFade");
-        var systemBottomFade = this.FindControl<Rectangle>("SystemBottomFade");
-
         var resourceScroll = this.FindControl<ScrollViewer>("ResourceScrollViewer");
         var resTopFade = this.FindControl<Rectangle>("ResourceTopFade");
         var resBottomFade = this.FindControl<Rectangle>("ResourceBottomFade");
@@ -118,6 +113,10 @@ public sealed partial class MainWindow : Window
         var auditScroll = this.FindControl<ScrollViewer>("AuditScrollViewer");
         var auditTopFade = this.FindControl<Rectangle>("AuditTopFade");
         var auditBottomFade = this.FindControl<Rectangle>("AuditBottomFade");
+
+        var aboutScroll = this.FindControl<ScrollViewer>("AboutScrollViewer");
+        var aboutTopFade = this.FindControl<Rectangle>("AboutTopFade");
+        var aboutBottomFade = this.FindControl<Rectangle>("AboutBottomFade");
 
         _logFlushTimer = new DispatcherTimer(DispatcherPriority.Background)
         {
@@ -150,7 +149,8 @@ public sealed partial class MainWindow : Window
         };
         Logger.OnLogAdded += _logEntryHandler;
 
-        // Tab-Wechsel-Event (Logs & Größenberechnung)
+        // Tab-Wechsel aktualisieren nur Animationen, Logs und echte Scroll-Fades.
+        // Die Fenstergröße bleibt davon bewusst unberührt.
         if (MainTabs != null)
         {
             MainTabs.SelectionChanged += (s, e) =>
@@ -158,8 +158,6 @@ public sealed partial class MainWindow : Window
                 // Nur auf echte Tab-Wechsel reagieren (verhindert Trigger durch interne Listen)
                 if (e.Source == MainTabs && MainTabs.SelectedItem is TabItem activeTab)
                 {
-                    // Sofort anpassen, bevor Logs und der nächste Layoutdurchlauf folgen.
-                    CalcWindowHeight();
                     UpdateTabAnimations(MainTabs.SelectedIndex);
 
                     // Tab-Wechsel als Trace loggen.
@@ -167,10 +165,10 @@ public sealed partial class MainWindow : Window
                     Dispatcher.UIThread.Post(() =>
                     {
                         // Fade-Effekte beim Tab-Wechsel sicherheitshalber auch triggern
-                        UpdateFadeEffects(systemScroll, systemTopFade, systemBottomFade);
                         UpdateFadeEffects(resourceScroll, resTopFade, resBottomFade);
                         UpdateFadeEffects(consoleScroll, consoleTopFade, consoleBottomFade);
                         UpdateFadeEffects(auditScroll, auditTopFade, auditBottomFade);
+                        UpdateFadeEffects(aboutScroll, aboutTopFade, aboutBottomFade);
                     }, DispatcherPriority.Loaded);
                 }
             };
@@ -182,13 +180,6 @@ public sealed partial class MainWindow : Window
             if (e.PropertyName == nameof(MainViewModel.AuditScoreText))
             {
                 Dispatcher.UIThread.Post(() => UpdateBlackWaterMask(vm.AuditScoreText));
-            }
-
-            // Wenn der Audit fertig ist oder die Details aufgeklappt werden, Fensterhöhe dynamisch anpassen
-            if (e.PropertyName == nameof(MainViewModel.HasAuditFinished) ||
-                e.PropertyName == nameof(MainViewModel.AreDetailsVisible))
-            {
-                Dispatcher.UIThread.Post(() => { CalcWindowHeight(); }, DispatcherPriority.Loaded);
             }
 
             // Wenn Verbose-Logs im Betrieb ein/ausgeschaltet werden, bauen wir das Log-Fenster retroaktiv aus dem RAM neu auf!
@@ -245,20 +236,16 @@ public sealed partial class MainWindow : Window
         // Dekorative Partikelanimation der Startansicht initialisieren.
         InitStarrySky();
 
-        // Dynamische Mindestbreite der Tabs
-        string[] tabTitles = { "Übersicht", "Audit", "System", "Protokolle", "Ressourcen", "Einstellungen", "Über" };
-        this.MinWidth = tabTitles.Sum(t => t.Length) * 10.0 + 80;
-
-        // Initiale Höhenberechnung beim Start
+        // Nur echte Scrollbereiche erhalten Laufzeit-Tracking. Die Systemseite
+        // passt vollständig in die deklarierte Mindestgröße und scrollt nicht.
         this.Loaded += (sender, args) =>
         {
-            CalcWindowHeight();
             UpdateTabAnimations(MainTabs?.SelectedIndex ?? 0);
 
             ConfigureFadeTracking(resourceScroll, resTopFade, resBottomFade);
-            ConfigureFadeTracking(systemScroll, systemTopFade, systemBottomFade);
             ConfigureFadeTracking(consoleScroll, consoleTopFade, consoleBottomFade);
             ConfigureFadeTracking(auditScroll, auditTopFade, auditBottomFade);
+            ConfigureFadeTracking(aboutScroll, aboutTopFade, aboutBottomFade);
             ConfigureConsoleAutoFollow(consoleScroll);
         };
     }
@@ -469,47 +456,6 @@ public sealed partial class MainWindow : Window
 
         topFade.Opacity = verticalOffset > 5.0 ? 1.0 : 0.0;
         bottomFade.Opacity = verticalOffset < (maxScrollable - 5.0) ? 1.0 : 0.0;
-    }
-
-    /// <summary>
-    /// Passt das Fenster an den aktiven Tab an, begrenzt die Höhe aber auf einen
-    /// bedienbaren Bereich. Größere Inhalte bleiben über ihre ScrollViewer erreichbar.
-    /// </summary>
-    private void CalcWindowHeight()
-    {
-        try
-        {
-            if (MainTabs?.SelectedIndex == 3)
-            {
-                ApplyWindowHeight(780);
-                return;
-            }
-
-            if (MainTabs?.SelectedItem is TabItem activeTab && activeTab.Content is Control tabContent)
-            {
-                double availableWidth = this.Bounds.Width > 0 ? this.Bounds.Width - 30 : 970;
-                tabContent.Measure(new Size(availableWidth, double.PositiveInfinity));
-
-                double contentHeight = tabContent.DesiredSize.Height;
-
-                if (contentHeight > 50)
-                {
-                    double targetHeight = contentHeight + 90;
-                    targetHeight = Math.Clamp(targetHeight, 600, 780);
-                    ApplyWindowHeight(targetHeight);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError("UI-Fehler bei der Berechnung der Fensterhöhe", ex);
-        }
-    }
-
-    private void ApplyWindowHeight(double targetHeight)
-    {
-        MinHeight = 600;
-        Height = targetHeight;
     }
 
     /// <summary>
