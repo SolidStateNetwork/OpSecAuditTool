@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64
+            os: ubuntu-latest
+            profile: LinuxPortable
+            platform: linux-x64
+          - name: Windows x64
+            os: windows-latest
+            profile: WindowsPortable
+            platform: windows-x64
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v6
+
+      - name: .NET 10 installieren
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Portable Version veröffentlichen
+        run: dotnet publish OpSecAuditTool.csproj -p:PublishProfile=${{ matrix.profile }} --nologo
+
+      - name: Linux-Archiv erstellen
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          package="OpSecAuditTool-${GITHUB_REF_NAME}-${{ matrix.platform }}"
+          mkdir -p "release/${package}"
+          cp -a artifacts/linux-portable/. "release/${package}/"
+          cp LICENSE LINUX_PORTABLE.md "release/${package}/"
+          tar -C release -czf "release/${package}.tar.gz" "${package}"
+
+      - name: Windows-Archiv erstellen
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $package = "OpSecAuditTool-$env:GITHUB_REF_NAME-${{ matrix.platform }}"
+          $packageDirectory = Join-Path "release" $package
+          New-Item -ItemType Directory -Path $packageDirectory -Force | Out-Null
+          Copy-Item -Path "artifacts/windows-portable/*" -Destination $packageDirectory -Recurse
+          New-Item -ItemType Directory -Path (Join-Path $packageDirectory "Settings") -Force | Out-Null
+          New-Item -ItemType Directory -Path (Join-Path $packageDirectory "Logs") -Force | Out-Null
+          New-Item -ItemType Directory -Path (Join-Path $packageDirectory "Reports") -Force | Out-Null
+          Copy-Item -Path "LICENSE", "WINDOWS_PORTABLE.md" -Destination $packageDirectory
+          Compress-Archive -Path $packageDirectory -DestinationPath "release/$package.zip"
+
+      - name: Release-Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: release/OpSecAuditTool-${{ github.ref_name }}-${{ matrix.platform }}.*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: GitHub-Release veröffentlichen
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v6
+
+      - name: Release-Artefakte herunterladen
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: SHA-256-Prüfsummen erzeugen
+        shell: bash
+        run: |
+          cd release-assets
+          sha256sum OpSecAuditTool-* > SHA256SUMS.txt
+
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          notes="docs/releases/${GITHUB_REF_NAME}.md"
+          if [[ -f "${notes}" ]]; then
+            gh release create "${GITHUB_REF_NAME}" release-assets/* \
+              --title "OpSec Audit Tool ${GITHUB_REF_NAME}" \
+              --notes-file "${notes}" \
+              --verify-tag
+          else
+            gh release create "${GITHUB_REF_NAME}" release-assets/* \
+              --title "OpSec Audit Tool ${GITHUB_REF_NAME}" \
+              --generate-notes \
+              --verify-tag
+          fi
