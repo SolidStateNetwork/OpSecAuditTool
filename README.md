@@ -9,6 +9,16 @@ Windows.
 > Sicherheitsbewertung. Ergebnisse sollten immer im Kontext des verwendeten
 > Systems geprüft werden.
 
+## Screenshots
+
+### Lokales OpSec-Kontrollzentrum
+
+![Übersicht des OpSec Audit Tools mit lokalem Kontrollzentrum](docs/images/overview.png)
+
+### System- und Sicherheits-Audit
+
+![Audit-Ansicht des OpSec Audit Tools vor dem ersten Prüflauf](docs/images/audit.png)
+
 ## Eigenschaften
 
 - lokale, ausschließlich lesende Sicherheits- und Systemprüfungen
