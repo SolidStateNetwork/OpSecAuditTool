@@ -23,10 +23,12 @@ public static class UiPalette
     public static readonly IBrush Error = Brush("#FF6363");
     public static readonly IBrush Critical = Brush("#FF2020");
 
-    public static readonly IBrush OfflineBackground = Brush("#1C1C1C");
-    public static readonly IBrush OfflineBorder = Brush("#505050");
-    public static readonly IBrush OnlineBackground = Brush("#2B2418");
-    public static readonly IBrush OnlineBorder = Brush("#705426");
+    // Netzwerkmodus: Rot signalisiert den bewusst abgeschalteten Zugang,
+    // Neon-Grün den freigegebenen Online-Modus.
+    public static readonly IBrush OfflineBackground = Brush("#260A0A");
+    public static readonly IBrush OfflineBorder = Brush("#FF2020");
+    public static readonly IBrush OnlineBackground = Brush("#082014");
+    public static readonly IBrush OnlineBorder = Brush("#00FF66");
 
     private static IBrush Brush(string value) =>
         new SolidColorBrush(Color.Parse(value));

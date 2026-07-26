@@ -59,6 +59,10 @@ bereit.
 - einheitliches, responsives Layout von der kompakten Standardgröße bis Vollbild
 - kontrastreiches Cyber-Terminal-Theme mit neutral-schwarzen Flächen, Neon-Akzenten
   und klar getrennten Erfolgs-, Warn- und Fehlerfarben
+- unmittelbar erkennbare Online-/Offline-Anzeige mit dynamischer grüner
+  beziehungsweise roter Statusfarbe
+- vollständig anklickbare Einstellungskarten mit konsistentem Hover- und
+  Auswahlzustand
 - kompakte Projekt- und Kontaktübersicht mit XMPP- und öffentlichem PGP-Schlüssel
 - lokale Protokolle und exportierbare Audit-Berichte
 - keine Werbung, keine extern geladenen Medien und keine Analyse-Telemetrie

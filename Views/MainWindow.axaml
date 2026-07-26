@@ -224,6 +224,48 @@
             <Setter Property="Fill" Value="#000000" />
         </Style>
 
+        <!-- Die gesamte Einstellungskarte arbeitet als Umschalter. Die kleine
+             Checkbox bleibt nur als gut erkennbarer Zustandsindikator sichtbar. -->
+        <Style Selector="ToggleButton.SettingCard">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="#1B1B1B"/>
+            <Setter Property="BorderBrush" Value="#3A3A3A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="SettingCardSurface"
+                            HorizontalAlignment="Stretch"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton.SettingCard:pointerover /template/ Border#SettingCardSurface">
+            <Setter Property="Background" Value="#202020"/>
+            <Setter Property="BorderBrush" Value="#505050"/>
+        </Style>
+        <Style Selector="ToggleButton.SettingCard:checked /template/ Border#SettingCardSurface">
+            <Setter Property="Background" Value="#1C211E"/>
+            <Setter Property="BorderBrush" Value="#00FF66"/>
+        </Style>
+        <Style Selector="ToggleButton.SettingCard:pressed /template/ Border#SettingCardSurface">
+            <Setter Property="Background" Value="#242424"/>
+        </Style>
+
         <!-- Standard Copy Button -->
         <Style Selector="Button.CopyBtn">
             <Setter Property="FontSize" Value="11"/>
@@ -257,7 +299,6 @@
         <Style Selector="Button.CopyBtn:pressed /template/ ContentPresenter">
             <Setter Property="Background" Value="#202020"/>
         </Style>
-
         <!-- Projekt-Disclosure für lange Kontaktinformationen. -->
         <Style Selector="ToggleButton.DisclosureBtn">
             <Setter Property="Padding" Value="0"/>
@@ -307,24 +348,76 @@
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="18"/>
             <Setter Property="Focusable" Value="False"/>
-            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Opacity" Value="1"/>
+            <!-- Das Fluent-Theme skaliert Buttons beim Drücken minimal.
+                 Für die fest mit dem Header verbundene Fläche darf sich jedoch
+                 weder die Geometrie noch der Inhalt bewegen. -->
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+            <Setter Property="Transitions">
+                <Transitions/>
+            </Setter>
+            <!-- Die Aktion bildet das rechte Abschlusssegment des Headers:
+                 links bündig und rechts mit demselben Radius wie die Mutterbox. -->
+            <Setter Property="CornerRadius" Value="0,9,9,0"/>
+            <!-- Ein eigenes Template verhindert, dass das Fluent-Theme beim
+                 Hover eine zweite, versetzte Buttonfläche darüber zeichnet. -->
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="HeaderActionSurface"
+                            Background="#151515"
+                            BorderBrush="#00FF66"
+                            BorderThickness="1"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            ClipToBounds="True">
+                        <ContentPresenter x:Name="HeaderActionContent"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
         </Style>
-        <Style Selector="Button.HeaderBlockBtn /template/ ContentPresenter">
-            <Setter Property="Background" Value="#1B1B1B"/>
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#2B2B2B"/>
-            <Setter Property="BorderBrush" Value="#505050"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="#202020"/>
+        <Style Selector="Button.HeaderBlockBtn:pointerover /template/ Border#HeaderActionSurface">
+            <Setter Property="Background" Value="#242424"/>
             <Setter Property="BorderBrush" Value="#00FF66"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed">
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn /template/ Border#HeaderActionSurface">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed /template/ Border#HeaderActionSurface">
+            <Setter Property="Background" Value="#202020"/>
+            <Setter Property="BorderBrush" Value="#00C851"/>
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn /template/ ContentPresenter#HeaderActionContent">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed /template/ ContentPresenter#HeaderActionContent">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed StackPanel">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed Path">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
+        </Style>
+        <Style Selector="Button.HeaderBlockBtn:pressed TextBlock">
+            <Setter Property="RenderTransform" Value="{x:Null}"/>
         </Style>
 
         <!-- Chromloser Profilbutton für das versteckte Easter Egg. -->
@@ -805,16 +898,20 @@
                             </Border>
 
                             <!-- Kompakte Erklärung der drei lokalen Schutzebenen -->
-                            <StackPanel Grid.Column="1"
-                                        Margin="9,0,0,0"
-                                        Spacing="10"
-                                        VerticalAlignment="Center">
-                                <Border Background="#1B1B1B"
+                            <Grid Grid.Column="1"
+                                  Margin="9,0,0,0"
+                                  RowDefinitions="*,*,*,Auto"
+                                  RowSpacing="10"
+                                  VerticalAlignment="Stretch">
+                                <Border Grid.Row="0"
+                                        Background="#1B1B1B"
                                         BorderBrush="#3A3A3A"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <Grid ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="12"
+                                          VerticalAlignment="Center">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
                                                 Background="#131313">
@@ -839,12 +936,15 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#1B1B1B"
+                                <Border Grid.Row="1"
+                                        Background="#1B1B1B"
                                         BorderBrush="#3A3A3A"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <Grid ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="12"
+                                          VerticalAlignment="Center">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
                                                 Background="#131313">
@@ -869,12 +969,15 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#1B1B1B"
+                                <Border Grid.Row="2"
+                                        Background="#1B1B1B"
                                         BorderBrush="#3A3A3A"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <Grid ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="12"
+                                          VerticalAlignment="Center">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
                                                 Background="#131313">
@@ -899,7 +1002,8 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#0E0E0E"
+                                <Border Grid.Row="3"
+                                        Background="#0E0E0E"
                                         BorderBrush="#333333"
                                         BorderThickness="1"
                                         CornerRadius="6"
@@ -911,7 +1015,7 @@
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"/>
                                 </Border>
-                            </StackPanel>
+                            </Grid>
                         </Grid>
                     </Border>
                 </Grid>
@@ -1351,9 +1455,16 @@
             <!-- TAB 3: System -->
             <TabItem Header="System" FontSize="14" FontWeight="Bold">
                 <Grid RowDefinitions="Auto, *" Margin="0,10,0,0">
-                    <Border Grid.Row="0" Classes="PageHeader" Margin="0,0,16,0">
+                    <Border Grid.Row="0"
+                            Classes="PageHeader"
+                            Margin="0,0,16,0"
+                            Padding="0"
+                            ClipToBounds="True">
                         <Grid ColumnDefinitions="*, Auto">
-                            <StackPanel Grid.Column="0" Spacing="5" VerticalAlignment="Center">
+                            <StackPanel Grid.Column="0"
+                                        Spacing="5"
+                                        Margin="18"
+                                        VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="SYSTEM DIAGNOSTICS // LOCAL HOST"/>
@@ -1361,7 +1472,10 @@
                                 <TextBlock Classes="PageTitle" Text="System- &amp; Hardwarediagnose"/>
                                 <TextBlock Classes="PageDescription" Text="Aktuelle Umgebungsinformationen, Netzwerkkonfiguration und OpSec-Sicherheitsstatus deines Rechners."/>
                             </StackPanel>
-                            <Button Grid.Column="1" Command="{Binding RefreshSystemCommand}" VerticalAlignment="Center" Classes="CopyBtn" Padding="15,10" CornerRadius="6">
+                            <Button Grid.Column="1"
+                                    Width="220"
+                                    Command="{Binding RefreshSystemCommand}"
+                                    Classes="HeaderBlockBtn">
                                 <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                                     <Path Classes="Lucide" Stroke="#00FF66" Width="16" Height="16" Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
                                     <TextBlock Text="Jetzt Scannen" FontSize="14" FontWeight="Bold" Foreground="#00FF66" VerticalAlignment="Center"/>
@@ -1593,9 +1707,15 @@
         <!-- TAB 5: Ressourcen -->
             <TabItem Header="Ressourcen" FontSize="14" FontWeight="Bold">
                 <Grid RowDefinitions="Auto, *" Margin="0,10,0,0">
-                    <Border Grid.Row="0" Classes="PageHeader" Margin="0,0,16,0">
+                    <Border Grid.Row="0"
+                            Classes="PageHeader"
+                            Margin="0,0,16,0"
+                            Padding="0"
+                            ClipToBounds="True">
                         <Grid ColumnDefinitions="*,Auto">
-                            <StackPanel Spacing="5" VerticalAlignment="Center">
+                            <StackPanel Spacing="5"
+                                        Margin="18"
+                                        VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
                                     <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="KNOWLEDGE BASE // CURATED"/>
@@ -1603,7 +1723,10 @@
                                 <TextBlock Classes="PageTitle" Text="Empfohlene OpSec-Ressourcen &amp; Linkbase"/>
                                 <TextBlock Classes="PageDescription" Text="Eine handverlesene Sammlung essenzieller Tools, gehärteter Betriebssysteme und Anonymisierungsdienste."/>
                             </StackPanel>
-                            <Button Grid.Column="1" Command="{Binding OpenOpSecBibleCommand}" Classes="CopyBtn" Padding="14,9" CornerRadius="6">
+                            <Button Grid.Column="1"
+                                    Width="220"
+                                    Command="{Binding OpenOpSecBibleCommand}"
+                                    Classes="HeaderBlockBtn">
                                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                                     <Path Classes="Lucide" Stroke="#00FF66" Width="18" Height="18" Data="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                                     <TextBlock Text="OpSec-Bibel öffnen" FontSize="13" FontWeight="Bold" Foreground="#00FF66" VerticalAlignment="Center"/>
@@ -1814,7 +1937,9 @@
                                 </Border>
 
                                 <!-- Jede Einstellung bildet ein eigenes, schnell erfassbares Modul. -->
-                                <Border Classes="ModuleCard">
+                                <ToggleButton Classes="SettingCard"
+                                              IsChecked="{Binding AllowInternetAccess, Mode=TwoWay}"
+                                              ToolTip.Tip="Internet-Zugriff umschalten">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
                                             <Path Classes="Lucide" Stroke="#00FF66" Width="18" Height="18"
@@ -1828,13 +1953,16 @@
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                         <CheckBox Grid.Column="2"
-                                                  IsChecked="{Binding AllowInternetAccess}"
-                                                  VerticalAlignment="Center"
-                                                  ToolTip.Tip="Internet-Zugriff umschalten"/>
+                                                  IsChecked="{Binding AllowInternetAccess, Mode=OneWay}"
+                                                  IsHitTestVisible="False"
+                                                  Focusable="False"
+                                                  VerticalAlignment="Center"/>
                                     </Grid>
-                                </Border>
+                                </ToggleButton>
 
-                                <Border Classes="ModuleCard">
+                                <ToggleButton Classes="SettingCard"
+                                              IsChecked="{Binding AutoStartAuditOnLaunch, Mode=TwoWay}"
+                                              ToolTip.Tip="Automatisches Audit umschalten">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
                                             <Path Classes="Lucide" Stroke="#00FF66" Width="18" Height="18"
@@ -1848,13 +1976,16 @@
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                         <CheckBox Grid.Column="2"
-                                                  IsChecked="{Binding AutoStartAuditOnLaunch}"
-                                                  VerticalAlignment="Center"
-                                                  ToolTip.Tip="Automatisches Audit umschalten"/>
+                                                  IsChecked="{Binding AutoStartAuditOnLaunch, Mode=OneWay}"
+                                                  IsHitTestVisible="False"
+                                                  Focusable="False"
+                                                  VerticalAlignment="Center"/>
                                     </Grid>
-                                </Border>
+                                </ToggleButton>
 
-                                <Border Classes="ModuleCard">
+                                <ToggleButton Classes="SettingCard"
+                                              IsChecked="{Binding ShowVerboseLogs, Mode=TwoWay}"
+                                              ToolTip.Tip="Detaillierte Protokolle umschalten">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
                                             <Path Classes="Lucide" Stroke="#00FF66" Width="18" Height="18"
@@ -1868,11 +1999,12 @@
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                         <CheckBox Grid.Column="2"
-                                                  IsChecked="{Binding ShowVerboseLogs}"
-                                                  VerticalAlignment="Center"
-                                                  ToolTip.Tip="Detaillierte Protokolle umschalten"/>
+                                                  IsChecked="{Binding ShowVerboseLogs, Mode=OneWay}"
+                                                  IsHitTestVisible="False"
+                                                  Focusable="False"
+                                                  VerticalAlignment="Center"/>
                                     </Grid>
-                                </Border>
+                                </ToggleButton>
                             </StackPanel>
                     </Border>
                 </Grid>

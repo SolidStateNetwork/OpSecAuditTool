@@ -30,10 +30,10 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
     private static readonly Uri PublicIpEndpoint = new("https://api.ipify.org");
     private static readonly IBrush OfflineStatusBackground = UiPalette.OfflineBackground;
     private static readonly IBrush OfflineStatusBorder = UiPalette.OfflineBorder;
-    private static readonly IBrush OfflineStatusForeground = UiPalette.AccentSoft;
+    private static readonly IBrush OfflineStatusForeground = UiPalette.Critical;
     private static readonly IBrush OnlineStatusBackground = UiPalette.OnlineBackground;
     private static readonly IBrush OnlineStatusBorder = UiPalette.OnlineBorder;
-    private static readonly IBrush OnlineStatusForeground = UiPalette.Warning;
+    private static readonly IBrush OnlineStatusForeground = UiPalette.Accent;
     private static readonly HttpClient PublicIpClient = new(
         new HttpClientHandler { CheckCertificateRevocationList = true })
     {
