@@ -9,7 +9,7 @@
         Width="1000" Height="726"
         MinWidth="1000" MinHeight="726"
         WindowStartupLocation="CenterScreen"
-        Background="#121212">
+        Background="#0E1210">
 
     <!-- Überschreibt den blauen Standard-Balken des Fluent-Themes global -->
     <Window.Resources>
@@ -39,21 +39,21 @@
             mit leicht abweichenden Einzelwerten gestaltet werden.
         -->
         <Style Selector="Border.PageHeader">
-            <Setter Property="Background" Value="#171A18"/>
-            <Setter Property="BorderBrush" Value="#334038"/>
+            <Setter Property="Background" Value="#171E19"/>
+            <Setter Property="BorderBrush" Value="#394C40"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="10"/>
             <Setter Property="Padding" Value="18"/>
         </Style>
         <Style Selector="Border.PageSurface">
-            <Setter Property="Background" Value="#171A18"/>
-            <Setter Property="BorderBrush" Value="#334038"/>
+            <Setter Property="Background" Value="#171E19"/>
+            <Setter Property="BorderBrush" Value="#394C40"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="10"/>
         </Style>
         <Style Selector="Border.ModuleCard">
-            <Setter Property="Background" Value="#1B201D"/>
-            <Setter Property="BorderBrush" Value="#303A33"/>
+            <Setter Property="Background" Value="#1C251F"/>
+            <Setter Property="BorderBrush" Value="#314138"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="8"/>
             <Setter Property="Padding" Value="15"/>
@@ -67,51 +67,43 @@
             <Setter Property="Width" Value="38"/>
             <Setter Property="Height" Value="38"/>
             <Setter Property="CornerRadius" Value="7"/>
-            <Setter Property="Background" Value="#132219"/>
-            <Setter Property="BorderBrush" Value="#24412E"/>
+            <Setter Property="Background" Value="#14261B"/>
+            <Setter Property="BorderBrush" Value="#2B5139"/>
             <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="Border.StatusChip">
-            <Setter Property="Background" Value="#18251D"/>
-            <Setter Property="BorderBrush" Value="#31523D"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Padding" Value="9,3"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style Selector="TextBlock.Eyebrow">
-            <Setter Property="Foreground" Value="#79E89D"/>
+            <Setter Property="Foreground" Value="#7FE5A1"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style Selector="TextBlock.PageTitle">
-            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#F1F5F2"/>
             <Setter Property="FontSize" Value="22"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style Selector="TextBlock.PageDescription">
-            <Setter Property="Foreground" Value="#AEB7B1"/>
+            <Setter Property="Foreground" Value="#B5C0B8"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
         <Style Selector="TextBlock.ModuleTitle">
-            <Setter Property="Foreground" Value="#00FF66"/>
+            <Setter Property="Foreground" Value="#35E878"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style Selector="TextBlock.Muted">
-            <Setter Property="Foreground" Value="#929B95"/>
+            <Setter Property="Foreground" Value="#98A49C"/>
         </Style>
         <Style Selector="TextBox.DataField">
-            <Setter Property="Background" Value="#101310"/>
-            <Setter Property="Foreground" Value="#79E89D"/>
-            <Setter Property="BorderBrush" Value="#2A3A30"/>
+            <Setter Property="Background" Value="#101612"/>
+            <Setter Property="Foreground" Value="#7FE5A1"/>
+            <Setter Property="BorderBrush" Value="#314138"/>
             <Setter Property="CornerRadius" Value="6"/>
         </Style>
 
         <Style Selector="TabItem">
-            <Setter Property="Foreground" Value="#929B95"/>
+            <Setter Property="Foreground" Value="#98A49C"/>
             <Setter Property="Background" Value="Transparent"/>
             <!-- Die Auswahl bleibt vollständig innerhalb der 48px Navigation.
                  So werden weder Border noch CornerRadius am Fensterrand geclippt. -->
@@ -128,20 +120,20 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="TabItem:pointerover">
-            <Setter Property="Foreground" Value="#E7F2EA"/>
-            <Setter Property="Background" Value="#243028"/>
-            <Setter Property="BorderBrush" Value="#31523D"/>
+            <Setter Property="Foreground" Value="#E8EEE9"/>
+            <Setter Property="Background" Value="#25352B"/>
+            <Setter Property="BorderBrush" Value="#3D5C48"/>
         </Style>
         <Style Selector="TabItem:selected">
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="Background" Value="#1B2A20"/>
-            <Setter Property="BorderBrush" Value="#31523D"/>
+            <Setter Property="Foreground" Value="#35E878"/>
+            <Setter Property="Background" Value="#1B3324"/>
+            <Setter Property="BorderBrush" Value="#3D5C48"/>
         </Style>
         <Style Selector="TabItem:selected:pointerover">
             <!-- Ein aktiver Tab bleibt beim Hover deutlich kräftiger als
                  die nur vorgewählte, inaktive Hoverfläche. -->
-            <Setter Property="Background" Value="#284A32"/>
-            <Setter Property="BorderBrush" Value="#00C851"/>
+            <Setter Property="Background" Value="#27533A"/>
+            <Setter Property="BorderBrush" Value="#25C967"/>
         </Style>
         <!-- Nur die Kopfzeile wird als Gruppe zentriert; der eigentliche
              Seiteninhalt bleibt weiterhin über die volle Breite gestreckt. -->
@@ -169,7 +161,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
         <Style Selector="ToggleButton.AuditResultToggle:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#1D2720"/>
+            <Setter Property="Background" Value="#243128"/>
         </Style>
         <Style Selector="ToggleButton.AuditResultToggle:checked /template/ ContentPresenter">
             <!-- Der aufgeklappte Zustand darf keine zweite, nur auf den Kopf
@@ -186,8 +178,8 @@
             <Setter Property="Cursor" Value="Hand" />
         </Style>
         <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
-            <Setter Property="Background" Value="#00FF66" />
-            <Setter Property="BorderBrush" Value="#00FF66" />
+            <Setter Property="Background" Value="#35E878" />
+            <Setter Property="BorderBrush" Value="#35E878" />
         </Style>
         <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
             <Setter Property="Fill" Value="#000000" />
@@ -201,17 +193,17 @@
             <Setter Property="Focusable" Value="False"/>
         </Style>
         <Style Selector="Button.CopyBtn /template/ ContentPresenter">
-            <Setter Property="Background" Value="#202622"/>
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="BorderBrush" Value="#35473B"/>
+            <Setter Property="Background" Value="#222D26"/>
+            <Setter Property="Foreground" Value="#35E878"/>
+            <Setter Property="BorderBrush" Value="#394C40"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style Selector="Button.CopyBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#28342C"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
+            <Setter Property="Background" Value="#25352B"/>
+            <Setter Property="BorderBrush" Value="#35E878"/>
         </Style>
         <Style Selector="Button.CopyBtn:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="#142019"/>
+            <Setter Property="Background" Value="#17241C"/>
         </Style>
 
         <!-- Projekt-Disclosure für lange Kontaktinformationen. -->
@@ -222,20 +214,20 @@
             <Setter Property="Focusable" Value="False"/>
         </Style>
         <Style Selector="ToggleButton.DisclosureBtn /template/ ContentPresenter">
-            <Setter Property="Background" Value="#18201B"/>
-            <Setter Property="Foreground" Value="#79E89D"/>
-            <Setter Property="BorderBrush" Value="#2A3A30"/>
+            <Setter Property="Background" Value="#1A241D"/>
+            <Setter Property="Foreground" Value="#7FE5A1"/>
+            <Setter Property="BorderBrush" Value="#314138"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="6"/>
             <Setter Property="Padding" Value="11,7"/>
         </Style>
         <Style Selector="ToggleButton.DisclosureBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#243028"/>
-            <Setter Property="BorderBrush" Value="#31523D"/>
+            <Setter Property="Background" Value="#25352B"/>
+            <Setter Property="BorderBrush" Value="#3D5C48"/>
         </Style>
         <Style Selector="ToggleButton.DisclosureBtn:checked /template/ ContentPresenter">
-            <Setter Property="Background" Value="#142019"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
+            <Setter Property="Background" Value="#17241C"/>
+            <Setter Property="BorderBrush" Value="#35E878"/>
         </Style>
         <Style Selector="ToggleButton.DisclosureBtn:checked Viewbox.DisclosureChevron">
             <Setter Property="RenderTransform">
@@ -253,19 +245,19 @@
             <Setter Property="CornerRadius" Value="8"/>
         </Style>
         <Style Selector="Button.HeaderBlockBtn /template/ ContentPresenter">
-            <Setter Property="Background" Value="#1B201D"/>
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="BorderBrush" Value="#303A33"/>
+            <Setter Property="Background" Value="#1C251F"/>
+            <Setter Property="Foreground" Value="#35E878"/>
+            <Setter Property="BorderBrush" Value="#314138"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius}"/>
         </Style>
         <Style Selector="Button.HeaderBlockBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#243028"/>
-            <Setter Property="BorderBrush" Value="#31523D"/>
+            <Setter Property="Background" Value="#25352B"/>
+            <Setter Property="BorderBrush" Value="#3D5C48"/>
         </Style>
         <Style Selector="Button.HeaderBlockBtn:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="#142019"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
+            <Setter Property="Background" Value="#17241C"/>
+            <Setter Property="BorderBrush" Value="#35E878"/>
         </Style>
 
         <!-- Chromloser Profilbutton für das versteckte Easter Egg. -->
@@ -341,7 +333,7 @@
                                             <Border x:Name="ThumbBorder"
                                                     Width="2"
                                                     HorizontalAlignment="Center"
-                                                    Background="#444444"
+                                                    Background="#4A5750"
                                                     CornerRadius="1"/>
                                         </Border>
                                     </ControlTemplate>
@@ -362,10 +354,10 @@
             </Setter>
         </Style>
         <Style Selector="ScrollBar:vertical /template/ Thumb:pointerover /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
+            <Setter Property="Background" Value="#35E878"/>
         </Style>
         <Style Selector="ScrollBar:vertical /template/ Thumb:pressed /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
+            <Setter Property="Background" Value="#35E878"/>
         </Style>
 
         <!-- Horizontale Scrollbar; sie erscheint nur bei tatsächlich überbreitem Inhalt. -->
@@ -390,7 +382,7 @@
                                             <Border x:Name="ThumbBorder"
                                                     Height="2"
                                                     VerticalAlignment="Center"
-                                                    Background="#444444"
+                                                    Background="#4A5750"
                                                     CornerRadius="1"/>
                                         </Border>
                                     </ControlTemplate>
@@ -411,10 +403,10 @@
             </Setter>
         </Style>
         <Style Selector="ScrollBar:horizontal /template/ Thumb:pointerover /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
+            <Setter Property="Background" Value="#35E878"/>
         </Style>
         <Style Selector="ScrollBar:horizontal /template/ Thumb:pressed /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
+            <Setter Property="Background" Value="#35E878"/>
         </Style>
 
     </Window.Styles>
@@ -424,11 +416,11 @@
             <!-- Ruhige Bühne für Ultrawide: Die Mitte erhält nur einen sehr
                  dezenten grünen Ton, während die Außenbereiche abdunkeln. -->
             <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
-                <GradientStop Offset="0" Color="#101010"/>
-                <GradientStop Offset="0.28" Color="#111411"/>
-                <GradientStop Offset="0.5" Color="#121813"/>
-                <GradientStop Offset="0.72" Color="#111411"/>
-                <GradientStop Offset="1" Color="#101010"/>
+                <GradientStop Offset="0" Color="#0B0E0C"/>
+                <GradientStop Offset="0.28" Color="#0D120F"/>
+                <GradientStop Offset="0.5" Color="#101712"/>
+                <GradientStop Offset="0.72" Color="#0D120F"/>
+                <GradientStop Offset="1" Color="#0B0E0C"/>
             </LinearGradientBrush>
         </Grid.Background>
         <!-- Geschlossene Navigationsfläche hinter den Tab-Köpfen. -->
@@ -437,8 +429,8 @@
                 MaxWidth="1500"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
-                Background="#151916"
-                BorderBrush="#29322C"
+                Background="#161D18"
+                BorderBrush="#29372F"
                 BorderThickness="1"
                 CornerRadius="8"
                 IsHitTestVisible="False"
@@ -461,15 +453,12 @@
                             <Grid ColumnDefinitions="*,Auto">
                                 <StackPanel Spacing="5">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                        <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                         <TextBlock Classes="Eyebrow" Text="SOLID STATE // OVERVIEW"/>
                                     </StackPanel>
                                     <TextBlock Classes="PageTitle" Text="Willkommen beim OpSec Audit Tool"/>
                                     <TextBlock Classes="PageDescription" Text="Ein modulares Analysetool zur Überprüfung deiner lokalen System-Sicherheit."/>
                                 </StackPanel>
-                                <Border Grid.Column="1" Classes="StatusChip">
-                                    <TextBlock Classes="Eyebrow" Text="LOCAL CONTROL"/>
-                                </Border>
                             </Grid>
                         </Border>
                     </StackPanel>
@@ -483,8 +472,8 @@
                             Margin="0,15,16,15"
                             MaxHeight="650"
                             VerticalAlignment="Top"
-                            Background="#171A18"
-                            BorderBrush="#334038"
+                            Background="#171E19"
+                            BorderBrush="#394C40"
                             BorderThickness="1"
                             CornerRadius="10"
                             Padding="22"
@@ -493,18 +482,18 @@
                             <!-- Primäre Status- und Aktionsfläche -->
                             <Border Grid.Column="0"
                                     Margin="0,0,9,0"
-                                    Background="#121713"
-                                    BorderBrush="#2A3A30"
+                                    Background="#111813"
+                                    BorderBrush="#314138"
                                     BorderThickness="1"
                                     CornerRadius="9"
                                     Padding="22"
-                                    BoxShadow="0 0 22 0 #2200FF66">
+                                    BoxShadow="0 0 22 0 #2235E878">
                                 <Grid RowDefinitions="Auto,*,Auto">
                                     <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
                                         <StackPanel Orientation="Horizontal" Spacing="9" VerticalAlignment="Center">
-                                            <Ellipse Width="8" Height="8" Fill="#00FF66"/>
+                                            <Ellipse Width="8" Height="8" Fill="#35E878"/>
                                             <TextBlock Text="LOCAL DEFENSE GRID"
-                                                       Foreground="#00FF66"
+                                                       Foreground="#35E878"
                                                        FontSize="12"
                                                        FontWeight="Bold"/>
                                         </StackPanel>
@@ -532,14 +521,14 @@
                                               Height="166"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center">
-                                            <Ellipse Fill="#0E1511"
-                                                     Stroke="#285037"
+                                            <Ellipse Fill="#0E1812"
+                                                     Stroke="#2E6A45"
                                                      StrokeThickness="1.5"/>
                                             <Ellipse Margin="25"
-                                                     Stroke="#1E3D2A"
+                                                     Stroke="#1C3927"
                                                      StrokeThickness="1"/>
                                             <Ellipse Margin="52"
-                                                     Stroke="#1E3D2A"
+                                                     Stroke="#1C3927"
                                                      StrokeThickness="1"/>
                                             <!--
                                                 Die Achsen reichen bis kurz vor den Außenring.
@@ -553,10 +542,10 @@
                                                 <Border.Background>
                                                     <LinearGradientBrush StartPoint="50%,0%"
                                                                          EndPoint="50%,100%">
-                                                        <GradientStop Offset="0" Color="#001E3D2A"/>
-                                                        <GradientStop Offset="0.07" Color="#1E3D2A"/>
-                                                        <GradientStop Offset="0.93" Color="#1E3D2A"/>
-                                                        <GradientStop Offset="1" Color="#001E3D2A"/>
+                                                        <GradientStop Offset="0" Color="#001C3927"/>
+                                                        <GradientStop Offset="0.07" Color="#1C3927"/>
+                                                        <GradientStop Offset="0.93" Color="#1C3927"/>
+                                                        <GradientStop Offset="1" Color="#001C3927"/>
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
@@ -567,10 +556,10 @@
                                                 <Border.Background>
                                                     <LinearGradientBrush StartPoint="0%,50%"
                                                                          EndPoint="100%,50%">
-                                                        <GradientStop Offset="0" Color="#001E3D2A"/>
-                                                        <GradientStop Offset="0.07" Color="#1E3D2A"/>
-                                                        <GradientStop Offset="0.93" Color="#1E3D2A"/>
-                                                        <GradientStop Offset="1" Color="#001E3D2A"/>
+                                                        <GradientStop Offset="0" Color="#001C3927"/>
+                                                        <GradientStop Offset="0.07" Color="#1C3927"/>
+                                                        <GradientStop Offset="0.93" Color="#1C3927"/>
+                                                        <GradientStop Offset="1" Color="#001C3927"/>
                                                     </LinearGradientBrush>
                                                 </Border.Background>
                                             </Border>
@@ -596,17 +585,17 @@
                                                          Height="164">
                                                     <Ellipse.Fill>
                                                         <ConicGradientBrush Center="50%,50%" Angle="90">
-                                                            <GradientStop Offset="0" Color="#0000FF66"/>
-                                                            <GradientStop Offset="0.84" Color="#0000FF66"/>
-                                                            <GradientStop Offset="0.92" Color="#0D00FF66"/>
-                                                            <GradientStop Offset="0.97" Color="#2400FF66"/>
-                                                            <GradientStop Offset="1" Color="#4800FF66"/>
+                                                            <GradientStop Offset="0" Color="#0035E878"/>
+                                                            <GradientStop Offset="0.84" Color="#0035E878"/>
+                                                            <GradientStop Offset="0.92" Color="#0D35E878"/>
+                                                            <GradientStop Offset="0.97" Color="#2435E878"/>
+                                                            <GradientStop Offset="1" Color="#4835E878"/>
                                                         </ConicGradientBrush>
                                                     </Ellipse.Fill>
                                                 </Ellipse>
                                                 <Line StartPoint="83,83"
                                                       EndPoint="165,83"
-                                                      Stroke="#A800FF66"
+                                                      Stroke="#A835E878"
                                                       StrokeThickness="1.4"/>
                                             </Canvas>
                                             <Canvas Width="166" Height="166">
@@ -614,25 +603,25 @@
                                                          Canvas.Left="30" Canvas.Top="48"
                                                          Width="6" Height="6"
                                                          RenderTransformOrigin="50%,50%"
-                                                         Fill="#00FF66"/>
+                                                         Fill="#35E878"/>
                                                 <Ellipse x:Name="RadarDotTwo"
                                                          Canvas.Left="129" Canvas.Top="73"
                                                          Width="4" Height="4"
                                                          RenderTransformOrigin="50%,50%"
-                                                         Fill="#79E89D"/>
+                                                         Fill="#7FE5A1"/>
                                                 <Ellipse x:Name="RadarDotThree"
                                                          Canvas.Left="105" Canvas.Top="129"
                                                          Width="5" Height="5"
                                                          RenderTransformOrigin="50%,50%"
-                                                         Fill="#00B847"/>
+                                                         Fill="#20B95C"/>
                                             </Canvas>
                                             <Border Width="72"
                                                     Height="72"
                                                     CornerRadius="36"
-                                                    Background="#15241A"
-                                                    BorderBrush="#00FF66"
+                                                    Background="#172B1F"
+                                                    BorderBrush="#35E878"
                                                     BorderThickness="1.5"
-                                                    BoxShadow="0 0 16 2 #4400FF66"
+                                                    BoxShadow="0 0 16 2 #4435E878"
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center">
                                                 <!--
@@ -648,7 +637,7 @@
                                                          VerticalAlignment="Center">
                                                     <Canvas Width="24" Height="24">
                                                         <Path Fill="Transparent"
-                                                              Stroke="#00FF66"
+                                                              Stroke="#35E878"
                                                               StrokeThickness="1.8"
                                                               StrokeLineCap="Round"
                                                               StrokeJoin="Round"
@@ -663,23 +652,23 @@
                                                     Spacing="9"
                                                     VerticalAlignment="Center">
                                             <TextBlock Text="Dein lokales OpSec-Kontrollzentrum"
-                                                       Foreground="#FFFFFF"
+                                                       Foreground="#F1F5F2"
                                                        FontSize="21"
                                                        FontWeight="Bold"
                                                        TextWrapping="Wrap"/>
                                             <TextBlock Text="Prüfe Systemhärtung, Netzwerkspuren und forensische Rückstände – transparent, portabel und standardmäßig offline."
-                                                       Foreground="#AEB7B1"
+                                                       Foreground="#B5C0B8"
                                                        FontSize="12"
                                                        LineHeight="18"
                                                        TextWrapping="Wrap"/>
-                                            <Border Background="#101310"
-                                                    BorderBrush="#273129"
+                                            <Border Background="#101612"
+                                                    BorderBrush="#29372F"
                                                     BorderThickness="1"
                                                     CornerRadius="5"
                                                     Padding="10,7"
                                                     Margin="0,3,0,0">
                                                 <TextBlock Text="{Binding WelcomeRatingText}"
-                                                           Foreground="#00FF66"
+                                                           Foreground="#35E878"
                                                            FontSize="12"
                                                            FontWeight="SemiBold"
                                                            TextWrapping="Wrap"/>
@@ -711,10 +700,10 @@
                                                 <Path Classes="Lucide"
                                                       Width="16"
                                                       Height="16"
-                                                      Stroke="#00FF66"
+                                                      Stroke="#35E878"
                                                       Data="{Binding AuditButtonIcon}"/>
                                                 <TextBlock Text="{Binding AuditButtonText}"
-                                                           Foreground="#00FF66"
+                                                           Foreground="#35E878"
                                                            FontSize="12"
                                                            FontWeight="Bold"
                                                            VerticalAlignment="Center"/>
@@ -735,10 +724,10 @@
                                                 <Path Classes="Lucide"
                                                       Width="16"
                                                       Height="16"
-                                                      Stroke="#00FF66"
+                                                      Stroke="#35E878"
                                                       Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
                                                 <TextBlock Text="Systemstatus prüfen"
-                                                           Foreground="#00FF66"
+                                                           Foreground="#35E878"
                                                            FontSize="12"
                                                            FontWeight="Bold"
                                                            VerticalAlignment="Center"/>
@@ -753,103 +742,103 @@
                                         Margin="9,0,0,0"
                                         Spacing="10"
                                         VerticalAlignment="Center">
-                                <Border Background="#1B201D"
-                                        BorderBrush="#303A33"
+                                <Border Background="#1C251F"
+                                        BorderBrush="#314138"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
-                                                Background="#132219">
+                                                Background="#14261B">
                                             <Path Classes="Lucide"
                                                   Width="20"
                                                   Height="20"
-                                                  Stroke="#00FF66"
+                                                  Stroke="#35E878"
                                                   HorizontalAlignment="Center"
                                                   Data="M9 11l3 3L22 4 M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
                                             <TextBlock Text="AUDIT ENGINE"
-                                                       Foreground="#FFFFFF"
+                                                       Foreground="#F1F5F2"
                                                        FontSize="12"
                                                        FontWeight="Bold"
                                                        VerticalAlignment="Center"/>
                                             <TextBlock Text="Mehrschichtige Sicherheitsprüfungen mit nachvollziehbarer Bewertung."
-                                                       Foreground="#929B95"
+                                                       Foreground="#98A49C"
                                                        FontSize="11"
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#1B201D"
-                                        BorderBrush="#303A33"
+                                <Border Background="#1C251F"
+                                        BorderBrush="#314138"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
-                                                Background="#132219">
+                                                Background="#14261B">
                                             <Path Classes="Lucide"
                                                   Width="20"
                                                   Height="20"
-                                                  Stroke="#00FF66"
+                                                  Stroke="#35E878"
                                                   HorizontalAlignment="Center"
                                                   Data="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94 M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19 M1 1l22 22"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
                                             <TextBlock Text="PRIVACY FIRST"
-                                                       Foreground="#FFFFFF"
+                                                       Foreground="#F1F5F2"
                                                        FontSize="12"
                                                        FontWeight="Bold"
                                                        VerticalAlignment="Center"/>
                                             <TextBlock Text="Keine Telemetrie. Netzwerkzugriffe bleiben unter deiner Kontrolle."
-                                                       Foreground="#929B95"
+                                                       Foreground="#98A49C"
                                                        FontSize="11"
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#1B201D"
-                                        BorderBrush="#303A33"
+                                <Border Background="#1C251F"
+                                        BorderBrush="#314138"
                                         BorderThickness="1"
                                         CornerRadius="8"
                                         Padding="15">
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
                                         <Border Width="38" Height="38"
                                                 CornerRadius="7"
-                                                Background="#132219">
+                                                Background="#14261B">
                                             <Path Classes="Lucide"
                                                   Width="20"
                                                   Height="20"
-                                                  Stroke="#00FF66"
+                                                  Stroke="#35E878"
                                                   HorizontalAlignment="Center"
                                                   Data="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z M3.27 6.96L12 12.01l8.73-5.05 M12 22.08V12"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
                                             <TextBlock Text="PORTABLE CORE"
-                                                       Foreground="#FFFFFF"
+                                                       Foreground="#F1F5F2"
                                                        FontSize="12"
                                                        FontWeight="Bold"
                                                        VerticalAlignment="Center"/>
                                             <TextBlock Text="Linux und Windows, ohne Installation und ohne angeforderte Adminrechte."
-                                                       Foreground="#929B95"
+                                                       Foreground="#98A49C"
                                                        FontSize="11"
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#101310"
-                                        BorderBrush="#26362B"
+                                <Border Background="#101612"
+                                        BorderBrush="#29372F"
                                         BorderThickness="1"
                                         CornerRadius="6"
                                         Padding="10,7">
                                     <TextBlock Text="SOLID STATE // LOCAL DEFENSE"
-                                               Foreground="#5CBF78"
+                                               Foreground="#69CC88"
                                                FontSize="10"
                                                FontWeight="SemiBold"
                                                HorizontalAlignment="Center"
@@ -868,15 +857,12 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <StackPanel Spacing="5">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="AUDIT ENGINE // LOCAL SCAN"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="System- &amp; Sicherheits-Audit"/>
                                 <TextBlock Classes="PageDescription" Text="Analysiere dein System in Echtzeit auf Sicherheitslücken, Netzwerkleaks und forensische Rückstände."/>
                             </StackPanel>
-                            <Border Grid.Column="1" Classes="StatusChip">
-                                <TextBlock Classes="Eyebrow" Text="READ-ONLY"/>
-                            </Border>
                         </Grid>
                     </Border>
 
@@ -891,10 +877,11 @@
                                       ClipToBounds="True">
                             <!-- Die Mutterbox wächst nur mit dem sichtbaren Audit-Inhalt.
                                  Bei Detailergebnissen übernimmt der äußere ScrollViewer.
-                                 HorizontalContentAlignment=Stretch hält ihre Breite ohne
-                                 eine rückgekoppelte Viewport-Bindung stabil. -->
-                            <Border Background="#171A18"
-                                    BorderBrush="#334038"
+                                 Ihre Breite folgt dem stabilen Viewport und schließt dadurch
+                                 bündig mit der Titelbox sowie der reservierten Scrollspur ab. -->
+                            <Border Width="{Binding Viewport.Width, ElementName=AuditScrollViewer}"
+                                    Background="#171E19"
+                                    BorderBrush="#394C40"
                                     BorderThickness="1"
                                     CornerRadius="10"
                                     Padding="20"
@@ -904,12 +891,12 @@
                                         HorizontalAlignment="Stretch">
 
                                 <!-- Kompaktes Audit-Cockpit nutzt breite Fenster, ohne unkontrolliert mitzuwachsen. -->
-                                <Border Background="#121713"
-                                        BorderBrush="#2A3A30"
+                                <Border Background="#111813"
+                                        BorderBrush="#314138"
                                         BorderThickness="1"
                                         CornerRadius="10"
                                         Padding="26"
-                                        BoxShadow="0 0 22 0 #1800FF66">
+                                        BoxShadow="0 0 22 0 #1835E878">
                                     <Grid ColumnDefinitions="220,*" ColumnSpacing="30">
                                         <StackPanel Grid.Column="0"
                                                     Spacing="10"
@@ -918,20 +905,20 @@
                                             <TextBlock Text="SECURITY SCORE"
                                                        Classes="Eyebrow"
                                                        HorizontalAlignment="Center"/>
-                                <Border Width="150" Height="150" CornerRadius="75" Background="#141A16" BorderBrush="#334038" BorderThickness="2" ClipToBounds="True" HorizontalAlignment="Center">
+                                <Border Width="150" Height="150" CornerRadius="75" Background="#151D18" BorderBrush="#394C40" BorderThickness="2" ClipToBounds="True" HorizontalAlignment="Center">
                                     <Grid Margin="-2">
                                         <Border VerticalAlignment="Bottom" Height="{Binding Height, ElementName=ScoreFillBorder}" ClipToBounds="True" ZIndex="1">
                                             <Grid RowDefinitions="Auto, *" ClipToBounds="False">
                                                 <Canvas Grid.Row="0" Height="15" ClipToBounds="True">
                                                     <Canvas Width="300" Height="15" RenderTransform="{Binding RenderTransform, ElementName=WaveMover}">
-                                                        <Path Fill="#009933" Opacity="0.85" Data="M 0,7.5 Q 37.5,15 75,7.5 T 150,7.5 Q 187.5,15 225,7.5 T 300,7.5 L 300,15 L 0,15 Z"/>
+                                                        <Path Fill="#168A45" Opacity="0.85" Data="M 0,7.5 Q 37.5,15 75,7.5 T 150,7.5 Q 187.5,15 225,7.5 T 300,7.5 L 300,15 L 0,15 Z"/>
                                                     </Canvas>
                                                 </Canvas>
-                                                <Rectangle Grid.Row="1" Fill="#009933" Opacity="0.85" VerticalAlignment="Stretch" Margin="0,-1,0,0"/>
+                                                <Rectangle Grid.Row="1" Fill="#168A45" Opacity="0.85" VerticalAlignment="Stretch" Margin="0,-1,0,0"/>
                                             </Grid>
                                         </Border>
 
-                                        <TextBlock Text="{Binding AuditScoreText}" FontSize="24" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center" ZIndex="2"/>
+                                        <TextBlock Text="{Binding AuditScoreText}" FontSize="24" FontWeight="Bold" Foreground="#F1F5F2" HorizontalAlignment="Center" VerticalAlignment="Center" ZIndex="2"/>
 
                                         <Border x:Name="ScoreFillBorder" VerticalAlignment="Bottom" Height="{Binding WaterHeight}" ClipToBounds="True" ZIndex="3">
                                             <Border.Transitions>
@@ -945,14 +932,14 @@
                                                         <Canvas.RenderTransform>
                                                             <TranslateTransform X="0"/>
                                                         </Canvas.RenderTransform>
-                                                        <Path x:Name="WavePath" Fill="#00FF66" Data="M 0,7.5 Q 37.5,0 75,7.5 T 150,7.5 Q 187.5,0 225,7.5 T 300,7.5 L 300,15 L 0,15 Z"/>
+                                                        <Path x:Name="WavePath" Fill="#35E878" Data="M 0,7.5 Q 37.5,0 75,7.5 T 150,7.5 Q 187.5,0 225,7.5 T 300,7.5 L 300,15 L 0,15 Z"/>
                                                     </Canvas>
                                                 </Canvas>
                                                 <Rectangle Grid.Row="1" VerticalAlignment="Stretch" Margin="0,-1,0,0">
                                                     <Rectangle.Fill>
                                                         <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                                            <GradientStop Color="#00FF66" Offset="0.0"/>
-                                                            <GradientStop Color="#007722" Offset="1.0"/>
+                                                            <GradientStop Color="#35E878" Offset="0.0"/>
+                                                            <GradientStop Color="#116B37" Offset="1.0"/>
                                                         </LinearGradientBrush>
                                                     </Rectangle.Fill>
                                                 </Rectangle>
@@ -972,7 +959,7 @@
                                     </Grid>
                                 </Border>
                                             <TextBlock Text="LOKALE BEWERTUNG"
-                                                       Foreground="#68736C"
+                                                       Foreground="#69766E"
                                                        FontSize="10"
                                                        FontWeight="SemiBold"
                                                        HorizontalAlignment="Center"/>
@@ -983,25 +970,25 @@
                                                     VerticalAlignment="Center">
                                             <StackPanel Spacing="5">
                                                 <TextBlock Text="Dein lokaler Sicherheits-Snapshot"
-                                                           Foreground="#FFFFFF"
+                                                           Foreground="#F1F5F2"
                                                            FontSize="20"
                                                            FontWeight="Bold"/>
                                                 <TextBlock Text="Die Audit Engine prüft Systemhärtung, Netzwerkspuren und forensische Rückstände ausschließlich lesend."
-                                                           Foreground="#AEB7B1"
+                                                           Foreground="#B5C0B8"
                                                            FontSize="12"
                                                            LineHeight="18"
                                                            TextWrapping="Wrap"/>
                                             </StackPanel>
 
                                             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                                                <Border Grid.Column="0" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
-                                                    <TextBlock Text="●  READ-ONLY" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <Border Grid.Column="0" Background="#101612" BorderBrush="#29372F" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  READ-ONLY" Foreground="#7FE5A1" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                 </Border>
-                                                <Border Grid.Column="1" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
-                                                    <TextBlock Text="●  LOCAL" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <Border Grid.Column="1" Background="#101612" BorderBrush="#29372F" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  LOCAL" Foreground="#7FE5A1" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                 </Border>
-                                                <Border Grid.Column="2" Background="#101310" BorderBrush="#26362B" BorderThickness="1" CornerRadius="6" Padding="9,7">
-                                                    <TextBlock Text="●  PORTABLE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                <Border Grid.Column="2" Background="#101612" BorderBrush="#29372F" BorderThickness="1" CornerRadius="6" Padding="9,7">
+                                                    <TextBlock Text="●  PORTABLE" Foreground="#7FE5A1" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
                                                 </Border>
                                             </Grid>
 
@@ -1019,14 +1006,14 @@
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center">
                                                         <Path Classes="Lucide"
-                                                              Stroke="#00FF66"
+                                                              Stroke="#35E878"
                                                               Width="16"
                                                               Height="16"
                                                               Data="{Binding AuditButtonIcon}"/>
                                                         <TextBlock Text="{Binding AuditButtonText}"
                                                                    FontSize="13"
                                                                    FontWeight="Bold"
-                                                                   Foreground="#00FF66"
+                                                                   Foreground="#35E878"
                                                                    VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Button>
@@ -1042,14 +1029,14 @@
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center">
                                                         <Path Classes="Lucide"
-                                                              Stroke="#00FF66"
+                                                              Stroke="#35E878"
                                                               Width="16"
                                                               Height="16"
                                                               Data="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"/>
                                                         <TextBlock Text="Bericht Speichern"
                                                                    FontSize="13"
                                                                    FontWeight="SemiBold"
-                                                                   Foreground="#00FF66"
+                                                                   Foreground="#35E878"
                                                                    VerticalAlignment="Center"/>
                                                     </StackPanel>
                                                 </Button>
@@ -1058,28 +1045,28 @@
                                     </Grid>
                                 </Border>
 
-                                <Border Background="#101310" CornerRadius="8" Padding="15" BorderBrush="#2A3A30" BorderThickness="1" IsVisible="{Binding HasAuditFinished}">
+                                <Border Background="#101612" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1" IsVisible="{Binding HasAuditFinished}">
                                     <UniformGrid Columns="4">
                                         <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                            <Ellipse Width="8" Height="8" Fill="#1E90FF" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding StatTotalText}" Foreground="#CCCCCC" FontSize="13"/>
+                                            <Ellipse Width="8" Height="8" Fill="#53BDEA" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding StatTotalText}" Foreground="#C9D1CB" FontSize="13"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                            <Ellipse Width="8" Height="8" Fill="#00FF66" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding StatPassedText}" Foreground="#CCCCCC" FontSize="13"/>
+                                            <Ellipse Width="8" Height="8" Fill="#35E878" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding StatPassedText}" Foreground="#C9D1CB" FontSize="13"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                            <Ellipse Width="8" Height="8" Fill="Orange" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding StatWarningText}" Foreground="#CCCCCC" FontSize="13"/>
+                                            <Ellipse Width="8" Height="8" Fill="#F2B84B" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding StatWarningText}" Foreground="#C9D1CB" FontSize="13"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                            <Ellipse Width="8" Height="8" Fill="Red" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding StatFailText}" Foreground="#CCCCCC" FontSize="13"/>
+                                            <Ellipse Width="8" Height="8" Fill="#FF5F6D" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding StatFailText}" Foreground="#C9D1CB" FontSize="13"/>
                                         </StackPanel>
                                     </UniformGrid>
                                 </Border>
 
-                                <Button Command="{Binding ToggleDetailsCommand}" Content="{Binding ToggleDetailsButtonText}" IsVisible="{Binding HasAuditFinished}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#18201B" Foreground="#9EAAA2" BorderBrush="#2A3A30" BorderThickness="1" FontSize="12" CornerRadius="6" Padding="8,6" Cursor="Hand"/>
+                                <Button Command="{Binding ToggleDetailsCommand}" Content="{Binding ToggleDetailsButtonText}" IsVisible="{Binding HasAuditFinished}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#1A241D" Foreground="#A2ADA6" BorderBrush="#314138" BorderThickness="1" FontSize="12" CornerRadius="6" Padding="8,6" Cursor="Hand"/>
 
                                 <!-- Kompakte Ergebnisübersicht: Je nach Breite
                                      erscheinen eine, zwei oder drei Karten pro
@@ -1100,8 +1087,8 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Background="#151B17"
-                                                    BorderBrush="#303A33"
+                                            <Border Background="#161D18"
+                                                    BorderBrush="#314138"
                                                     BorderThickness="1"
                                                     CornerRadius="8"
                                                     ClipToBounds="True"
@@ -1124,19 +1111,19 @@
                                                               Margin="16,13,13,13">
                                                             <StackPanel Spacing="5">
                                                                 <TextBlock Text="{Binding Category}"
-                                                                           Foreground="#87928B"
+                                                                           Foreground="#8D9991"
                                                                            FontSize="10"
                                                                            FontWeight="SemiBold"
                                                                            TextTrimming="CharacterEllipsis"/>
                                                                 <TextBlock Text="{Binding Name}"
-                                                                           Foreground="#FFFFFF"
+                                                                           Foreground="#F1F5F2"
                                                                            FontSize="13"
                                                                            FontWeight="Bold"
                                                                            TextWrapping="Wrap"
                                                                            MaxLines="2"
                                                                            TextTrimming="CharacterEllipsis"/>
                                                                 <TextBlock Text="{Binding Summary}"
-                                                                           Foreground="#B9C3BC"
+                                                                           Foreground="#C0CAC3"
                                                                            FontSize="11"
                                                                            TextWrapping="Wrap"
                                                                            MaxLines="2"
@@ -1146,7 +1133,7 @@
                                                             <StackPanel Grid.Column="1"
                                                                         Spacing="10"
                                                                         HorizontalAlignment="Right">
-                                                                <Border Background="#101310"
+                                                                <Border Background="#101612"
                                                                         BorderBrush="{Binding BorderColor}"
                                                                         BorderThickness="1"
                                                                         CornerRadius="9"
@@ -1163,7 +1150,7 @@
                                                                          RenderTransformOrigin="50%,50%">
                                                                     <Canvas Width="24" Height="24">
                                                                         <Path Fill="Transparent"
-                                                                              Stroke="#87928B"
+                                                                              Stroke="#8D9991"
                                                                               StrokeThickness="2"
                                                                               StrokeLineCap="Round"
                                                                               StrokeJoin="Round"
@@ -1177,8 +1164,8 @@
                                                     <Border Grid.Row="1"
                                                             Margin="16,0,13,13"
                                                             Padding="12"
-                                                            Background="#101310"
-                                                            BorderBrush="#28332C"
+                                                            Background="#101612"
+                                                            BorderBrush="#29372F"
                                                             BorderThickness="1"
                                                             CornerRadius="6"
                                                             IsVisible="{Binding IsChecked, ElementName=AuditResultDisclosure}">
@@ -1186,7 +1173,7 @@
                                                             <TextBlock Text="TECHNISCHE DETAILS"
                                                                        Classes="Eyebrow"/>
                                                             <TextBlock Text="{Binding Details}"
-                                                                       Foreground="#C4CDC7"
+                                                                       Foreground="#CDD5CF"
                                                                        FontSize="11"
                                                                        LineHeight="17"
                                                                        TextWrapping="Wrap"/>
@@ -1214,8 +1201,8 @@
                                    ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#121212" Offset="0.0"/>
-                                    <GradientStop Color="#00121212" Offset="1.0"/>
+                                    <GradientStop Color="#0E1210" Offset="0.0"/>
+                                    <GradientStop Color="#000E1210" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1229,8 +1216,8 @@
                                    ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#00121212" Offset="0.0"/>
-                                    <GradientStop Color="#121212" Offset="1.0"/>
+                                    <GradientStop Color="#000E1210" Offset="0.0"/>
+                                    <GradientStop Color="#0E1210" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1245,7 +1232,7 @@
                         <Grid ColumnDefinitions="*, Auto">
                             <StackPanel Grid.Column="0" Spacing="5" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="SYSTEM DIAGNOSTICS // LOCAL HOST"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="System- &amp; Hardwarediagnose"/>
@@ -1253,8 +1240,8 @@
                             </StackPanel>
                             <Button Grid.Column="1" Command="{Binding RefreshSystemCommand}" VerticalAlignment="Center" Classes="CopyBtn" Padding="15,10" CornerRadius="6">
                                 <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                                    <Path Classes="Lucide" Stroke="#00FF66" Width="16" Height="16" Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
-                                    <TextBlock Text="Jetzt Scannen" FontSize="14" FontWeight="Bold" Foreground="#00FF66" VerticalAlignment="Center"/>
+                                    <Path Classes="Lucide" Stroke="#35E878" Width="16" Height="16" Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
+                                    <TextBlock Text="Jetzt Scannen" FontSize="14" FontWeight="Bold" Foreground="#35E878" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -1271,111 +1258,111 @@
                           Margin="0,15,16,15"
                           VerticalAlignment="Top">
                             <!-- Linke Karten -->
-                            <Border Grid.Row="0" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                            <Border Grid.Row="0" Grid.Column="0" Classes="SystemCard" Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M4 17l6-6-6-6 M12 19h8"/>
-                                        <TextBlock Text="Betriebssystem" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M4 17l6-6-6-6 M12 19h8"/>
+                                        <TextBlock Text="Betriebssystem" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="120, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="Betriebssystem:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding OsDistribution}" Foreground="#FFFFFF" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="0" Text="Betriebssystem:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding OsDistribution}" Foreground="#F1F5F2" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="OS / Kernel:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding KernelVersion}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="OS / Kernel:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding KernelVersion}" Foreground="#F1F5F2"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="Architektur:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding OsArchitecture}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="Architektur:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding OsArchitecture}" Foreground="#F1F5F2"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="Hostname:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Hostname}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="Hostname:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Hostname}" Foreground="#F1F5F2"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- Rechte Karten -->
-                            <Border Grid.Row="0" Grid.Column="1" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                            <Border Grid.Row="0" Grid.Column="1" Classes="SystemCard" Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z M9 9h6v6H9z M9 1v3 M15 1v3 M9 20v3 M15 20v3 M20 9h3 M20 14h3 M1 9h3 M1 14h3"/>
-                                        <TextBlock Text="Hardware &amp; Leistung" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z M9 9h6v6H9z M9 1v3 M15 1v3 M9 20v3 M15 20v3 M20 9h3 M20 14h3 M1 9h3 M1 14h3"/>
+                                        <TextBlock Text="Hardware &amp; Leistung" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="120, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="CPU-Kerne:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding CpuCores}" Foreground="#FFFFFF" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="0" Text="CPU-Kerne:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding CpuCores}" Foreground="#F1F5F2" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="Arbeitsspeicher:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding RamTotal}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="Arbeitsspeicher:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding RamTotal}" Foreground="#F1F5F2"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- 3. Software (Links) -->
-                            <Border Grid.Row="1" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                            <Border Grid.Row="1" Grid.Column="0" Classes="SystemCard" Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M4.93 19.07l1.41-1.41 M17.66 6.34l1.41-1.41 M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                                        <TextBlock Text="Software &amp; Runtime" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M4.93 19.07l1.41-1.41 M17.66 6.34l1.41-1.41 M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                                        <TextBlock Text="Software &amp; Runtime" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="120, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="App-Version:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding AppVersion}" Foreground="#FFFFFF" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="0" Text="App-Version:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding AppVersion}" Foreground="#F1F5F2" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text=".NET Runtime:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding NetRuntime}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text=".NET Runtime:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding NetRuntime}" Foreground="#F1F5F2"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="Laufzeit-RID:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding RuntimeRid}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="Laufzeit-RID:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding RuntimeRid}" Foreground="#F1F5F2"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- 4. Graphic (Rechts) -->
-                            <Border Grid.Row="1" Grid.Column="1" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                            <Border Grid.Row="1" Grid.Column="1" Classes="SystemCard" Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5z M12 17v4 M8 21h8"/>
-                                        <TextBlock Text="Grafik &amp; Desktop" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5z M12 17v4 M8 21h8"/>
+                                        <TextBlock Text="Grafik &amp; Desktop" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="120, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="Display-Server:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding DisplayServer}" Foreground="#FFFFFF" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="0" Text="Display-Server:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding DisplayServer}" Foreground="#F1F5F2" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="Desktop-Env:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding DesktopEnvironment}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="Desktop-Env:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding DesktopEnvironment}" Foreground="#F1F5F2"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="C-Runtime:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding GlibcVersion}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="C-Runtime:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding GlibcVersion}" Foreground="#F1F5F2"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
 
                             <!-- 5. Netzwerk (Links) -->
-                            <Border Grid.Row="2" Grid.Column="0" Classes="SystemCard" Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                            <Border Grid.Row="2" Grid.Column="0" Classes="SystemCard" Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                                        <TextBlock Text="Netzwerk &amp; Routing" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                        <TextBlock Text="Netzwerk &amp; Routing" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="120, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="Lokale IP:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding LocalIp}" Foreground="#FFFFFF" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="0" Text="Lokale IP:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding LocalIp}" Foreground="#F1F5F2" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="DNS-Server:" Foreground="#888888"/>
+                                        <TextBlock Grid.Column="0" Text="DNS-Server:" Foreground="#8D9991"/>
                                         <TextBlock Grid.Column="1" Text="{Binding DnsServer}" Foreground="{Binding DnsColor}"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="120, *">
-                                        <TextBlock Grid.Column="0" Text="MAC-Adresse:" Foreground="#888888"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding MacAddress}" Foreground="#FFFFFF"/>
+                                        <TextBlock Grid.Column="0" Text="MAC-Adresse:" Foreground="#8D9991"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding MacAddress}" Foreground="#F1F5F2"/>
                                     </Grid>
                                 </StackPanel>
                             </Border>
@@ -1384,30 +1371,30 @@
                             <Border Grid.Row="2"
                                     Grid.Column="1"
                                     Classes="SystemCard"
-                                    Background="#1B201D"
+                                    Background="#1C251F"
                                     CornerRadius="8"
                                     Padding="15"
-                                    BorderBrush="#303A33"
+                                    BorderBrush="#314138"
                                     BorderThickness="1">
                                 <StackPanel Spacing="6">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                        <TextBlock Text="OpSec &amp; Sicherheit" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                        <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                        <TextBlock Text="OpSec &amp; Sicherheit" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <Grid ColumnDefinitions="155, *" Margin="0,5,0,0">
-                                        <TextBlock Grid.Column="0" Text="Datenträgerverschl.:" Foreground="#888888"/>
+                                        <TextBlock Grid.Column="0" Text="Datenträgerverschl.:" Foreground="#8D9991"/>
                                         <TextBlock Grid.Column="1" Text="{Binding LuksEncryption}" Foreground="{Binding DiskCryptColor}" FontWeight="SemiBold"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="155, *">
-                                        <TextBlock Grid.Column="0" Text="Swap / Pagefile:" Foreground="#888888"/>
+                                        <TextBlock Grid.Column="0" Text="Swap / Pagefile:" Foreground="#8D9991"/>
                                         <TextBlock Grid.Column="1" Text="{Binding SwapStatus}" Foreground="{Binding SwapColor}"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="155, *">
-                                        <TextBlock Grid.Column="0" Text="Firewall:" Foreground="#888888"/>
+                                        <TextBlock Grid.Column="0" Text="Firewall:" Foreground="#8D9991"/>
                                         <TextBlock Grid.Column="1" Text="{Binding FirewallStatus}" Foreground="{Binding FirewallColor}"/>
                                     </Grid>
                                     <Grid ColumnDefinitions="155, *">
-                                        <TextBlock Grid.Column="0" Text="Tor-Routing:" Foreground="#888888"/>
+                                        <TextBlock Grid.Column="0" Text="Tor-Routing:" Foreground="#8D9991"/>
                                         <TextBlock Grid.Column="1" Text="{Binding TorRouting}" Foreground="{Binding TorColor}"/>
                                     </Grid>
                                 </StackPanel>
@@ -1423,26 +1410,20 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <StackPanel Spacing="5">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="EVENT STREAM // LIVE OUTPUT"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="Live-Protokollierung (Logs &amp; Events)"/>
                                 <TextBlock Classes="PageDescription" Text="Echtzeit-Ausgabe von Anwendungsereignissen, Systemdiagnosen und Fehlern."/>
                             </StackPanel>
-                            <Border Grid.Column="1" Classes="StatusChip">
-                                <StackPanel Orientation="Horizontal" Spacing="6">
-                                    <Ellipse Width="6" Height="6" Fill="#00FF66" VerticalAlignment="Center"/>
-                                    <TextBlock Classes="Eyebrow" Text="STREAMING"/>
-                                </StackPanel>
-                            </Border>
                         </Grid>
                     </Border>
 
                     <Grid Grid.Row="1" Margin="0,15,0,15" ClipToBounds="True">
                         <!-- Wie im Audit-Tab bleiben rechts 16px außerhalb der Mutterbox für die Scrollbar frei. -->
-                        <Border Background="#0B0F0C"
+                        <Border Background="#090D0B"
                                 CornerRadius="8"
-                                BorderBrush="#2A3A30"
+                                BorderBrush="#314138"
                                 BorderThickness="1"
                                 Margin="0,0,16,0"
                                 ClipToBounds="True"/>
@@ -1459,7 +1440,7 @@
                                                  FontFamily="Consolas, Monospace, Courier New"
                                                  FontSize="12.5"
                                                  LineHeight="19"
-                                                 Foreground="#D7E0D9"
+                                                 Foreground="#DCE4DE"
                                                  TextWrapping="Wrap"/>
                         </ScrollViewer>
 
@@ -1467,8 +1448,8 @@
                         <Rectangle x:Name="ConsoleTopFade" Height="25" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="15,9,31,0">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#0B0F0C" Offset="0.0"/>
-                                    <GradientStop Color="#000B0F0C" Offset="1.0"/>
+                                    <GradientStop Color="#090D0B" Offset="0.0"/>
+                                    <GradientStop Color="#00090D0B" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1477,8 +1458,8 @@
                         <Rectangle x:Name="ConsoleBottomFade" Height="25" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="15,0,31,9">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#000B0F0C" Offset="0.0"/>
-                                    <GradientStop Color="#0B0F0C" Offset="1.0"/>
+                                    <GradientStop Color="#00090D0B" Offset="0.0"/>
+                                    <GradientStop Color="#090D0B" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1493,7 +1474,7 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <StackPanel Spacing="5" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="KNOWLEDGE BASE // CURATED"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="Empfohlene OpSec-Ressourcen &amp; Linkbase"/>
@@ -1501,8 +1482,8 @@
                             </StackPanel>
                             <Button Grid.Column="1" Command="{Binding OpenOpSecBibleCommand}" Classes="CopyBtn" Padding="14,9" CornerRadius="6">
                                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                                    <Path Classes="Lucide" Stroke="#00FF66" Width="18" Height="18" Data="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                                    <TextBlock Text="OpSec-Bibel öffnen" FontSize="13" FontWeight="Bold" Foreground="#00FF66" VerticalAlignment="Center"/>
+                                    <Path Classes="Lucide" Stroke="#35E878" Width="18" Height="18" Data="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                    <TextBlock Text="OpSec-Bibel öffnen" FontSize="13" FontWeight="Bold" Foreground="#35E878" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
@@ -1514,135 +1495,135 @@
                             <StackPanel Spacing="15" Margin="0">
 
                                 <!-- Kategorie: Netzwerke & Anonymisierung -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                                            <TextBlock Text="Anonymität, Tor, I2P &amp; VPNs" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                            <TextBlock Text="Anonymität, Tor, I2P &amp; VPNs" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Tor Browser &amp; Whonix – Der Goldstandard für echtes Onion-Routing und Netzwerkisolation." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• I2P (Invisible Internet Project) – Dezentrales, anonymes Overlay-Netzwerk für zensurresistente Dienste." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Mullvad VPN &amp; IVPN – Streng No-Logs, datenschutzfreundliche Account-Erstellung." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• NymVPN – Next-Gen Mixnet-basierter VPN-Dienst für maximalen Metadatenschutz." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• LNVPN – VPN-Dienst bezahlbar über das Bitcoin Lightning Network." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Tor Browser &amp; Whonix – Der Goldstandard für echtes Onion-Routing und Netzwerkisolation." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• I2P (Invisible Internet Project) – Dezentrales, anonymes Overlay-Netzwerk für zensurresistente Dienste." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Mullvad VPN &amp; IVPN – Streng No-Logs, datenschutzfreundliche Account-Erstellung." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• NymVPN – Next-Gen Mixnet-basierter VPN-Dienst für maximalen Metadatenschutz." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• LNVPN – VPN-Dienst bezahlbar über das Bitcoin Lightning Network." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Proxy- & Routing-Tools -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M4 17l6-6-6-6 M12 19h8"/>
-                                            <TextBlock Text="Proxy- &amp; Routing-Tools" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M4 17l6-6-6-6 M12 19h8"/>
+                                            <TextBlock Text="Proxy- &amp; Routing-Tools" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Proxifier – Leitet beliebige Applikationen über SOCKS/HTTPS-Proxies oder Tor." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• Proxychains (Linux) – Erzwingt TCP-Verbindungen über Proxies oder Tor-Socks-Ports." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Proxifier – Leitet beliebige Applikationen über SOCKS/HTTPS-Proxies oder Tor." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• Proxychains (Linux) – Erzwingt TCP-Verbindungen über Proxies oder Tor-Socks-Ports." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Gehärtete Betriebssysteme -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2"/>
-                                            <TextBlock Text="Gehärtete Betriebssysteme &amp; Isolation" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2"/>
+                                            <TextBlock Text="Gehärtete Betriebssysteme &amp; Isolation" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Qubes OS – Das Nonplusultra für compartmentalisierte Desktop-Sicherheit durch Xen-Virtualisierung." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• GrapheneOS – Gehärtetes Android für Google Pixel, extrem resistent gegen Forensik." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Tails OS – Amnesic Incognito Live System, läuft direkt vom USB-Stick ohne Festplattenspuren." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Qubes OS – Das Nonplusultra für compartmentalisierte Desktop-Sicherheit durch Xen-Virtualisierung." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• GrapheneOS – Gehärtetes Android für Google Pixel, extrem resistent gegen Forensik." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Tails OS – Amnesic Incognito Live System, läuft direkt vom USB-Stick ohne Festplattenspuren." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Sichere E-Mail & Alias-Dienste -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6"/>
-                                            <TextBlock Text="Sichere E-Mail &amp; E-Mail-Alias-Dienste" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6"/>
+                                            <TextBlock Text="Sichere E-Mail &amp; E-Mail-Alias-Dienste" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• SimpleLogin / AnonAddy – E-Mail-Maskierungsdienste (Aliase), um die echte Adresse bei Registrierungen zu verbergen." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• ProtonMail &amp; Tuta – Ende-zu-Ende verschlüsselte E-Mail-Anbieter mit starkem Fokus auf Datenschutz." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• SimpleLogin / AnonAddy – E-Mail-Maskierungsdienste (Aliase), um die echte Adresse bei Registrierungen zu verbergen." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• ProtonMail &amp; Tuta – Ende-zu-Ende verschlüsselte E-Mail-Anbieter mit starkem Fokus auf Datenschutz." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Kryptografie, PGP & Verschlüsselung -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-                                            <TextBlock Text="Kryptografie, PGP &amp; Dateiverschlüsselung" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                                            <TextBlock Text="Kryptografie, PGP &amp; Dateiverschlüsselung" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• PGP / GnuPG (GPG) – Der Klassiker für sichere, signierte und verschlüsselte E-Mails und Kommunikation." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• VeraCrypt – Verschlüsselung von virtuellen Containern und vollständigen Festplatten." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Age (age-encryption) – Modernes, minimalistisches CLI-Tool zur sicheren Dateiverschlüsselung." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Cryptomator – Client-seitige Verschlüsselung für Cloud-Speicher (Nextcloud, Dropbox)." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• PGP / GnuPG (GPG) – Der Klassiker für sichere, signierte und verschlüsselte E-Mails und Kommunikation." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• VeraCrypt – Verschlüsselung von virtuellen Containern und vollständigen Festplatten." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Age (age-encryption) – Modernes, minimalistisches CLI-Tool zur sicheren Dateiverschlüsselung." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Cryptomator – Client-seitige Verschlüsselung für Cloud-Speicher (Nextcloud, Dropbox)." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Passwörter & Hardware-Sicherheit -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                            <TextBlock Text="Passwörter &amp; Hardware-Sicherheit (2FA)" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            <TextBlock Text="Passwörter &amp; Hardware-Sicherheit (2FA)" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• KeePassXC – Lokaler Open-Source-Passwortmanager mit starker Zero-Knowledge-Architektur." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• YubiKey / FIDO2 – Physische Sicherheitstoken für absolut phishing-sichere Zwei-Faktor-Authentifizierung." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• KeePassXC – Lokaler Open-Source-Passwortmanager mit starker Zero-Knowledge-Architektur." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• YubiKey / FIDO2 – Physische Sicherheitstoken für absolut phishing-sichere Zwei-Faktor-Authentifizierung." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Krypto-Wallets & Swapping -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2"/>
-                                            <TextBlock Text="Krypto-Wallets &amp; No-KYC Swapping" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2"/>
+                                            <TextBlock Text="Krypto-Wallets &amp; No-KYC Swapping" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Monero GUI Wallet &amp; Feather Wallet – Führende Desktoplösungen für sicheres Monero-Management." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• Cake Wallet – Multi-Coin Mobile Wallet mit integrierter Swap-Funktionalität." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• StealthEX, GhostSwap &amp; FF.io – Schnelle Krypto-Swaps ohne Registrierung." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Robosats &amp; Basicswap DEX – P2P-Plattformen und dezentrales Trading ohne KYC." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Monero GUI Wallet &amp; Feather Wallet – Führende Desktoplösungen für sicheres Monero-Management." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• Cake Wallet – Multi-Coin Mobile Wallet mit integrierter Swap-Funktionalität." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• StealthEX, GhostSwap &amp; FF.io – Schnelle Krypto-Swaps ohne Registrierung." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Robosats &amp; Basicswap DEX – P2P-Plattformen und dezentrales Trading ohne KYC." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Private Suchmaschinen & Navigation -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
-                                            <TextBlock Text="Private Suchmaschinen &amp; Navigation" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"/>
+                                            <TextBlock Text="Private Suchmaschinen &amp; Navigation" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• SearXNG &amp; Whoogle – Open-Source Metasuchmaschinen / Google-Frontends ohne Tracking und Personalisierung." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• Organic Maps – Datenschutzfreundliche Open-Source Offline-Navigation (OpenStreetMap-basiert) als Google/Apple-Maps-Ersatz." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• SearXNG &amp; Whoogle – Open-Source Metasuchmaschinen / Google-Frontends ohne Tracking und Personalisierung." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• Organic Maps – Datenschutzfreundliche Open-Source Offline-Navigation (OpenStreetMap-basiert) als Google/Apple-Maps-Ersatz." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Netzwerk-Sicherheit, Paket-Analyse & Firewalls -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                            <TextBlock Text="Netzwerk-Sicherheit, Paket-Analyse &amp; Firewalls" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                            <TextBlock Text="Netzwerk-Sicherheit, Paket-Analyse &amp; Firewalls" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Wireshark – Der Industriestandard zur tiefgehenden Paket-Analyse, Traffic-Überwachung und Forensik." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• Pi-hole / AdGuard Home – Netzweiter DNS-Filter zur Blockierung von Werbung und Trackern." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Portmaster – Kostenlose Open-Source-Netzwerk-Firewall zur App-basierten Verbindungskontrolle." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• OpenSnitch – Open-Source Applikations-Firewall für Linux zur strikten Kontrolle ausgehender Verbindungen." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• WireGuard – Modernes, extrem schnelles VPN-Protokoll für sichere Heimnetz- und Serververbindungen." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Wireshark – Der Industriestandard zur tiefgehenden Paket-Analyse, Traffic-Überwachung und Forensik." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• Pi-hole / AdGuard Home – Netzweiter DNS-Filter zur Blockierung von Werbung und Trackern." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Portmaster – Kostenlose Open-Source-Netzwerk-Firewall zur App-basierten Verbindungskontrolle." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• OpenSnitch – Open-Source Applikations-Firewall für Linux zur strikten Kontrolle ausgehender Verbindungen." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• WireGuard – Modernes, extrem schnelles VPN-Protokoll für sichere Heimnetz- und Serververbindungen." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
                                 <!-- Kategorie: Metadaten, Sync & System-Härtung -->
-                                <Border Background="#1B201D" CornerRadius="8" Padding="15" BorderBrush="#303A33" BorderThickness="1">
+                                <Border Background="#1C251F" CornerRadius="8" Padding="15" BorderBrush="#314138" BorderThickness="1">
                                     <StackPanel Spacing="8">
                                         <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                            <TextBlock Text="Metadaten-Bereinigung, Sync &amp; Härtung" FontWeight="Bold" Foreground="#00FF66" FontSize="14" VerticalAlignment="Center"/>
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                            <TextBlock Text="Metadaten-Bereinigung, Sync &amp; Härtung" FontWeight="Bold" Foreground="#35E878" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
-                                        <TextBlock Text="• Syncthing – Dezentrale, verschlüsselte Peer-to-Peer Dateisynchronisation komplett ohne Cloud-Zwang." Foreground="#FFFFFF" FontSize="13"/>
-                                        <TextBlock Text="• Mat2 / Metadata Cleaner – Zuverlässiges Entfernen von EXIF-Daten und Metadaten aus Dateien." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• BleachBit – Sicheres Überschreiben und Bereinigen von Systemspuren und temporären Dateien." Foreground="#CCCCCC" FontSize="12"/>
-                                        <TextBlock Text="• Session – Metadaten-armer Messenger ohne Telefonnummern-Bindung (Oxen-Netzwerk)." Foreground="#CCCCCC" FontSize="12"/>
+                                        <TextBlock Text="• Syncthing – Dezentrale, verschlüsselte Peer-to-Peer Dateisynchronisation komplett ohne Cloud-Zwang." Foreground="#F1F5F2" FontSize="13"/>
+                                        <TextBlock Text="• Mat2 / Metadata Cleaner – Zuverlässiges Entfernen von EXIF-Daten und Metadaten aus Dateien." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• BleachBit – Sicheres Überschreiben und Bereinigen von Systemspuren und temporären Dateien." Foreground="#C9D1CB" FontSize="12"/>
+                                        <TextBlock Text="• Session – Metadaten-armer Messenger ohne Telefonnummern-Bindung (Oxen-Netzwerk)." Foreground="#C9D1CB" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
 
@@ -1653,8 +1634,8 @@
                         <Rectangle x:Name="ResourceTopFade" Height="25" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="0,0,16,0">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#121212" Offset="0.0"/>
-                                    <GradientStop Color="#00121212" Offset="1.0"/>
+                                    <GradientStop Color="#0E1210" Offset="0.0"/>
+                                    <GradientStop Color="#000E1210" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1663,8 +1644,8 @@
                         <Rectangle x:Name="ResourceBottomFade" Height="25" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="0,0,16,0">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#00121212" Offset="0.0"/>
-                                    <GradientStop Color="#121212" Offset="1.0"/>
+                                    <GradientStop Color="#000E1210" Offset="0.0"/>
+                                    <GradientStop Color="#0E1210" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -1679,15 +1660,12 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <StackPanel Spacing="5">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="CONTROL PLANE // LOCAL CONFIG"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="Anwendungs-Einstellungen &amp; Präferenzen"/>
                                 <TextBlock Classes="PageDescription" Text="Verwalte hier Berechtigungen, Datenschutzoptionen und das Startverhalten des Tools."/>
                             </StackPanel>
-                            <Border Grid.Column="1" Classes="StatusChip">
-                                <TextBlock Classes="Eyebrow" Text="ON-DEVICE"/>
-                            </Border>
                         </Grid>
                     </Border>
 
@@ -1697,13 +1675,13 @@
                             Padding="18"
                             VerticalAlignment="Top">
                             <StackPanel Spacing="12">
-                                <Border Background="#101310"
-                                        BorderBrush="#2A3A30"
+                                <Border Background="#101612"
+                                        BorderBrush="#314138"
                                         BorderThickness="1"
                                         CornerRadius="7"
                                         Padding="12">
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                        <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                        <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="1"
                                                    Text="Alle Optionen werden lokal gespeichert und können jederzeit geändert werden."
                                                    Classes="Muted"
@@ -1716,7 +1694,7 @@
                                 <Border Classes="ModuleCard">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Width="18" Height="18"
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Width="18" Height="18"
                                                   Data="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M2 12h20 M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10 15.3 15.3 0 0 1 4-10z"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
@@ -1736,7 +1714,7 @@
                                 <Border Classes="ModuleCard">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Width="18" Height="18"
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Width="18" Height="18"
                                                   Data="M5 3l14 9-14 9V3z"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
@@ -1756,7 +1734,7 @@
                                 <Border Classes="ModuleCard">
                                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
                                         <Border Classes="IconTile">
-                                            <Path Classes="Lucide" Stroke="#79E89D" Width="18" Height="18"
+                                            <Path Classes="Lucide" Stroke="#7FE5A1" Width="18" Height="18"
                                                   Data="M4 17l6-6-6-6 M12 19h8"/>
                                         </Border>
                                         <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
@@ -1784,15 +1762,12 @@
                         <Grid ColumnDefinitions="*,Auto">
                             <StackPanel Spacing="5">
                                 <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                                    <Ellipse Width="7" Height="7" Fill="#35E878" VerticalAlignment="Center"/>
                                     <TextBlock Classes="Eyebrow" Text="SOLID STATE NETWORK // PROJECT"/>
                                 </StackPanel>
                                 <TextBlock Classes="PageTitle" Text="Über das OpSec Audit Tool"/>
                                 <TextBlock Classes="PageDescription" Text="Hintergrundinformationen, Datenschutz, MIT-Lizenz und direkter Kontakt zum Entwickler."/>
                             </StackPanel>
-                            <Border Grid.Column="1" Classes="StatusChip">
-                                <TextBlock Classes="Eyebrow" Text="MIT LICENSE"/>
-                            </Border>
                         </Grid>
                     </Border>
 
@@ -1805,207 +1780,367 @@
                         <ScrollViewer x:Name="AboutScrollViewer"
                                       Classes="ContentBox"
                                       VerticalAlignment="Stretch"
-                                      VerticalContentAlignment="Center"
+                                      VerticalContentAlignment="Top"
                                       HorizontalContentAlignment="Stretch">
-                            <StackPanel Spacing="15"
-                                        HorizontalAlignment="Stretch">
-                            <!-- Projektidentität als kompakter Hero statt einer überbreiten Leerfläche. -->
-                            <Border Background="#121713"
-                                    CornerRadius="10"
-                                    Padding="26"
-                                    BorderBrush="#2A3A30"
-                                    BorderThickness="1"
-                                    BoxShadow="0 0 22 0 #1800FF66">
-                                <Grid ColumnDefinitions="180,*" ColumnSpacing="28">
-                                    <StackPanel Grid.Column="0"
-                                                Spacing="7"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center">
-                                        <Grid Width="130"
-                                              Height="130"
-                                              HorizontalAlignment="Center"
-                                              Background="Transparent"
-                                              PointerMoved="ProfileButton_PointerMoved"
-                                              PointerExited="ProfileButton_PointerExited">
-                                            <Canvas x:Name="StarCanvas" Width="130" Height="130" ClipToBounds="False"/>
-                                            <Button Classes="ProfileEasterEgg"
-                                                    Command="{Binding RegisterProfileClickCommand}"
-                                                    ToolTip.Tip="SolidStateNetwork"
-                                                    ZIndex="2">
-                                                <Border x:Name="ProfileImageFrameControl"
-                                                        Classes="ProfileImageFrame"
-                                                        CornerRadius="40"
-                                                        Background="#2D2D2D"
-                                                        BorderBrush="#00FF66"
-                                                        BorderThickness="2"
-                                                        BoxShadow="0 0 14 3 #00FF66"
-                                                        RenderTransformOrigin="50%,50%">
-                                                    <Border CornerRadius="40" ClipToBounds="True">
-                                                        <Image Source="/Assets/Profile.png" Stretch="UniformToFill"/>
-                                                    </Border>
-                                                </Border>
-                                            </Button>
-                                        </Grid>
-                                        <TextBlock Text="SolidStateNetwork"
-                                                   FontWeight="Bold"
-                                                   Foreground="#00FF66"
-                                                   FontSize="15"
-                                                   HorizontalAlignment="Center"/>
-                                    </StackPanel>
+                            <!--
+                                Eine zusammenhängende Projektfläche ersetzt den alten,
+                                dunkelgrünen Hero-Kasten. Die Ebenen werden jetzt über
+                                Helligkeit und Abstände statt über konkurrierende Farben
+                                gegliedert; sehr dunkle Flächen bleiben verschachtelten
+                                Informationen wie Chips und dem Public Key vorbehalten.
+                            -->
+                            <Border Classes="PageSurface"
+                                    Padding="22"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Top">
+                                <StackPanel Spacing="20">
 
-                                    <StackPanel Grid.Column="1"
-                                                Spacing="12"
-                                                VerticalAlignment="Center">
-                                        <StackPanel Spacing="5">
-                                            <TextBlock Classes="Eyebrow" Text="MISSION // USER-CONTROLLED SECURITY"/>
-                                            <TextBlock Text="Sicherheit, die auf deinem System bleibt."
-                                                       Foreground="#FFFFFF"
-                                                       FontSize="22"
-                                                       FontWeight="Bold"/>
-                                            <TextBlock Text="Ein portables MIT-lizenziertes Projekt zur Stärkung der lokalen Privatsphäre, Systemsicherheit und Anti-Forensik unter Linux und Windows. Entwickelt für maximale Kontrolle, Transparenz und einen Betrieb ohne Administratorrechte."
-                                                       Foreground="#AEB7B1"
-                                                       TextWrapping="Wrap"
-                                                       FontSize="13"
-                                                       LineHeight="19"/>
-                                        </StackPanel>
-
-                                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                                            <Border Grid.Column="0" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
-                                                <TextBlock Text="OPEN SOURCE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <Border Grid.Column="1" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
-                                                <TextBlock Text="MIT LICENSE" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-                                            <Border Grid.Column="2" Background="#18251D" BorderBrush="#31523D" BorderThickness="1" CornerRadius="6" Padding="10,7">
-                                                <TextBlock Text="NO TELEMETRY" Foreground="#79E89D" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                            </Border>
-                                        </Grid>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                            <StackPanel Spacing="10">
-                                <!-- XMPP wird als kompakte Kontaktzeile statt als leeres Textfeld dargestellt. -->
-                                <Border Classes="ModuleCard" Padding="16">
-                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
-                                        <Border Classes="IconTile">
-                                            <Path Classes="Lucide"
-                                                  Stroke="#79E89D"
-                                                  Width="19"
-                                                  Height="19"
-                                                  Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                        </Border>
-                                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
-                                            <TextBlock Text="Direkter Kontakt über XMPP"
-                                                       Foreground="#FFFFFF"
-                                                       FontSize="14"
-                                                       FontWeight="Bold"/>
-                                            <SelectableTextBlock Text="{Binding XmppAddress}"
-                                                                 Foreground="#79E89D"
-                                                                 FontFamily="Consolas, Monospace"
-                                                                 FontSize="12"/>
-                                        </StackPanel>
-                                        <Button Grid.Column="2"
-                                                Command="{Binding CopyXmppCommand}"
-                                                Classes="CopyBtn"
-                                                Padding="12,8"
-                                                VerticalAlignment="Center">
-                                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                                <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14"
-                                                      Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
-                                                <TextBlock Text="Adresse kopieren" Foreground="#00FF66" FontSize="11"/>
-                                            </StackPanel>
-                                        </Button>
-                                    </Grid>
-                                </Border>
-
-                                <!-- Der lange Schlüssel bleibt verfügbar, dominiert die Seite aber
-                                     erst, wenn er bewusst aufgeklappt wird. -->
-                                <Border Classes="ModuleCard" Padding="16">
-                                    <Grid RowDefinitions="Auto,Auto">
-                                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
-                                            <Border Classes="IconTile">
-                                                <Path Classes="Lucide"
-                                                      Stroke="#79E89D"
-                                                      Width="19"
-                                                      Height="19"
-                                                      Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-                                            </Border>
-                                            <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
-                                                <TextBlock Text="Öffentlicher PGP-Schlüssel"
-                                                           Foreground="#FFFFFF"
-                                                           FontSize="14"
-                                                           FontWeight="Bold"/>
-                                                <TextBlock Text="Für verschlüsselte Nachrichten und die Verifikation meiner Identität."
-                                                           Classes="Muted"
-                                                           FontSize="11"/>
-                                            </StackPanel>
-                                            <Button Grid.Column="2"
-                                                    Command="{Binding CopyPgpCommand}"
-                                                    Classes="CopyBtn"
-                                                    Padding="12,8"
+                                    <!-- Identität und Mission bilden eine offene Kopfsektion. -->
+                                    <Grid ColumnDefinitions="180,*" ColumnSpacing="26">
+                                        <StackPanel Grid.Column="0"
+                                                    Spacing="5"
+                                                    HorizontalAlignment="Center"
                                                     VerticalAlignment="Center">
-                                                <StackPanel Orientation="Horizontal" Spacing="6">
-                                                    <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14"
-                                                          Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
-                                                    <TextBlock Text="Key kopieren" Foreground="#00FF66" FontSize="11"/>
-                                                </StackPanel>
-                                            </Button>
-                                        </Grid>
+                                            <Grid Width="130"
+                                                  Height="130"
+                                                  HorizontalAlignment="Center"
+                                                  Background="Transparent"
+                                                  PointerMoved="ProfileButton_PointerMoved"
+                                                  PointerExited="ProfileButton_PointerExited">
+                                                <Canvas x:Name="StarCanvas"
+                                                        Width="130"
+                                                        Height="130"
+                                                        ClipToBounds="False"/>
+                                                <Button Classes="ProfileEasterEgg"
+                                                        Command="{Binding RegisterProfileClickCommand}"
+                                                        ToolTip.Tip="SolidStateNetwork"
+                                                        ZIndex="2">
+                                                    <Border x:Name="ProfileImageFrameControl"
+                                                            Classes="ProfileImageFrame"
+                                                            CornerRadius="40"
+                                                            Background="#222D26"
+                                                            BorderBrush="#35E878"
+                                                            BorderThickness="2"
+                                                            BoxShadow="0 0 14 3 #4435E878"
+                                                            RenderTransformOrigin="50%,50%">
+                                                        <Border CornerRadius="40" ClipToBounds="True">
+                                                            <Image Source="/Assets/Profile.png"
+                                                                   Stretch="UniformToFill"/>
+                                                        </Border>
+                                                    </Border>
+                                                </Button>
+                                            </Grid>
+                                            <TextBlock Text="SolidStateNetwork"
+                                                       Foreground="#F1F5F2"
+                                                       FontSize="15"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding AppVersion, StringFormat='VERSION {0}'}"
+                                                       Classes="Eyebrow"
+                                                       HorizontalAlignment="Center"/>
+                                        </StackPanel>
 
-                                        <StackPanel Grid.Row="1"
-                                                    Margin="52,10,0,0"
-                                                    Spacing="8">
-                                            <ToggleButton x:Name="PgpKeyDisclosure"
-                                                          Classes="DisclosureBtn">
-                                                <StackPanel Orientation="Horizontal"
-                                                            Spacing="8"
-                                                            VerticalAlignment="Center">
-                                                    <TextBlock Text="Public Key Details"
-                                                               Foreground="#79E89D"
-                                                               FontSize="11"
-                                                               FontWeight="SemiBold"/>
-                                                    <!-- Feste 24x24-Fläche verhindert, dass die
-                                                         sichtbare Chevron-Kontur optisch verrutscht. -->
-                                                    <Viewbox Classes="DisclosureChevron"
-                                                             Width="14"
-                                                             Height="14"
-                                                             Stretch="Uniform"
-                                                             VerticalAlignment="Center"
-                                                             HorizontalAlignment="Center"
-                                                             RenderTransformOrigin="50%,50%">
-                                                        <Canvas Width="24" Height="24">
-                                                            <Path Fill="Transparent"
-                                                                  Stroke="#79E89D"
-                                                                  StrokeThickness="2"
-                                                                  StrokeLineCap="Round"
-                                                                  StrokeJoin="Round"
-                                                                  Data="M6 9l6 6 6-6"/>
-                                                        </Canvas>
-                                                    </Viewbox>
-                                                </StackPanel>
-                                            </ToggleButton>
-                                            <Border Background="#101310"
-                                                    BorderBrush="#26362B"
-                                                    BorderThickness="1"
-                                                    CornerRadius="6"
-                                                    Padding="12"
-                                                    IsVisible="{Binding IsChecked, ElementName=PgpKeyDisclosure}">
-                                                <ScrollViewer Height="150"
-                                                              VerticalScrollBarVisibility="Auto"
-                                                              HorizontalScrollBarVisibility="Auto"
-                                                              AllowAutoHide="True">
-                                                    <SelectableTextBlock Text="{Binding PgpKey}"
-                                                                         Foreground="#79E89D"
-                                                                         FontFamily="Consolas, Monospace"
-                                                                         FontSize="11"
-                                                                         TextWrapping="NoWrap"/>
-                                                </ScrollViewer>
-                                            </Border>
+                                        <StackPanel Grid.Column="1"
+                                                    Spacing="12"
+                                                    VerticalAlignment="Center">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Classes="Eyebrow"
+                                                           Text="MISSION // USER-CONTROLLED SECURITY"/>
+                                                <TextBlock Text="Sicherheit, die unter deiner Kontrolle bleibt."
+                                                           Foreground="#F1F5F2"
+                                                           FontSize="23"
+                                                           FontWeight="Bold"
+                                                           TextWrapping="Wrap"/>
+                                                <TextBlock Text="Das OpSec Audit Tool analysiert lokale Systemhärtung, Netzwerkspuren und forensische Rückstände – transparent, portabel und ohne verpflichtende Administratorrechte."
+                                                           Foreground="#B5C0B8"
+                                                           FontSize="13"
+                                                           LineHeight="19"
+                                                           TextWrapping="Wrap"/>
+                                            </StackPanel>
+
+                                            <!-- Kompakte Vertrauenssignale statt drei dominanter Karten. -->
+                                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                                                <Border Grid.Column="0"
+                                                        Background="#101612"
+                                                        BorderBrush="#29372F"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        Padding="10,7">
+                                                    <TextBlock Text="●  OPEN SOURCE"
+                                                               Foreground="#7FE5A1"
+                                                               FontSize="10"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <Border Grid.Column="1"
+                                                        Background="#101612"
+                                                        BorderBrush="#29372F"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        Padding="10,7">
+                                                    <TextBlock Text="●  LOKAL VERARBEITET"
+                                                               Foreground="#7FE5A1"
+                                                               FontSize="10"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <Border Grid.Column="2"
+                                                        Background="#101612"
+                                                        BorderBrush="#29372F"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        Padding="10,7">
+                                                    <TextBlock Text="●  KEINE TELEMETRIE"
+                                                               Foreground="#7FE5A1"
+                                                               FontSize="10"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
                                         </StackPanel>
                                     </Grid>
-                                </Border>
-                            </StackPanel>
-                            </StackPanel>
+
+                                    <Border Height="1"
+                                            Background="#29372F"
+                                            HorizontalAlignment="Stretch"/>
+
+                                    <!-- Drei kurze Prinzipien erklären das Projekt auf einen Blick. -->
+                                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                                        <Border Grid.Column="0" Classes="ModuleCard" Padding="14">
+                                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="11">
+                                                <Border Classes="IconTile">
+                                                    <Path Classes="Lucide"
+                                                          Stroke="#7FE5A1"
+                                                          Width="18"
+                                                          Height="18"
+                                                          Data="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z M9 12l2 2 4-4"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1"
+                                                            Spacing="3"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="PRIVACY BY DESIGN"
+                                                               Classes="Eyebrow"/>
+                                                    <TextBlock Text="Prüfdaten bleiben auf deinem Gerät."
+                                                               Classes="Muted"
+                                                               FontSize="11"
+                                                               TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border Grid.Column="1" Classes="ModuleCard" Padding="14">
+                                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="11">
+                                                <Border Classes="IconTile">
+                                                    <Path Classes="Lucide"
+                                                          Stroke="#7FE5A1"
+                                                          Width="18"
+                                                          Height="18"
+                                                          Data="M16 18l6-6-6-6 M8 6l-6 6 6 6 M14.5 4l-5 16"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1"
+                                                            Spacing="3"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="OFFEN &amp; PRÜFBAR"
+                                                               Classes="Eyebrow"/>
+                                                    <TextBlock Text="MIT-lizenziert und nachvollziehbar."
+                                                               Classes="Muted"
+                                                               FontSize="11"
+                                                               TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border Grid.Column="2" Classes="ModuleCard" Padding="14">
+                                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="11">
+                                                <Border Classes="IconTile">
+                                                    <Path Classes="Lucide"
+                                                          Stroke="#7FE5A1"
+                                                          Width="18"
+                                                          Height="18"
+                                                          Data="M12 2l8 4.5v9L12 20l-8-4.5v-9L12 2z M4.5 6.75L12 11l7.5-4.25 M12 20v-9"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1"
+                                                            Spacing="3"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock Text="PORTABLE CORE"
+                                                               Classes="Eyebrow"/>
+                                                    <TextBlock Text="Linux und Windows, ohne Installation."
+                                                               Classes="Muted"
+                                                               FontSize="11"
+                                                               TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Kontaktwege sind ein eigener, klar benannter Abschnitt. -->
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="Eyebrow"
+                                                   Text="KONTAKT &amp; VERIFIKATION"/>
+                                        <TextBlock Text="Direkte, überprüfbare Kommunikationswege"
+                                                   Foreground="#F1F5F2"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"/>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="10">
+                                        <Border Classes="ModuleCard"
+                                                Padding="0"
+                                                ClipToBounds="True">
+                                            <!-- Die Akzentkante ist eine echte Kartenspalte.
+                                                 Dadurch sitzt sie bündig und füllt stets die
+                                                 komplette Höhe der abgerundeten Karte. -->
+                                            <Grid ColumnDefinitions="6,*">
+                                                <Border Grid.Column="0"
+                                                        Background="#35E878"/>
+                                                <Grid Grid.Column="1"
+                                                      Margin="16"
+                                                      ColumnDefinitions="Auto,*,Auto"
+                                                      ColumnSpacing="14">
+                                                    <Border Grid.Column="0" Classes="IconTile">
+                                                        <Path Classes="Lucide"
+                                                              Stroke="#7FE5A1"
+                                                              Width="19"
+                                                              Height="19"
+                                                              Data="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1"
+                                                                Spacing="4"
+                                                                VerticalAlignment="Center">
+                                                        <TextBlock Text="Direkter Kontakt über XMPP"
+                                                                   Foreground="#F1F5F2"
+                                                                   FontSize="14"
+                                                                   FontWeight="Bold"/>
+                                                        <SelectableTextBlock Text="{Binding XmppAddress}"
+                                                                             Foreground="#7FE5A1"
+                                                                             FontFamily="Consolas, Monospace"
+                                                                             FontSize="12"/>
+                                                    </StackPanel>
+                                                    <Button Grid.Column="2"
+                                                            Command="{Binding CopyXmppCommand}"
+                                                            Classes="CopyBtn"
+                                                            Padding="12,8"
+                                                            VerticalAlignment="Center">
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <Path Classes="Lucide"
+                                                                  Stroke="#35E878"
+                                                                  Width="14"
+                                                                  Height="14"
+                                                                  Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                                                            <TextBlock Text="Adresse kopieren"
+                                                                       Foreground="#35E878"
+                                                                       FontSize="11"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Der vollständige Schlüssel bleibt bewusst eine
+                                             dritte, verschachtelte Informationsebene. -->
+                                        <Border Classes="ModuleCard"
+                                                Padding="0"
+                                                ClipToBounds="True">
+                                            <Grid ColumnDefinitions="6,*">
+                                                <!-- Diese Kante wächst automatisch mit, wenn
+                                                     der Public Key aufgeklappt wird. -->
+                                                <Border Grid.Column="0"
+                                                        Background="#69CC88"/>
+                                                <Grid Grid.Column="1"
+                                                      RowDefinitions="Auto,Auto"
+                                                      Margin="16">
+                                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                                      ColumnSpacing="14">
+                                                    <Border Grid.Column="0" Classes="IconTile">
+                                                        <Path Classes="Lucide"
+                                                              Stroke="#7FE5A1"
+                                                              Width="19"
+                                                              Height="19"
+                                                              Data="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1"
+                                                                Spacing="4"
+                                                                VerticalAlignment="Center">
+                                                        <TextBlock Text="Öffentlicher PGP-Schlüssel"
+                                                                   Foreground="#F1F5F2"
+                                                                   FontSize="14"
+                                                                   FontWeight="Bold"/>
+                                                        <TextBlock Text="Signierte Identität für verschlüsselte Nachrichten."
+                                                                   Classes="Muted"
+                                                                   FontSize="11"/>
+                                                    </StackPanel>
+                                                    <Button Grid.Column="2"
+                                                            Command="{Binding CopyPgpCommand}"
+                                                            Classes="CopyBtn"
+                                                            Padding="12,8"
+                                                            VerticalAlignment="Center">
+                                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                                            <Path Classes="Lucide"
+                                                                  Stroke="#35E878"
+                                                                  Width="14"
+                                                                  Height="14"
+                                                                  Data="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2 M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                                                            <TextBlock Text="Key kopieren"
+                                                                       Foreground="#35E878"
+                                                                       FontSize="11"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </Grid>
+
+                                                <StackPanel Grid.Row="1"
+                                                            Margin="52,10,0,0"
+                                                            Spacing="8">
+                                                    <ToggleButton x:Name="PgpKeyDisclosure"
+                                                                  Classes="DisclosureBtn">
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Spacing="8"
+                                                                    VerticalAlignment="Center">
+                                                            <TextBlock Text="Public Key anzeigen"
+                                                                       Foreground="#7FE5A1"
+                                                                       FontSize="11"
+                                                                       FontWeight="SemiBold"/>
+                                                            <Viewbox Classes="DisclosureChevron"
+                                                                     Width="14"
+                                                                     Height="14"
+                                                                     Stretch="Uniform"
+                                                                     VerticalAlignment="Center"
+                                                                     HorizontalAlignment="Center"
+                                                                     RenderTransformOrigin="50%,50%">
+                                                                <Canvas Width="24" Height="24">
+                                                                    <Path Fill="Transparent"
+                                                                          Stroke="#7FE5A1"
+                                                                          StrokeThickness="2"
+                                                                          StrokeLineCap="Round"
+                                                                          StrokeJoin="Round"
+                                                                          Data="M6 9l6 6 6-6"/>
+                                                                </Canvas>
+                                                            </Viewbox>
+                                                        </StackPanel>
+                                                    </ToggleButton>
+                                                    <Border Background="#101612"
+                                                            BorderBrush="#29372F"
+                                                            BorderThickness="1"
+                                                            CornerRadius="6"
+                                                            Padding="12"
+                                                            IsVisible="{Binding IsChecked, ElementName=PgpKeyDisclosure}">
+                                                        <ScrollViewer Height="150"
+                                                                      VerticalScrollBarVisibility="Auto"
+                                                                      HorizontalScrollBarVisibility="Auto"
+                                                                      AllowAutoHide="True">
+                                                            <SelectableTextBlock Text="{Binding PgpKey}"
+                                                                                 Foreground="#7FE5A1"
+                                                                                 FontFamily="Consolas, Monospace"
+                                                                                 FontSize="11"
+                                                                                 TextWrapping="NoWrap"/>
+                                                        </ScrollViewer>
+                                                    </Border>
+                                                </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
                         </ScrollViewer>
 
                         <!-- Bleed-Out bleibt innerhalb des Inhaltsbereichs; die
@@ -2019,8 +2154,8 @@
                                    ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#121512" Offset="0.0"/>
-                                    <GradientStop Color="#00121512" Offset="1.0"/>
+                                    <GradientStop Color="#101712" Offset="0.0"/>
+                                    <GradientStop Color="#00101712" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
@@ -2034,8 +2169,8 @@
                                    ZIndex="10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                    <GradientStop Color="#00121512" Offset="0.0"/>
-                                    <GradientStop Color="#121512" Offset="1.0"/>
+                                    <GradientStop Color="#00101712" Offset="0.0"/>
+                                    <GradientStop Color="#101712" Offset="1.0"/>
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>

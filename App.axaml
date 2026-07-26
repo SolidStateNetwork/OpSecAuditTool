@@ -1,7 +1,22 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="OpSecAuditTool.App"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
+
+    <!--
+        Einheitlicher Akzent für alle Fluent-Controls. Dadurch bleiben Fokus,
+        Auswahl und Standardzustände auch unter fremden Linux-/Windows-Themes
+        Teil der dunkelgrünen Designsprache.
+    -->
+    <Application.Resources>
+        <Color x:Key="SystemAccentColor">#35E878</Color>
+        <Color x:Key="SystemAccentColorLight1">#7FE5A1</Color>
+        <Color x:Key="SystemAccentColorLight2">#A7F0BD</Color>
+        <Color x:Key="SystemAccentColorLight3">#D4F8DF</Color>
+        <Color x:Key="SystemAccentColorDark1">#25C967</Color>
+        <Color x:Key="SystemAccentColorDark2">#168A45</Color>
+        <Color x:Key="SystemAccentColorDark3">#116B37</Color>
+    </Application.Resources>
 
     <Application.Styles>
         <FluentTheme />

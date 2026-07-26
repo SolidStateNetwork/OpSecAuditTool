@@ -12,6 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using OpSecAuditTool.Services;
+using OpSecAuditTool.Theme;
 using OpSecAuditTool.ViewModels;
 
 namespace OpSecAuditTool.Views;
@@ -22,16 +23,16 @@ namespace OpSecAuditTool.Views;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private static readonly IBrush TimestampBrush = CreateBrush("#68737D");
-    private static readonly IBrush TraceBrush = CreateBrush("#87929C");
-    private static readonly IBrush InfoBrush = CreateBrush("#48CAE4");
-    private static readonly IBrush WarningBrush = CreateBrush("#FFB020");
-    private static readonly IBrush ErrorBrush = CreateBrush("#FF6363");
-    private static readonly IBrush CriticalBrush = CreateBrush("#FF2D55");
-    private static readonly IBrush ComponentBrush = CreateBrush("#B79CFF");
-    private static readonly IBrush TraceMessageBrush = CreateBrush("#A5AFB8");
-    private static readonly IBrush MessageBrush = CreateBrush("#D7E0D9");
-    private static readonly IBrush ExceptionBrush = CreateBrush("#FF8A8A");
+    private static readonly IBrush TimestampBrush = UiPalette.TextMuted;
+    private static readonly IBrush TraceBrush = CreateBrush("#A0ABA4");
+    private static readonly IBrush InfoBrush = UiPalette.Info;
+    private static readonly IBrush WarningBrush = UiPalette.Warning;
+    private static readonly IBrush ErrorBrush = UiPalette.Error;
+    private static readonly IBrush CriticalBrush = UiPalette.Critical;
+    private static readonly IBrush ComponentBrush = CreateBrush("#B7A2F8");
+    private static readonly IBrush TraceMessageBrush = CreateBrush("#AAB5AE");
+    private static readonly IBrush MessageBrush = CreateBrush("#DCE4DE");
+    private static readonly IBrush ExceptionBrush = CreateBrush("#FFA0A7");
 
     private DispatcherTimer? _waveTimer;
     private DispatcherTimer? _radarTimer;
@@ -213,7 +214,7 @@ public sealed partial class MainWindow : Window
             Logger.LogWarning($"Wellenfarbe konnte nicht aus dem Verlauf gelesen werden: {ex.Message}");
             if (WavePath != null)
             {
-                WavePath.Fill = Brushes.LimeGreen;
+                WavePath.Fill = UiPalette.Accent;
             }
         }
 
@@ -499,9 +500,9 @@ public sealed partial class MainWindow : Window
             int colorVariant = random.Next(0, 4);
             Color starColor = colorVariant switch
             {
-                0 => Color.FromRgb(210, 255, 225),
-                1 or 2 => Color.FromRgb(0, 255, 102),
-                _ => Color.FromRgb(0, 190, 75)
+                0 => Color.FromRgb(218, 255, 230),
+                1 or 2 => Color.FromRgb(53, 232, 120),
+                _ => Color.FromRgb(32, 185, 92)
             };
 
             var starBorder = new Border
@@ -510,7 +511,7 @@ public sealed partial class MainWindow : Window
                 Height = size,
                 CornerRadius = new CornerRadius(8),
                 Background = new SolidColorBrush(starColor),
-                BoxShadow = BoxShadows.Parse("0 0 8 2 #00FF66")
+                BoxShadow = BoxShadows.Parse("0 0 8 2 #35E878")
             };
 
             // Sektoren-basierte Verteilung: Garantiert keine leeren Ecken oder Anhäufungen

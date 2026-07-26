@@ -16,6 +16,7 @@ using OpSecAuditTool.Core.Security;
 using OpSecAuditTool.Core.Windows;
 using OpSecAuditTool.Models;
 using OpSecAuditTool.Services;
+using OpSecAuditTool.Theme;
 using OpSecAuditTool.Views;
 
 namespace OpSecAuditTool.ViewModels;
@@ -27,12 +28,12 @@ namespace OpSecAuditTool.ViewModels;
 public sealed partial class MainViewModel : ViewModelBase, IDisposable
 {
     private static readonly Uri PublicIpEndpoint = new("https://api.ipify.org");
-    private static readonly IBrush OfflineStatusBackground = CreateBrush("#18251D");
-    private static readonly IBrush OfflineStatusBorder = CreateBrush("#31523D");
-    private static readonly IBrush OfflineStatusForeground = CreateBrush("#79E89D");
-    private static readonly IBrush OnlineStatusBackground = CreateBrush("#2A2112");
-    private static readonly IBrush OnlineStatusBorder = CreateBrush("#6A4A18");
-    private static readonly IBrush OnlineStatusForeground = CreateBrush("#FFB020");
+    private static readonly IBrush OfflineStatusBackground = UiPalette.OfflineBackground;
+    private static readonly IBrush OfflineStatusBorder = UiPalette.OfflineBorder;
+    private static readonly IBrush OfflineStatusForeground = UiPalette.AccentSoft;
+    private static readonly IBrush OnlineStatusBackground = UiPalette.OnlineBackground;
+    private static readonly IBrush OnlineStatusBorder = UiPalette.OnlineBorder;
+    private static readonly IBrush OnlineStatusForeground = UiPalette.Warning;
     private static readonly HttpClient PublicIpClient = new(
         new HttpClientHandler { CheckCertificateRevocationList = true })
     {
@@ -88,12 +89,12 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private string _firewallStatus = "-";
     [ObservableProperty] private string _torRouting = "-";
 
-    [ObservableProperty] private IBrush _publicIpColor = Brushes.White;
-    [ObservableProperty] private IBrush _dnsColor = Brushes.White;
-    [ObservableProperty] private IBrush _diskCryptColor = Brushes.White;
-    [ObservableProperty] private IBrush _swapColor = Brushes.White;
-    [ObservableProperty] private IBrush _firewallColor = Brushes.White;
-    [ObservableProperty] private IBrush _torColor = Brushes.White;
+    [ObservableProperty] private IBrush _publicIpColor = UiPalette.TextPrimary;
+    [ObservableProperty] private IBrush _dnsColor = UiPalette.TextPrimary;
+    [ObservableProperty] private IBrush _diskCryptColor = UiPalette.TextPrimary;
+    [ObservableProperty] private IBrush _swapColor = UiPalette.TextPrimary;
+    [ObservableProperty] private IBrush _firewallColor = UiPalette.TextPrimary;
+    [ObservableProperty] private IBrush _torColor = UiPalette.TextPrimary;
 
     public MainViewModel()
     {
@@ -264,10 +265,10 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
     {
         IBrush borderColor = result.Status switch
         {
-            CheckStatus.Pass => Brushes.LimeGreen,
-            CheckStatus.Warning => Brushes.Orange,
-            CheckStatus.Fail => Brushes.Red,
-            _ => Brushes.Gray
+            CheckStatus.Pass => UiPalette.Accent,
+            CheckStatus.Warning => UiPalette.Warning,
+            CheckStatus.Fail => UiPalette.Critical,
+            _ => UiPalette.TextMuted
         };
 
         return new AuditResultItem
@@ -313,12 +314,12 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
         Logger.LogInfo("Manueller System- und Security-Scan gestartet.");
 
         PublicIp = DnsServer = LuksEncryption = SwapStatus = FirewallStatus = TorRouting = "Wird geprüft...";
-        PublicIpColor = DnsColor = DiskCryptColor = SwapColor = FirewallColor = TorColor = Brushes.White;
+        PublicIpColor = DnsColor = DiskCryptColor = SwapColor = FirewallColor = TorColor = UiPalette.TextPrimary;
 
         if (!SettingsService.AllowInternetAccess)
         {
             PublicIp = "Deaktiviert (Bitte in Einstellungen erlauben)";
-            PublicIpColor = Brushes.Orange;
+            PublicIpColor = UiPalette.Warning;
             Logger.LogWarning("Öffentlicher IP-Scan übersprungen (Offline-Modus aktiv).");
         }
         else
@@ -326,9 +327,9 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
             try
             {
                 PublicIp = (await PublicIpClient.GetStringAsync(PublicIpEndpoint)).Trim();
-                PublicIpColor = Brushes.White;
+                PublicIpColor = UiPalette.TextPrimary;
             }
-            catch (Exception ex) { PublicIp = "Fehler (Offline)"; PublicIpColor = Brushes.Red; Logger.LogError("Fehler IP", ex); }
+            catch (Exception ex) { PublicIp = "Fehler (Offline)"; PublicIpColor = UiPalette.Error; Logger.LogError("Fehler IP", ex); }
         }
 
         try
@@ -356,9 +357,9 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
                 LuksEncryption = bitLockerResult.Summary;
                 DiskCryptColor = bitLockerResult.Status switch
                 {
-                    CheckStatus.Pass => Brushes.LimeGreen,
-                    CheckStatus.Warning => Brushes.Orange,
-                    _ => Brushes.Red
+                    CheckStatus.Pass => UiPalette.Accent,
+                    CheckStatus.Warning => UiPalette.Warning,
+                    _ => UiPalette.Critical
                 };
             }
             else if (File.Exists("/proc/mounts"))
@@ -372,13 +373,13 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
                            parts[0].StartsWith("/dev/mapper/", StringComparison.Ordinal);
                 });
                 LuksEncryption = isEncrypted ? "Aktiv (LUKS dm-crypt)" : "Inaktiv / Unverschlüsselt";
-                DiskCryptColor = isEncrypted ? Brushes.LimeGreen : Brushes.Red;
+                DiskCryptColor = isEncrypted ? UiPalette.Accent : UiPalette.Critical;
             }
         }
         catch (Exception ex)
         {
             LuksEncryption = "Fehler beim Lesen";
-            DiskCryptColor = Brushes.Red;
+            DiskCryptColor = UiPalette.Error;
             Logger.LogError("Verschlüsselungsstatus konnte nicht gelesen werden.", ex);
         }
 
@@ -394,13 +395,13 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
                 string[] swapLines = await File.ReadAllLinesAsync("/proc/swaps");
                 bool isSwapActive = swapLines.Length > 1;
                 SwapStatus = !isSwapActive ? "Deaktiviert" : "Aktiv";
-                SwapColor = !isSwapActive ? Brushes.LimeGreen : Brushes.Orange;
+                SwapColor = !isSwapActive ? UiPalette.Accent : UiPalette.Warning;
             }
         }
         catch (Exception ex)
         {
             SwapStatus = "Fehler beim Lesen";
-            SwapColor = Brushes.Red;
+            SwapColor = UiPalette.Error;
             Logger.LogError("Swap-Status konnte nicht gelesen werden.", ex);
         }
 
@@ -413,14 +414,14 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
             if (isTorProcessRunning || isPort9050Open || isPort9150Open)
             {
                 TorRouting = "Aktiv (SOCKS5/Daemon läuft)";
-                TorColor = Brushes.LimeGreen;
+                TorColor = UiPalette.Accent;
             }
-            else { TorRouting = "Inaktiv"; TorColor = Brushes.White; }
+            else { TorRouting = "Inaktiv"; TorColor = UiPalette.TextPrimary; }
         }
         catch (Exception ex)
         {
             TorRouting = "Fehler bei Tor-Prüfung";
-            TorColor = Brushes.Red;
+            TorColor = UiPalette.Error;
             Logger.LogError("Tor-Status konnte nicht ermittelt werden.", ex);
         }
 
@@ -433,18 +434,18 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
             if (fwResult.Status == CheckStatus.Pass)
             {
                 FirewallStatus = "Aktiv";
-                FirewallColor = Brushes.LimeGreen;
+                FirewallColor = UiPalette.Accent;
             }
             else
             {
                 FirewallStatus = "Inaktiv / Nicht konfiguriert";
-                FirewallColor = Brushes.Red;
+                FirewallColor = UiPalette.Critical;
             }
         }
         catch (Exception ex)
         {
             FirewallStatus = "Fehler bei Prüfung";
-            FirewallColor = Brushes.Red;
+            FirewallColor = UiPalette.Error;
             Logger.LogError("Fehler bei Firewall-System-Check", ex);
         }
 
@@ -619,6 +620,4 @@ public sealed partial class MainViewModel : ViewModelBase, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private static IBrush CreateBrush(string hexColor) =>
-        new SolidColorBrush(Color.Parse(hexColor));
 }
