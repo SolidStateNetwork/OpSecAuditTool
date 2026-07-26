@@ -4,7 +4,10 @@
         x:DataType="vm:OpSecBibleViewModel"
         x:Class="OpSecAuditTool.Views.OpSecBibleWindow"
         Title="OpSec-Bibel – Der Leitfaden"
-        Width="1050" Height="720"
+        Width="1050"
+        Height="720"
+        MinWidth="820"
+        MinHeight="560"
         WindowStartupLocation="CenterOwner"
         Background="#121212">
 
@@ -13,11 +16,65 @@
     </Design.DataContext>
 
     <Window.Styles>
+        <FluentTheme/>
 
-        <!-- FluentTheme GANZ OBEN -->
-        <FluentTheme />
+        <!-- Gemeinsame visuelle Sprache des Hauptfensters. -->
+        <Style Selector="Path.Lucide">
+            <Setter Property="Fill" Value="Transparent"/>
+            <Setter Property="StrokeThickness" Value="1.5"/>
+            <Setter Property="StrokeLineCap" Value="Round"/>
+            <Setter Property="StrokeJoin" Value="Round"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
 
-        <!-- Linke ListBox-Einträge im Karten-Design -->
+        <Style Selector="Border.PageHeader">
+            <Setter Property="Background" Value="#171A18"/>
+            <Setter Property="BorderBrush" Value="#334038"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="18"/>
+        </Style>
+
+        <Style Selector="Border.PageSurface">
+            <Setter Property="Background" Value="#171A18"/>
+            <Setter Property="BorderBrush" Value="#334038"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+
+        <Style Selector="Border.IconTile">
+            <Setter Property="Width" Value="38"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="CornerRadius" Value="7"/>
+            <Setter Property="Background" Value="#132219"/>
+            <Setter Property="BorderBrush" Value="#24412E"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style Selector="Border.StatusChip">
+            <Setter Property="Background" Value="#18251D"/>
+            <Setter Property="BorderBrush" Value="#31523D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="9,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="TextBlock.Eyebrow">
+            <Setter Property="Foreground" Value="#79E89D"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style Selector="TextBlock.ChapterTitle">
+            <Setter Property="Foreground" Value="#F2F5F3"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Inhaltsverzeichnis als kompakte Modul-Liste. -->
         <Style Selector="ListBoxItem">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="0"/>
@@ -26,45 +83,67 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <Border x:Name="ItemBorder"
-                            Background="#161616"
-                            BorderBrush="#2A2A2A"
+                            Background="#151A17"
+                            BorderBrush="#29322C"
                             BorderThickness="1"
-                            CornerRadius="6"
+                            CornerRadius="7"
                             Padding="12"
                             ClipToBounds="True">
                         <ContentPresenter Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          HorizontalContentAlignment="Stretch"
+                                          VerticalContentAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter>
         </Style>
 
-        <!-- Hover-Effekt für ListBox -->
         <Style Selector="ListBoxItem:pointerover /template/ Border#ItemBorder">
-            <Setter Property="Background" Value="#1C1C1C"/>
-            <Setter Property="BorderBrush" Value="#383838"/>
+            <Setter Property="Background" Value="#1B241E"/>
+            <Setter Property="BorderBrush" Value="#3A4A40"/>
         </Style>
 
-        <!-- Ausgewählte Box -->
         <Style Selector="ListBoxItem:selected /template/ Border#ItemBorder">
-            <Setter Property="Background" Value="#1E3D28"/>
+            <Setter Property="Background" Value="#182B20"/>
             <Setter Property="BorderBrush" Value="#00FF66"/>
         </Style>
 
-        <!-- Titel im ausgewählten Zustand -->
         <Style Selector="ListBoxItem:selected TextBlock.ChapterTitle">
             <Setter Property="Foreground" Value="#00FF66"/>
         </Style>
 
-        <!-- Verhindert, dass die Scrollbar komplett unsichtbar wird -->
+        <!-- Einheitlicher Aktionsbutton wie im Hauptfenster. -->
+        <Style Selector="Button.BibleAction">
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+
+        <Style Selector="Button.BibleAction /template/ ContentPresenter">
+            <Setter Property="Background" Value="#202622"/>
+            <Setter Property="Foreground" Value="#00FF66"/>
+            <Setter Property="BorderBrush" Value="#35473B"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style Selector="Button.BibleAction:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#28342C"/>
+            <Setter Property="BorderBrush" Value="#00FF66"/>
+        </Style>
+
+        <Style Selector="Button.BibleAction:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#142019"/>
+        </Style>
+
         <Style Selector="ScrollViewer">
             <Setter Property="AllowAutoHide" Value="False"/>
         </Style>
 
-        <!-- SCROLLBAR ULTIMATE FIX: 10px Hitbox, sichtbarer 2px-Balken exakt zentriert -->
+        <!-- 16px Bedienfläche mit feiner, mittiger Scrollspur. -->
         <Style Selector="ScrollBar:vertical">
-            <Setter Property="Width" Value="10"/>
-            <Setter Property="MinWidth" Value="10"/>
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="MinWidth" Value="16"/>
             <Setter Property="Template">
                 <ControlTemplate>
                     <Border Background="Transparent">
@@ -75,7 +154,6 @@
                                ViewportSize="{TemplateBinding ViewportSize}"
                                Orientation="Vertical"
                                IsDirectionReversed="True">
-
                             <Thumb Name="PART_Thumb" Cursor="Hand" MinWidth="0" MinHeight="15">
                                 <Thumb.Template>
                                     <ControlTemplate>
@@ -89,69 +167,110 @@
                                     </ControlTemplate>
                                 </Thumb.Template>
                             </Thumb>
-
                         </Track>
                     </Border>
                 </ControlTemplate>
             </Setter>
         </Style>
 
-        <!-- Farbübergang für den Thumb -->
-        <Style Selector="ScrollBar:vertical /template/ Thumb /template/ Border#ThumbBorder">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
-                </Transitions>
-            </Setter>
-        </Style>
-
-        <!-- Hover = Grün -->
         <Style Selector="ScrollBar:vertical /template/ Thumb:pointerover /template/ Border#ThumbBorder">
             <Setter Property="Background" Value="#00FF66"/>
         </Style>
 
-        <!-- Geklickt = Grün -->
         <Style Selector="ScrollBar:vertical /template/ Thumb:pressed /template/ Border#ThumbBorder">
             <Setter Property="Background" Value="#00FF66"/>
         </Style>
-
     </Window.Styles>
 
-    <Grid ColumnDefinitions="320, *" Margin="15">
+    <Grid RowDefinitions="Auto,*"
+          ColumnDefinitions="300,*"
+          Margin="18">
 
-        <!-- Linke Spalte: Inhaltsverzeichnis (Rechter Innenabstand auf 6px) -->
-        <Border Grid.Column="0" Background="#1E1E1E" CornerRadius="8" Padding="15,15,6,15" BorderBrush="#333333" BorderThickness="1" Margin="0,0,10,0">
-            <Grid RowDefinitions="Auto, *">
+        <!-- Eigenständiger Fensterkopf mit derselben Hierarchie wie alle Haupttabs. -->
+        <Border Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Classes="PageHeader"
+                Margin="0,0,0,14">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="5">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Ellipse Width="7" Height="7" Fill="#00FF66" VerticalAlignment="Center"/>
+                        <TextBlock Classes="Eyebrow" Text="KNOWLEDGE BASE // LOCAL REFERENCE"/>
+                    </StackPanel>
+                    <TextBlock Text="OpSec-Bibel"
+                               Foreground="#FFFFFF"
+                               FontSize="22"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Ein strukturierter Leitfaden für Bedrohungsmodelle, Datenschutz, Systemhärtung und sichere Routinen."
+                               Foreground="#AEB7B1"
+                               FontSize="13"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+                <Border Grid.Column="1" Classes="StatusChip">
+                    <TextBlock Classes="Eyebrow" Text="14 KAPITEL"/>
+                </Border>
+            </Grid>
+        </Border>
 
-                <!-- Linker Header (Zentriert mit 9px Ausgleichs-Margin) -->
-                <Grid Grid.Row="0" Height="50" VerticalAlignment="Top" Margin="0,0,9,0">
-                    <TextBlock Text="Inhaltsverzeichnis" FontSize="17" FontWeight="Bold" Foreground="#00FF66" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
-                    <Rectangle Height="1" Fill="#2A2A2A" VerticalAlignment="Bottom"/>
+        <!-- Linke Navigation: Kapitel und Unterthemen. -->
+        <Border Grid.Row="1"
+                Grid.Column="0"
+                Classes="PageSurface"
+                Margin="0,0,10,0"
+                Padding="14,14,0,14">
+            <Grid RowDefinitions="Auto,*">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto,*"
+                      ColumnSpacing="10"
+                      Margin="0,0,14,12">
+                    <Border Classes="IconTile">
+                        <Path Classes="Lucide"
+                              Width="19"
+                              Height="19"
+                              Stroke="#79E89D"
+                              Data="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </Border>
+                    <StackPanel Grid.Column="1"
+                                Spacing="2"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="Inhaltsverzeichnis"
+                                   Foreground="#FFFFFF"
+                                   FontSize="15"
+                                   FontWeight="Bold"/>
+                        <TextBlock Text="Thema auswählen"
+                                   Foreground="#929B95"
+                                   FontSize="11"/>
+                    </StackPanel>
                 </Grid>
 
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <ScrollViewer x:Name="TocScrollViewer" Classes="ContentBox" VerticalScrollBarVisibility="Auto">
+                <Grid Grid.Row="1" ClipToBounds="True">
+                    <ScrollViewer x:Name="TocScrollViewer"
+                                  VerticalScrollBarVisibility="Visible">
                         <ListBox ItemsSource="{Binding Chapters}"
                                  SelectedItem="{Binding SelectedChapter}"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  Padding="0"
-                                 Margin="0,0,6,0">
-
+                                 Margin="0,0,16,0">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Spacing="8"/>
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
-
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Spacing="4">
-                                        <TextBlock Classes="ChapterTitle" Text="{Binding Title}" FontWeight="Bold" Foreground="#FFFFFF" FontSize="13"/>
+                                    <StackPanel Spacing="5">
+                                        <TextBlock Classes="ChapterTitle"
+                                                   Text="{Binding Title}"
+                                                   TextWrapping="Wrap"/>
                                         <ItemsControl ItemsSource="{Binding SubTopics}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding StringFormat='• {0}'}" Foreground="#AAAAAA" FontSize="11" Margin="8,0,0,0"/>
+                                                    <TextBlock Text="{Binding StringFormat='• {0}'}"
+                                                               Foreground="#929B95"
+                                                               FontSize="11"
+                                                               Margin="7,0,0,0"
+                                                               TextWrapping="Wrap"/>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -161,22 +280,30 @@
                         </ListBox>
                     </ScrollViewer>
 
-                    <!-- Oberer Fade-Out links -->
-                    <Rectangle x:Name="TocTopFade" Height="20" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="0,0,10,0">
+                    <Rectangle x:Name="TocTopFade"
+                               Height="22"
+                               VerticalAlignment="Top"
+                               IsHitTestVisible="False"
+                               Opacity="0.0"
+                               Margin="0,0,16,0">
                         <Rectangle.Fill>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                <GradientStop Color="#1E1E1E" Offset="0.0"/>
-                                <GradientStop Color="#001E1E1E" Offset="1.0"/>
+                                <GradientStop Color="#171A18" Offset="0.0"/>
+                                <GradientStop Color="#00171A18" Offset="1.0"/>
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
 
-                    <!-- Unterer Fade-Out links -->
-                    <Rectangle x:Name="TocBottomFade" Height="20" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="0,0,10,0">
+                    <Rectangle x:Name="TocBottomFade"
+                               Height="22"
+                               VerticalAlignment="Bottom"
+                               IsHitTestVisible="False"
+                               Opacity="1.0"
+                               Margin="0,0,16,0">
                         <Rectangle.Fill>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                <GradientStop Color="#001E1E1E" Offset="0.0"/>
-                                <GradientStop Color="#1E1E1E" Offset="1.0"/>
+                                <GradientStop Color="#00171A18" Offset="0.0"/>
+                                <GradientStop Color="#171A18" Offset="1.0"/>
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
@@ -184,20 +311,40 @@
             </Grid>
         </Border>
 
-        <!-- Rechte Spalte: Inhalt / Strukturierte Karten-Ansicht -->
-        <Border Grid.Column="1" Background="#1E1E1E" CornerRadius="8" Padding="15,15,6,15" BorderBrush="#333333" BorderThickness="1">
-            <Grid RowDefinitions="Auto, *, Auto">
-
-                <!-- Rechter Header -->
-                <Grid Grid.Row="0" Height="50" VerticalAlignment="Top" Margin="0,0,9,0">
-                    <TextBlock Text="{Binding SelectedChapter.Title}" FontSize="17" FontWeight="Bold" Foreground="#00FF66" HorizontalAlignment="Left" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Bottom" Margin="0,0,0,10"/>
-                    <Rectangle Height="1" Fill="#2A2A2A" VerticalAlignment="Bottom"/>
+        <!-- Rechte Lesefläche mit ausgewähltem Kapitel und modularen Sektionen. -->
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                Classes="PageSurface"
+                Padding="16,16,0,14">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="*,Auto"
+                      Margin="0,0,16,12">
+                    <StackPanel Spacing="4">
+                        <TextBlock Classes="Eyebrow"
+                                   Text="{Binding SelectedChapter.Number, StringFormat='KAPITEL {0:00} // AUSGEWÄHLT'}"/>
+                        <TextBlock Text="{Binding SelectedChapter.Title}"
+                                   Foreground="#FFFFFF"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   TextWrapping="NoWrap"
+                                   TextTrimming="CharacterEllipsis"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Classes="StatusChip">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="6"
+                                    VerticalAlignment="Center">
+                            <Ellipse Width="6" Height="6" Fill="#00FF66"/>
+                            <TextBlock Classes="Eyebrow" Text="LOKAL"/>
+                        </StackPanel>
+                    </Border>
                 </Grid>
 
-                <!-- Strukturierte Sektionen als Karten -->
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <ScrollViewer x:Name="ContentScrollViewer" Classes="ContentBox" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding SelectedChapter.Sections}" Margin="0,0,6,0">
+                <Grid Grid.Row="1" ClipToBounds="True">
+                    <ScrollViewer x:Name="ContentScrollViewer"
+                                  VerticalScrollBarVisibility="Visible">
+                        <ItemsControl ItemsSource="{Binding SelectedChapter.Sections}"
+                                      Margin="0,0,16,0">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Spacing="12"/>
@@ -205,22 +352,29 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="#161616"
-                                            BorderBrush="#2A2A2A"
+                                    <Border Background="#1B201D"
+                                            BorderBrush="#303A33"
                                             BorderThickness="1"
-                                            CornerRadius="6"
-                                            Padding="15">
-                                        <StackPanel Spacing="6">
-                                            <!-- Sektions-Titel -->
-                                            <TextBlock Text="{Binding Title}"
-                                                       FontSize="13"
-                                                       FontWeight="Bold"
-                                                       Foreground="#00FF66"/>
-
-                                            <!-- Textkörper -->
+                                            CornerRadius="8"
+                                            Padding="16">
+                                        <StackPanel Spacing="8">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8"
+                                                        VerticalAlignment="Center">
+                                                <Ellipse Width="6"
+                                                         Height="6"
+                                                         Fill="#00FF66"
+                                                         VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontSize="12"
+                                                           FontWeight="Bold"
+                                                           Foreground="#79E89D"
+                                                           VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <Rectangle Height="1" Fill="#303A33"/>
                                             <TextBlock Text="{Binding Body}"
                                                        FontSize="12.5"
-                                                       Foreground="#CCCCCC"
+                                                       Foreground="#D4DAD6"
                                                        LineHeight="20"
                                                        TextWrapping="Wrap"/>
                                         </StackPanel>
@@ -230,29 +384,62 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <!-- Oberer Fade-Out rechts -->
-                    <Rectangle x:Name="TopFadeRectangle" Height="25" VerticalAlignment="Top" IsHitTestVisible="False" Opacity="0.0" Margin="0,0,10,0">
+                    <Rectangle x:Name="TopFadeRectangle"
+                               Height="25"
+                               VerticalAlignment="Top"
+                               IsHitTestVisible="False"
+                               Opacity="0.0"
+                               Margin="0,0,16,0">
                         <Rectangle.Fill>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                <GradientStop Color="#1E1E1E" Offset="0.0"/>
-                                <GradientStop Color="#001E1E1E" Offset="1.0"/>
+                                <GradientStop Color="#171A18" Offset="0.0"/>
+                                <GradientStop Color="#00171A18" Offset="1.0"/>
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
 
-                    <!-- Unterer Fade-Out rechts -->
-                    <Rectangle x:Name="BottomFadeRectangle" Height="25" VerticalAlignment="Bottom" IsHitTestVisible="False" Opacity="1.0" Margin="0,0,10,0">
+                    <Rectangle x:Name="BottomFadeRectangle"
+                               Height="25"
+                               VerticalAlignment="Bottom"
+                               IsHitTestVisible="False"
+                               Opacity="1.0"
+                               Margin="0,0,16,0">
                         <Rectangle.Fill>
                             <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                                <GradientStop Color="#001E1E1E" Offset="0.0"/>
-                                <GradientStop Color="#1E1E1E" Offset="1.0"/>
+                                <GradientStop Color="#00171A18" Offset="0.0"/>
+                                <GradientStop Color="#171A18" Offset="1.0"/>
                             </LinearGradientBrush>
                         </Rectangle.Fill>
                     </Rectangle>
                 </Grid>
 
-                <!-- Footer / Schließen Button -->
-                <Button Grid.Row="2" Content="Schließen" HorizontalAlignment="Right" Click="CloseButton_Click" Background="#2D2D2D" Foreground="#00FF66" BorderBrush="#333333" BorderThickness="1" CornerRadius="6" Padding="15,6" Margin="0,15,9,0" Cursor="Hand"/>
+                <Grid Grid.Row="2"
+                      ColumnDefinitions="*,Auto"
+                      Margin="0,13,16,0">
+                    <TextBlock Text="SOLID STATE // FIELD MANUAL"
+                               Foreground="#5CBF78"
+                               FontSize="10"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                    <Button Grid.Column="1"
+                            Classes="BibleAction"
+                            Click="CloseButton_Click">
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="7"
+                                    VerticalAlignment="Center">
+                            <Path Classes="Lucide"
+                                  Width="14"
+                                  Height="14"
+                                  Stroke="#00FF66"
+                                  Data="M18 6L6 18 M6 6l12 12"/>
+                            <TextBlock Text="Schließen"
+                                       Foreground="#00FF66"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
             </Grid>
         </Border>
     </Grid>
