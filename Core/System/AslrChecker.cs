@@ -19,7 +19,7 @@ public sealed class AslrChecker : IOpSecChecker
 
         try
         {
-            string aslrPath = "/proc/sys/kernel/randomize_va_space";
+            const string aslrPath = "/proc/sys/kernel/randomize_va_space";
 
             if (!File.Exists(aslrPath))
             {
@@ -30,7 +30,7 @@ public sealed class AslrChecker : IOpSecChecker
                     Category = Category,
                     Status = CheckStatus.Warning,
                     Summary = "ASLR-Status konnte nicht ermittelt werden.",
-                    Details = "Die Datei '/proc/sys/kernel/randomize_va_space' ist auf diesem System nicht vorhanden."
+                    Details = "Die Datei `/proc/sys/kernel/randomize_va_space` ist auf diesem System nicht vorhanden."
                 });
             }
 
@@ -47,10 +47,11 @@ public sealed class AslrChecker : IOpSecChecker
                         Category = Category,
                         Status = CheckStatus.Pass,
                         Summary = "ASLR ist vollständig aktiv (Level 2).",
-                        Details = "Address Space Layout Randomization schützt Stack, VDSO, mmap und Heap vor Speicher-Exploits."
+                        Details = "Address Space Layout Randomization schützt Stack, VDSO, mmap und Heap durch zufällige Speicheranordnung."
                     });
                 }
-                else if (value == 1)
+
+                if (value == 1)
                 {
                     Logger.LogWarning("ASLR ist nur partiell aktiv (Level 1).");
                     return Task.FromResult(new CheckResult
@@ -58,21 +59,21 @@ public sealed class AslrChecker : IOpSecChecker
                         Name = Name,
                         Category = Category,
                         Status = CheckStatus.Warning,
-                        Summary = "ASLR nur partiell aktiv (Level 1).",
+                        Summary = "ASLR ist nur partiell aktiv (Level 1).",
                         Details = "Die Randomisierung ist für mmap, Stack und VDSO aktiv, der Heap ist jedoch ausgenommen.\n\n" +
                                   "Empfehlung: Setze `kernel.randomize_va_space = 2` in `/etc/sysctl.d/50-aslr.conf`."
                     });
                 }
 
-                Logger.LogWarning("ASLR ist komplett deaktiviert (Level 0)!");
+                Logger.LogWarning("ASLR ist deaktiviert (Level 0).");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Warning,
-                    Summary = "KRITISCH: ASLR ist deaktiviert (Level 0)!",
-                    Details = "Speicheradressen werden beim Programmstart nicht randomisiert. Das System ist hochgradig anfällig für Buffer Overflows und ROP-Attatcken.\n\n" +
-                              "Empfehlung: Setze `kernel.randomize_va_space = 2` via sysctl."
+                    Summary = "ASLR ist deaktiviert (Level 0).",
+                    Details = "Speicheradressen werden beim Programmstart nicht randomisiert. Das erleichtert unter anderem Return-Oriented-Programming- und Speicherfehler-Angriffe.\n\n" +
+                              "Empfehlung: Setze `kernel.randomize_va_space = 2` über sysctl."
                 });
             }
 
@@ -82,7 +83,7 @@ public sealed class AslrChecker : IOpSecChecker
                 Category = Category,
                 Status = CheckStatus.Warning,
                 Summary = "Unerwarteter ASLR-Wert.",
-                Details = $"Inhalt von randomize_va_space: '{content}'"
+                Details = $"Inhalt von `randomize_va_space`: '{content}'"
             });
         }
         catch (Exception ex)
@@ -93,8 +94,8 @@ public sealed class AslrChecker : IOpSecChecker
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "ASLR Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Summary = "ASLR-Audit fehlgeschlagen.",
+                Details = ex.Message
             });
         }
     }
