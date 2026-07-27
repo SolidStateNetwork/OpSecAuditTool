@@ -10,104 +10,90 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Network;
 
 /// <summary>
-/// Bewertet die konfigurierten DNS-Resolver und erkennt auffällige Resolver-Konstellationen.
+/// Ermittelt die lokal konfigurierten DNS-Resolver. Die Prüfung behauptet bewusst
+/// weder einen extern gemessenen DNS-Leak noch eine nicht lokal verifizierbare
+/// DoH-/DoT-Verschlüsselung.
 /// </summary>
 public sealed class DnsLeakChecker : IOpSecChecker
 {
-    public string Name => "DNS-Server & DNS-Leak-Prüfung";
+    public string Name => "Lokale DNS-Resolver-Konfiguration";
     public string Category => "Netzwerk / Anonymität";
 
     public async Task<CheckResult> ExecuteAsync()
     {
-        Logger.LogTrace("Starte Prüfung der konfigurierten DNS-Server...");
-
-        if (!SettingsService.AllowInternetAccess)
-        {
-            Logger.LogTrace("Internet-Zugriff ist in den Einstellungen deaktiviert. DNS-Leak-Check wird übersprungen.");
-            return new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Fail,
-                Summary = "Check übersprungen (Offline-Modus).",
-                Details = "Internet-Verbindungen wurden in den Einstellungen für das Audit-Tool deaktiviert."
-            };
-        }
+        Logger.LogTrace("Starte Prüfung der lokal konfigurierten DNS-Resolver...");
 
         try
         {
-            List<string> dnsServers = NetworkInterface
+            var dnsServers = NetworkInterface
                 .GetAllNetworkInterfaces()
                 .Where(network => network.OperationalStatus == OperationalStatus.Up)
                 .SelectMany(network => network.GetIPProperties().DnsAddresses)
                 .Where(address => !IPAddress.IsLoopback(address))
                 .Select(address => address.ToString())
-                .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToList();
 
-            // Einige Linux-Resolver melden nur den lokalen Stub über die
-            // Netzwerkschnittstelle; resolv.conf dient dort als zusätzlicher Fallback.
-            if (dnsServers.Count == 0 && OperatingSystem.IsLinux() && File.Exists("/etc/resolv.conf"))
+            // Einige Linux-Resolver melden über die Schnittstelle nur einen lokalen
+            // Stub. resolv.conf ergänzt die lokal sichtbare Konfiguration, ohne eine
+            // Internetverbindung aufzubauen.
+            if (OperatingSystem.IsLinux() && File.Exists("/etc/resolv.conf"))
             {
-                var lines = await File.ReadAllLinesAsync("/etc/resolv.conf");
-                foreach (var line in lines)
+                string[] lines = await File.ReadAllLinesAsync("/etc/resolv.conf");
+                foreach (string line in lines)
                 {
-                    if (line.StartsWith("nameserver"))
+                    string trimmed = line.Trim();
+                    if (!trimmed.StartsWith("nameserver", StringComparison.Ordinal))
                     {
-                        var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                        if (parts.Length > 1)
-                        {
-                            dnsServers.Add(parts[1]);
-                        }
+                        continue;
+                    }
+
+                    string[] parts = trimmed.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                    {
+                        dnsServers.Add(parts[1]);
                     }
                 }
             }
 
-            if (dnsServers.Count > 0)
+            string[] distinctServers = dnsServers
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(server => server, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            if (distinctServers.Length == 0)
             {
-                string serverList = string.Join(", ", dnsServers);
-                Logger.LogInfo($"Gefundene DNS-Server: {serverList}");
-
-                try
-                {
-                    var hostEntry = await Dns.GetHostEntryAsync("one.one.one.one");
-                    Logger.LogTrace($"DNS-Auflösung erfolgreich: {hostEntry.HostName}");
-                }
-                catch
-                {
-                    // Die optionale Namensauflösung beeinflusst die lokale Resolver-Auswertung nicht.
-                }
-
+                Logger.LogWarning("Keine lokal konfigurierten DNS-Resolver ermittelt.");
                 return new CheckResult
                 {
                     Name = Name,
                     Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = $"DNS Server aktiv: {serverList}",
-                    Details = $"Die folgenden DNS-Resolver sind für aktive Netzwerkschnittstellen konfiguriert:\n• {string.Join("\n• ", dnsServers)}\n\nHinweis: Stelle sicher, dass deine DNS-Anfragen verschlüsselt (DoH/DoT) verarbeitet werden."
+                    Status = CheckStatus.Warning,
+                    Summary = "Keine DNS-Resolver konnten ermittelt werden.",
+                    Details = "Für aktive Netzwerkschnittstellen und die lokale Resolver-Konfiguration wurden keine DNS-Server gefunden. Der tatsächliche Auflösungsweg bleibt deshalb unbekannt."
                 };
             }
 
-            Logger.LogWarning("Keine lokalen DNS-Resolver in resolv.conf gefunden!");
+            Logger.LogInfo($"{distinctServers.Length} lokale DNS-Resolver-Konfiguration(en) erkannt.");
             return new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Keine DNS-Server konfiguriert.",
-                Details = "Für aktive Netzwerkschnittstellen konnten keine DNS-Resolver ermittelt werden."
+                Summary = $"{distinctServers.Length} DNS-Resolver lokal konfiguriert; Verschlüsselung nicht verifiziert.",
+                Details = $"Lokal sichtbare Resolver:\n• {string.Join("\n• ", distinctServers)}\n\n" +
+                          "Diese lokale Bestandsaufnahme misst keinen externen DNS-Leak und kann nicht zuverlässig bestätigen, ob DNS-over-HTTPS oder DNS-over-TLS verwendet wird."
             };
         }
         catch (Exception ex)
         {
-            Logger.LogError("Fehler bei der DNS-Prüfung", ex);
+            Logger.LogError("Fehler bei der DNS-Resolver-Prüfung", ex);
             return new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "DNS Check fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Summary = "DNS-Resolver konnten nicht vollständig geprüft werden.",
+                Details = ex.Message
             };
         }
     }
