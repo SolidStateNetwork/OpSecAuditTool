@@ -6,11 +6,12 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Windows;
 
 /// <summary>
-/// Bewertet das aktuell verbundene Windows-WLAN und dessen Authentifizierung.
+/// Ermittelt aktive Windows-WLAN-Schnittstellen. Die Authentifizierung oder
+/// Verschlüsselung einer verbundenen Funkstrecke wird nicht bewertet.
 /// </summary>
 public sealed class WindowsWirelessChecker : IOpSecChecker
 {
-    public string Name => "Windows-WLAN-Schnittstellenprüfung";
+    public string Name => "Windows-WLAN-Aktivitätsprüfung";
     public string Category => "Windows / Funk";
 
     public Task<CheckResult> ExecuteAsync()
@@ -35,7 +36,7 @@ public sealed class WindowsWirelessChecker : IOpSecChecker
                 CheckStatus.Warning,
                 $"{activeInterfaces.Length} WLAN-Schnittstelle(n) sind aktiv.",
                 $"Aktiv: {string.Join(", ", activeInterfaces.Select(network => network.Name))}.\n\n" +
-                "Deaktiviere WLAN während sensibler Offline-Arbeiten, um Probe Requests und Netzwerkerkennung zu vermeiden."));
+                "Die Prüfung bestätigt nur den Schnittstellenstatus. WPA-/WPA2-/WPA3-Authentifizierung und die Sicherheit des verbundenen Netzwerks werden nicht gemessen."));
     }
 
     private CheckResult Result(CheckStatus status, string summary, string details) => new()
