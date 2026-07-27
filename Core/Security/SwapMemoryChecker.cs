@@ -7,11 +7,12 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
-/// Prüft aktiven Linux-Swap auf mögliche unverschlüsselte Speicherreste.
+/// Prüft aktiven Linux-Swap auf mögliche persistente Speicherreste. Nur zRAM kann
+/// ohne weitere Systemabfragen eindeutig als nicht persistent bestätigt werden.
 /// </summary>
 public sealed class SwapMemoryChecker : IOpSecChecker
 {
-    public string Name => "Auslagerungsspeicher-Verschlüsselung (Swap)";
+    public string Name => "Auslagerungsspeicher- und Swap-Prüfung";
     public string Category => "Kernel / Speicher";
 
     public Task<CheckResult> ExecuteAsync()
@@ -22,67 +23,78 @@ public sealed class SwapMemoryChecker : IOpSecChecker
         {
             if (!File.Exists("/proc/swaps"))
             {
-                Logger.LogInfo("/proc/swaps nicht vorhanden. Swap-Status unklar.");
+                Logger.LogWarning("/proc/swaps nicht vorhanden. Swap-Status unbekannt.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = "Keine Swap-Informationen gefunden.",
-                    Details = "Das System stellt keine '/proc/swaps'-Schnittstelle bereit."
+                    Status = CheckStatus.Warning,
+                    Summary = "Swap-Status konnte nicht ermittelt werden.",
+                    Details = "Das System stellt keine `/proc/swaps`-Schnittstelle bereit. Ein sicherer oder unverschlüsselter Swap lässt sich deshalb nicht bestätigen."
                 });
             }
 
-            var lines = File.ReadAllLines("/proc/swaps")
+            string[] lines = File.ReadAllLines("/proc/swaps")
                 .Where(line => !line.StartsWith("Filename", StringComparison.Ordinal) &&
                                !string.IsNullOrWhiteSpace(line))
-                .ToList();
+                .ToArray();
 
-            if (lines.Count == 0)
+            if (lines.Length == 0)
             {
-                Logger.LogInfo("Kein Swap-Speicher aktiv (z. B. Swapless System oder Zram).");
+                Logger.LogInfo("Kein Swap-Speicher aktiv.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Pass,
-                    Summary = "Kein unverschlüsselter Swap-Speicher aktiv.",
-                    Details = "Es sind keine physischen Swap-Partitionen oder Swap-Dateien auf der Festplatte eingebunden."
+                    Summary = "Kein Swap-Speicher aktiv.",
+                    Details = "Es sind keine Swap-Partitionen, Swap-Dateien oder zRAM-Geräte eingebunden."
                 });
             }
 
-            bool isEncrypted = false;
-            var swapDetails = string.Join("\n", lines);
+            string[] devices = lines
+                .Select(line => line.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0])
+                .ToArray();
+            string swapDetails = string.Join("\n", lines);
 
-            if (lines.All(line =>
-                    line.Contains("/dev/mapper/", StringComparison.Ordinal) ||
-                    line.Contains("/dev/dm-", StringComparison.Ordinal) ||
-                    line.Contains("/dev/zram", StringComparison.Ordinal)))
+            if (devices.All(device => device.StartsWith("/dev/zram", StringComparison.Ordinal)))
             {
-                isEncrypted = true;
-            }
-
-            if (isEncrypted)
-            {
-                Logger.LogInfo("Verschlüsselter oder RAM-basierter Swap erkannt.");
+                Logger.LogInfo("Ausschließlich RAM-basierter zRAM-Swap erkannt.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Pass,
-                    Summary = "Swap-Speicher ist verschlüsselt oder im RAM (zRAM).",
+                    Summary = "Swap liegt ausschließlich im RAM (zRAM).",
                     Details = $"Eingebundene Swap-Geräte:\n{swapDetails}"
                 });
             }
 
-            Logger.LogWarning("Unverschlüsselter Swap-Speicher auf der Festplatte erkannt!");
+            if (devices.Any(device =>
+                    device.StartsWith("/dev/mapper/", StringComparison.Ordinal) ||
+                    device.StartsWith("/dev/dm-", StringComparison.Ordinal)))
+            {
+                Logger.LogWarning("Device-Mapper-Swap erkannt; Verschlüsselung nicht eindeutig verifizierbar.");
+                return Task.FromResult(new CheckResult
+                {
+                    Name = Name,
+                    Category = Category,
+                    Status = CheckStatus.Warning,
+                    Summary = "Swap verwendet Device Mapper; Verschlüsselung ist nicht bestätigt.",
+                    Details = $"Eingebundene Swap-Geräte:\n{swapDetails}\n\n" +
+                              "Ein Pfad unter `/dev/mapper` kann LUKS, aber auch unverschlüsseltes LVM verwenden. Prüfe den zugrunde liegenden Mapper mit `cryptsetup status` oder `lsblk -f`."
+                });
+            }
+
+            Logger.LogWarning("Persistenter Swap ohne nachweisbare Verschlüsselung erkannt.");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Mögliches Forensik-Risiko! Unverschlüsselter Swap aktiv.",
-                Details = $"Swap-Partition/Datei liegt unverschlüsselt vor:\n{swapDetails}\n\nHinweis: Sensible RAM-Inhalte könnten unverschlüsselt auf der Festplatte landen."
+                Summary = "Persistenter Swap ohne nachweisbare Verschlüsselung aktiv.",
+                Details = $"Eingebundene Swap-Geräte:\n{swapDetails}\n\n" +
+                          "Sensible RAM-Inhalte können auf einem persistenten Datenträger verbleiben."
             });
         }
         catch (Exception ex)
@@ -94,7 +106,7 @@ public sealed class SwapMemoryChecker : IOpSecChecker
                 Category = Category,
                 Status = CheckStatus.Warning,
                 Summary = "Swap-Analyse fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Details = ex.Message
             });
         }
     }
