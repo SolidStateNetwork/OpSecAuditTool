@@ -2,14 +2,15 @@
 
 ## Unterstützte Versionen
 
-Bis zur ersten stabilen Veröffentlichung wird ausschließlich der aktuelle Stand
-des `main`-Branches gepflegt.
+Sicherheitskorrekturen werden für die neueste veröffentlichte Version und den
+aktuellen Stand des `main`-Branches bereitgestellt. Ältere Releases erhalten
+keine separaten Rückportierungen.
 
 ## Sicherheitslücken melden
 
 Bitte Sicherheitslücken nicht in einem öffentlichen GitHub-Issue veröffentlichen.
-Nach dem Anlegen des Repositorys sollte dafür unter **Security → Advisories →
-New draft security advisory** die private Meldung verwendet werden.
+Verwende im Repository unter **Security → Advisories → New draft security
+advisory** eine private Meldung.
 
 Alternativ kann der im „Über“-Tab der Anwendung veröffentlichte XMPP-Kontakt
 verwendet und die Nachricht mit dem dort hinterlegten öffentlichen PGP-Schlüssel
@@ -23,4 +24,5 @@ Eine hilfreiche Meldung enthält:
 - einen Lösungsvorschlag, falls vorhanden
 
 Bitte keine echten Zugangsdaten, privaten Schlüssel oder personenbezogenen Logs
-mitschicken.
+mitschicken. IP-Adressen, Hostnamen, Benutzernamen und lokale Dateipfade sollten
+vor dem Versand redigiert werden.

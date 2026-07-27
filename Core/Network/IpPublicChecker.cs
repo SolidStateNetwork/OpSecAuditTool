@@ -7,11 +7,13 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Network;
 
 /// <summary>
-/// Ruft bei erlaubtem Internetzugriff die sichtbare öffentliche IP-Adresse und ISP-Daten ab.
+/// Ruft bei ausdrücklich erlaubtem Internetzugriff die sichtbare öffentliche
+/// IP-Adresse ab. Die Adresse wird in der Oberfläche angezeigt, aber nicht in das
+/// dauerhafte Anwendungslog geschrieben.
 /// </summary>
 public sealed class IpPublicChecker : IOpSecChecker
 {
-    public string Name => "Öffentliche IP-Adresse & ISP-Prüfung";
+    public string Name => "Sichtbare öffentliche IP-Adresse";
     public string Category => "Netzwerk / Anonymität";
 
     public async Task<CheckResult> ExecuteAsync()
@@ -20,77 +22,75 @@ public sealed class IpPublicChecker : IOpSecChecker
 
         if (!SettingsService.AllowInternetAccess)
         {
-            Logger.LogTrace("Internet-Zugriff ist in den Einstellungen deaktiviert. IP-Check wird übersprungen.");
+            Logger.LogTrace("Internetzugriff ist deaktiviert. IP-Prüfung wird übersprungen.");
             return new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Fail,
-                Summary = "Check übersprungen (Offline-Modus).",
-                Details = "Internet-Verbindungen wurden in den Einstellungen für das Audit-Tool deaktiviert."
+                Summary = "Prüfung übersprungen (Offline-Modus).",
+                Details = "Internetverbindungen wurden in den Einstellungen des Audit-Tools deaktiviert."
             };
         }
 
         try
         {
             using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
-
             string publicIp = string.Empty;
+
             try
             {
                 string json = await client.GetStringAsync("https://api.ipify.org?format=json");
-                using var doc = JsonDocument.Parse(json);
-                publicIp = doc.RootElement.GetProperty("ip").GetString() ?? string.Empty;
+                using JsonDocument document = JsonDocument.Parse(json);
+                publicIp = document.RootElement.GetProperty("ip").GetString() ?? string.Empty;
             }
             catch
             {
-                // Der zweite Anbieter dient ausschließlich als Fallback.
                 try
                 {
-                    string rawIp = await client.GetStringAsync("https://icanhazip.com");
-                    publicIp = rawIp.Trim();
+                    publicIp = (await client.GetStringAsync("https://icanhazip.com")).Trim();
                 }
                 catch
                 {
-                    // Beide Fehler werden unten gemeinsam als kritisches, unklares Ergebnis behandelt.
+                    // Beide Fehler werden unten gemeinsam als unklares Ergebnis behandelt.
                 }
             }
 
-            if (!string.IsNullOrEmpty(publicIp))
+            if (!string.IsNullOrWhiteSpace(publicIp))
             {
-                Logger.LogWarning($"Öffentliche IP ermittelt: {publicIp}");
-
+                Logger.LogWarning("Eine öffentliche IP-Adresse wurde ermittelt; der Wert wird nicht protokolliert.");
                 return new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Warning,
                     Summary = $"Öffentliche IP sichtbar: {publicIp}",
-                    Details = $"Deine echte/aktuelle IP-Adresse ist online sichtbar ({publicIp}).\n\n" +
-                              "Hinweis: Wenn du anonym surfen möchtest, aktiviere ein VPN oder die Tor-Verbindung."
+                    Details = $"Der verwendete Internetzugang ist unter der Adresse {publicIp} sichtbar.\n\n" +
+                              "Die Anzeige allein bewertet weder VPN- noch Tor-Nutzung. Vergleiche die Adresse mit der erwarteten Ausgangsverbindung."
                 };
             }
 
-            Logger.LogInfo("Öffentliche IP konnte nicht über Direct-HTTP abgerufen werden.");
+            Logger.LogInfo("Öffentliche IP konnte nicht abgerufen werden.");
             return new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Fail,
                 Summary = "IP-Prüfung ohne eindeutiges Ergebnis.",
-                Details = "Die IP-Abfrage lieferte keine Antwort. Die Prüfung gilt als kritisch, weil sie die öffentliche IP nicht verlässlich bewerten konnte."
+                Details = "Beide IP-Dienste lieferten keine verwertbare Antwort. Die öffentliche Adresse konnte deshalb nicht verlässlich bewertet werden."
             };
         }
-        catch (HttpRequestException ex) when (ex.StatusCode == global::System.Net.HttpStatusCode.TooManyRequests)
+        catch (HttpRequestException ex) when (
+            ex.StatusCode == global::System.Net.HttpStatusCode.TooManyRequests)
         {
-            Logger.LogWarning("IP-Check Rate-Limit erreicht (HTTP 429).");
+            Logger.LogWarning("IP-Prüfung wurde durch HTTP 429 gedrosselt.");
             return new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Fail,
                 Summary = "Rate-Limit erreicht (HTTP 429).",
-                Details = "Der Anfragen-Dienst hat die Anfrage vorübergehend gedrosselt. Die öffentliche IP konnte deshalb nicht verlässlich geprüft werden."
+                Details = "Der Anfragedienst hat die Anfrage vorübergehend gedrosselt. Die öffentliche IP konnte nicht verlässlich geprüft werden."
             };
         }
         catch (Exception ex)
@@ -102,7 +102,7 @@ public sealed class IpPublicChecker : IOpSecChecker
                 Category = Category,
                 Status = CheckStatus.Fail,
                 Summary = "IP-Prüfung fehlgeschlagen.",
-                Details = $"Die öffentliche IP konnte nicht verlässlich geprüft werden ({ex.Message})."
+                Details = ex.Message
             };
         }
     }

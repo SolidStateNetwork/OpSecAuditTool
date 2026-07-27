@@ -10,8 +10,8 @@ namespace OpSecAuditTool.Core;
 
 /// <summary>
 /// Erstellt ausschließlich Checker, die auf dem aktuellen Betriebssystem sinnvoll
-/// ausgewertet werden können. Dadurch verfälschen Linux-only-Prüfungen unter Windows
-/// weder die Fehlerzahl noch die Prozentberechnung.
+/// ausgewertet werden können. Dadurch verfälschen plattformspezifische Prüfungen
+/// weder die Fehlerzahl noch die Prozentberechnung anderer Systeme.
 /// </summary>
 public static class AuditCheckerCatalog
 {
@@ -49,7 +49,6 @@ public static class AuditCheckerCatalog
     [
         new IpPublicChecker(),
         new DnsLeakChecker(),
-        new OpenPortsChecker(),
         new ExternalListenerChecker(),
         new HostnameTimezoneChecker(),
         new TorrentLeakChecker(),
@@ -65,19 +64,11 @@ public static class AuditCheckerCatalog
 
     private static IOpSecChecker[] CreateLinux() =>
     [
-        new IpPublicChecker(),
-        new DnsLeakChecker(),
+        .. CreatePortableCommon(),
         new FirewallChecker(),
-        new OpenPortsChecker(),
-        new ExternalListenerChecker(),
-        new HostnameTimezoneChecker(),
         new SwapMemoryChecker(),
-        new TorrentLeakChecker(),
         new MacSpoofChecker(),
-        new TorStatusChecker(),
-        new ShellHistoryChecker(),
         new TmpFsChecker(),
-        new ClipboardChecker(),
         new SudoersChecker(),
         new UsbGuardChecker(),
         new BluetoothChecker(),
@@ -89,18 +80,13 @@ public static class AuditCheckerCatalog
         new DiskEncryptionChecker(),
         new SecureBootChecker(),
         new JournaldChecker(),
-        new BrowserStorageChecker(),
         new AslrChecker(),
         new CronJobChecker(),
-        new CrashReportChecker(),
         new FailedServicesChecker(),
         new DisplayServerChecker(),
         new KernelLockdownChecker(),
         new WifiSecurityChecker(),
         new KernelModuleChecker(),
-        new ThumbnailCacheChecker(),
-        new RecentFilesChecker(),
-        new TrashChecker(),
-        new EnvironmentSecretChecker()
+        new TrashChecker()
     ];
 }

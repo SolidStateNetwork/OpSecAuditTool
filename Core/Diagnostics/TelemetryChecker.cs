@@ -5,69 +5,79 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Diagnostics;
 
 /// <summary>
-/// Erkennt bekannte Telemetrie- und Fehlerberichtsdienste im Linux-Hintergrund.
+/// Erkennt bekannte Linux-Dienste für Diagnosedaten sowie lokale Datei-Indexer.
+/// Indexer werden ausdrücklich nicht mit externer Telemetrie gleichgesetzt.
 /// </summary>
 public sealed class TelemetryChecker : IOpSecChecker
 {
-    public string Name => "System-Telemetrie & Diagnosedienste";
-    public string Category => "System / Härtung";
+    public string Name => "Linux-Diagnosedienste und Datei-Indexer";
+    public string Category => "System / Datenschutz";
 
-    private readonly string[] _telemetryProcesses = new[]
+    private readonly string[] _diagnosticProcesses =
     {
-        "tracker-miner-fs",
-        "tracker-miner-3",
-        "localsearch",
-        "baloo_file",
         "ubuntu-report",
         "popularity-contest",
         "apport"
     };
 
+    private readonly string[] _indexerProcesses =
+    {
+        "tracker-miner-fs",
+        "tracker-miner-3",
+        "localsearch",
+        "baloo_file"
+    };
+
     public Task<CheckResult> ExecuteAsync()
     {
-        Logger.LogTrace("Starte Prüfung auf aktive System-Telemetrie und Datei-Indexer...");
+        Logger.LogTrace("Starte Prüfung auf Diagnosedienste und lokale Datei-Indexer...");
 
         try
         {
-            var activeTrackers = ProcessInspectionService.FindRunning(_telemetryProcesses);
+            var diagnostics = ProcessInspectionService.FindRunning(_diagnosticProcesses);
+            var indexers = ProcessInspectionService.FindRunning(_indexerProcesses);
 
-            if (activeTrackers.Count > 0)
+            if (diagnostics.Count == 0 && indexers.Count == 0)
             {
-                string trackerList = string.Join(", ", activeTrackers);
-                Logger.LogWarning($"Aktive Telemetrie-/Indexer-Dienste gefunden: {trackerList}");
-
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = $"{activeTrackers.Count} Telemetrie- / Indizierungsdienste aktiv!",
-                    Details = $"Folgende Hintergrunddienste wurden erkannt:\n• {string.Join("\n• ", activeTrackers)}\n\n" +
-                              "Hinweis: Diese Dienste lesen/indizieren Dateien oder erfassen Diagnosedaten. Deaktiviere sie bei Bedarf (z. B. `balooctl disable` oder via systemctl)."
-                });
+                return Task.FromResult(Result(
+                    CheckStatus.Pass,
+                    "Keine bekannten Diagnosedienste oder Datei-Indexer aktiv.",
+                    "In der begrenzten Prozessliste wurden keine passenden Hintergrunddienste erkannt."));
             }
 
-            Logger.LogTrace("Keine bekannten Telemetrie- oder Indizierungsdienste im Hintergrund aktiv.");
-            return Task.FromResult(new CheckResult
+            string details = string.Empty;
+            if (diagnostics.Count > 0)
             {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Keine aktiven Telemetrie- oder Indexer-Dienste.",
-                Details = "Gängige Tracker-Dienste (GNOME Tracker, KDE Baloo, Apport, Telemetrie) sind inaktiv."
-            });
+                details += $"Diagnose-/Berichtsdienste:\n• {string.Join("\n• ", diagnostics)}\n";
+            }
+            if (indexers.Count > 0)
+            {
+                details += $"Lokale Datei-Indexer:\n• {string.Join("\n• ", indexers)}\n";
+            }
+
+            Logger.LogWarning($"{diagnostics.Count} Diagnosedienst(e) und {indexers.Count} Datei-Indexer erkannt.");
+            return Task.FromResult(Result(
+                CheckStatus.Warning,
+                $"{diagnostics.Count} Diagnosedienst(e) und {indexers.Count} lokale Datei-Indexer aktiv.",
+                details +
+                "\nDatei-Indexer wie Baloo oder Tracker arbeiten normalerweise lokal und sind nicht automatisch Telemetrie. Sie können jedoch Dateinamen und Inhalte katalogisieren. Prüfe jeden Dienst nach deinem Bedrohungsmodell."));
         }
         catch (Exception ex)
         {
-            Logger.LogError("Fehler bei der Telemetrie-Prüfung", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Telemetrie Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
-            });
+            Logger.LogError("Fehler bei der Diagnose-/Indexer-Prüfung", ex);
+            return Task.FromResult(Result(
+                CheckStatus.Warning,
+                "Diagnosedienste und Datei-Indexer konnten nicht geprüft werden.",
+                ex.Message));
         }
     }
+
+    private CheckResult Result(CheckStatus status, string summary, string details) => new()
+    {
+        Name = Name,
+        Category = Category,
+        Status = status,
+        Summary = summary,
+        Details = details
+    };
 }
