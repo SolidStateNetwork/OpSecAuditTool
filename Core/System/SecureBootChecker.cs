@@ -10,7 +10,7 @@ namespace OpSecAuditTool.Core.System;
 /// </summary>
 public sealed class SecureBootChecker : IOpSecChecker
 {
-    public string Name => "UEFI Secure Boot Statusprüfung";
+    public string Name => "UEFI-Secure-Boot-Status";
     public string Category => "System / Härtung";
 
     public Task<CheckResult> ExecuteAsync()
@@ -19,59 +19,55 @@ public sealed class SecureBootChecker : IOpSecChecker
 
         try
         {
-            string efiPath = "/sys/firmware/efi";
+            const string efiPath = "/sys/firmware/efi";
 
             if (!Directory.Exists(efiPath))
             {
-                Logger.LogWarning("System läuft im Legacy/CSM-Modus (kein UEFI).");
+                Logger.LogWarning("System läuft ohne erkennbare UEFI-Schnittstelle.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Warning,
-                    Summary = "Legacy BIOS Modus aktiv (Kein UEFI).",
-                    Details = "Das System wurde im Legacy-BIOS/CSM-Modus gebootet. Secure Boot steht in dieser Konfiguration nicht zur Verfügung."
+                    Summary = "Kein UEFI-Secure-Boot-Status verfügbar.",
+                    Details = "Das System wurde möglicherweise im Legacy-BIOS-/CSM-Modus gestartet. Secure Boot steht in dieser Konfiguration nicht zur Verfügung."
                 });
             }
 
-            string efivarsPath = "/sys/firmware/efi/efivars";
+            const string efivarsPath = "/sys/firmware/efi/efivars";
             bool isSecureBootEnabled = false;
 
             if (Directory.Exists(efivarsPath))
             {
-                var files = Directory.GetFiles(efivarsPath, "SecureBoot-*");
+                string[] files = Directory.GetFiles(efivarsPath, "SecureBoot-*");
                 if (files.Length > 0)
                 {
                     byte[] data = File.ReadAllBytes(files[0]);
-                    if (data.Length >= 5 && data[4] == 1)
-                    {
-                        isSecureBootEnabled = true;
-                    }
+                    isSecureBootEnabled = data.Length >= 5 && data[4] == 1;
                 }
             }
 
             if (isSecureBootEnabled)
             {
-                Logger.LogInfo("Secure Boot ist im UEFI aktiv und schützt den Boot-Prozess.");
+                Logger.LogInfo("Secure Boot ist im UEFI aktiv.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Pass,
-                    Summary = "Secure Boot ist aktiv.",
-                    Details = "Der UEFI-Bootloader und der Kernel sind vor Manipulationen (Evil Maid / Bootkit-Angriffe) geschützt."
+                    Summary = "Secure Boot ist aktiviert.",
+                    Details = "Der UEFI-Secure-Boot-Status ist aktiv. Das erschwert das Starten nicht vertrauenswürdiger Boot-Komponenten."
                 });
             }
 
-            Logger.LogWarning("Secure Boot ist im UEFI deaktiviert.");
+            Logger.LogWarning("Secure Boot ist im UEFI deaktiviert oder nicht lesbar.");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Secure Boot is deaktiviert.",
-                Details = "Das System läuft im UEFI-Modus, jedoch ist Secure Boot nicht aktiviert.\n\n" +
-                          "Hinweis: Aktiviere Secure Boot im Mainboard-UEFI, um die Bootloader-Integrität zu sichern."
+                Summary = "Secure Boot ist deaktiviert oder nicht eindeutig lesbar.",
+                Details = "Das System läuft im UEFI-Modus, aber die Secure-Boot-Variable bestätigt keinen aktiven Schutz."
             });
         }
         catch (Exception ex)
@@ -82,8 +78,8 @@ public sealed class SecureBootChecker : IOpSecChecker
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Secure Boot Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Summary = "Secure-Boot-Audit fehlgeschlagen.",
+                Details = ex.Message
             });
         }
     }
