@@ -5,48 +5,38 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.System;
 
 /// <summary>
-/// Bewertet Hostname und Zeitzone auf vermeidbare Standort- oder Identitätshinweise.
+/// Bewertet den Hostnamen auf eine direkte Übereinstimmung mit dem Benutzernamen
+/// und zeigt die lokale Zeitzone zur manuellen Einordnung an.
 /// </summary>
 public sealed class HostnameTimezoneChecker : IOpSecChecker
 {
-    public string Name => "Hostname- & Zeitzonen-Anonymitätsprüfung";
-    public string Category => "System / Härtung";
+    public string Name => "Hostname- und Zeitzonen-Hinweise";
+    public string Category => "System / Datenschutz";
 
     public Task<CheckResult> ExecuteAsync()
     {
-        Logger.LogTrace("Starte Prüfung von Hostname und Zeitzone...");
+        Logger.LogTrace("Starte lokale Prüfung von Hostname und Zeitzone; konkrete Werte werden nicht protokolliert.");
 
         try
         {
             string hostname = Environment.MachineName;
             string username = Environment.UserName;
             TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+            bool containsUserName = !string.IsNullOrWhiteSpace(username) &&
+                                    username.Length > 2 &&
+                                    hostname.Contains(username, StringComparison.OrdinalIgnoreCase);
 
-            Logger.LogTrace($"System-Hostname: '{hostname}', Benutzer: '{username}', Zeitzone: '{localTimeZone.DisplayName}'");
-
-            bool isHostnamePersonal = false;
-
-            if (!string.IsNullOrEmpty(username) && username.Length > 2 &&
-                hostname.Contains(username, StringComparison.OrdinalIgnoreCase))
+            if (containsUserName)
             {
-                isHostnamePersonal = true;
-            }
-
-            bool isGenericHostname = hostname.Equals("localhost", StringComparison.OrdinalIgnoreCase) ||
-                                     hostname.StartsWith("arch", StringComparison.OrdinalIgnoreCase) ||
-                                     hostname.StartsWith("linux", StringComparison.OrdinalIgnoreCase) ||
-                                     hostname.StartsWith("desktop", StringComparison.OrdinalIgnoreCase);
-
-            if (isHostnamePersonal)
-            {
-                Logger.LogWarning($"Hostname '{hostname}' enthält den Benutzernamen '{username}'!");
+                Logger.LogWarning("Der Hostname enthält den lokalen Benutzernamen.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Warning,
-                    Summary = $"Persönlicher Hostname erkannt ('{hostname}')",
-                    Details = $"Der Computercode/Hostname enthält deinen Benutzernamen ({username}).\n\nHinweis: Das kann im lokalen Netzwerk deine Identität verraten. Nutze lieber einen anonymen Hostnamen."
+                    Summary = "Hostname enthält den lokalen Benutzernamen.",
+                    Details = $"Hostname: '{hostname}'\nZeitzone: '{localTimeZone.Id}' ({localTimeZone.DisplayName})\n\n" +
+                              "Ein persönlicher Hostname kann im lokalen Netzwerk Identitätshinweise offenlegen. Die Zeitzone wird nur angezeigt und nicht automatisch gegen einen VPN-Standort bewertet."
                 });
             }
 
@@ -55,20 +45,21 @@ public sealed class HostnameTimezoneChecker : IOpSecChecker
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Pass,
-                Summary = "Hostname & Systemzeit-Konfiguration unauffällig.",
-                Details = $"Hostname: '{hostname}'\nZeitzone: '{localTimeZone.Id}' ({localTimeZone.DisplayName})\n\nHinweis: Achte darauf, dass deine Zeitzone zum Standort deines VPNs passt."
+                Summary = "Keine direkte Benutzername-Übereinstimmung im Hostnamen erkannt.",
+                Details = $"Hostname: '{hostname}'\nZeitzone: '{localTimeZone.Id}' ({localTimeZone.DisplayName})\n\n" +
+                          "Die Prüfung erkennt nur eine einfache Zeichenübereinstimmung. Andere persönliche Hostnamen oder Standortinformationen können unentdeckt bleiben."
             });
         }
         catch (Exception ex)
         {
-            Logger.LogError("Fehler bei der Hostname/Zeitzonen-Prüfung", ex);
+            Logger.LogError("Fehler bei der Hostname-/Zeitzonen-Prüfung", ex);
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Hostname-Analyse fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Summary = "Hostname und Zeitzone konnten nicht geprüft werden.",
+                Details = ex.Message
             });
         }
     }
