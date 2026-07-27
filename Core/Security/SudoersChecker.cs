@@ -1,17 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using OpSecAuditTool.Services;
 
 namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
-/// Sucht in sudoers-Regeln nach kennwortlosen oder besonders weitreichenden Freigaben.
+/// Sucht in lesbaren sudoers-Regeln nach kennwortlosen Freigaben. Nicht lesbare
+/// Konfigurationen werden als unbekannt und nicht als bestanden gewertet.
 /// </summary>
 public sealed class SudoersChecker : IOpSecChecker
 {
-    public string Name => "Sudo-Berechtigungen & Rechteausweitung";
+    public string Name => "Sudo-Berechtigungen und NOPASSWD-Regeln";
     public string Category => "System / Härtung";
 
     public Task<CheckResult> ExecuteAsync()
@@ -20,68 +21,60 @@ public sealed class SudoersChecker : IOpSecChecker
 
         try
         {
-            string sudoersFile = "/etc/sudoers";
-            string sudoersDDir = "/etc/sudoers.d";
+            const string sudoersFile = "/etc/sudoers";
+            const string sudoersDDir = "/etc/sudoers.d";
+            var matchedFiles = new List<string>();
 
-            bool hasNoPasswd = false;
-            string matchedDetails = "";
-
-            if (File.Exists(sudoersFile))
+            if (File.Exists(sudoersFile) && ContainsNoPasswdRule(sudoersFile))
             {
-                if (CheckFileForNoPasswd(sudoersFile, out string match))
-                {
-                    hasNoPasswd = true;
-                    matchedDetails += $"• {sudoersFile}: {match}\n";
-                }
+                matchedFiles.Add(sudoersFile);
             }
 
             if (Directory.Exists(sudoersDDir))
             {
-                var files = Directory.GetFiles(sudoersDDir);
-                foreach (var file in files)
+                foreach (string file in Directory.GetFiles(sudoersDDir))
                 {
-                    if (CheckFileForNoPasswd(file, out string match))
+                    if (ContainsNoPasswdRule(file))
                     {
-                        hasNoPasswd = true;
-                        matchedDetails += $"• {Path.GetFileName(file)}: {match}\n";
+                        matchedFiles.Add(Path.Combine(sudoersDDir, Path.GetFileName(file)));
                     }
                 }
             }
 
-            if (hasNoPasswd)
+            if (matchedFiles.Count > 0)
             {
-                Logger.LogWarning("NOPASSWD-Regel in der Sudoers-Konfiguration gefunden!");
+                Logger.LogWarning("NOPASSWD-Regel in der Sudoers-Konfiguration gefunden.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Warning,
-                    Summary = "Privilege Escalation Risiko: 'NOPASSWD' Regel aktiv!",
-                    Details = $"Gefundene 'NOPASSWD'-Einträge:\n{matchedDetails}\n" +
-                              "Hinweis: Befehle können ohne Passwortbestätigung als Root ausgeführt werden. Überprüfe, ob diese Ausnahmen zwingend notwendig sind."
+                    Summary = $"NOPASSWD-Regeln in {matchedFiles.Count} Sudoers-Datei(en) erkannt.",
+                    Details = $"Betroffene Dateien:\n• {string.Join("\n• ", matchedFiles)}\n\n" +
+                              "Die konkreten Regeln werden aus Datenschutzgründen nicht in Bericht oder Log übernommen. Prüfe, ob jede kennwortlose Ausnahme zwingend erforderlich und auf einzelne Befehle begrenzt ist."
                 });
             }
 
-            Logger.LogInfo("Sudoers-Konfiguration enthält keine auffälligen NOPASSWD-Regeln.");
+            Logger.LogInfo("In den lesbaren Sudoers-Dateien wurden keine NOPASSWD-Regeln erkannt.");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Pass,
-                Summary = "Sudoers-Konfiguration ist gehärtet.",
-                Details = "Es wurden keine uneingeschränkten 'NOPASSWD'-Berechtigungen in `/etc/sudoers` oder `/etc/sudoers.d/` gefunden."
+                Summary = "Keine NOPASSWD-Regeln in den lesbaren Sudoers-Dateien gefunden.",
+                Details = "Die lesbaren Dateien `/etc/sudoers` und `/etc/sudoers.d/` enthalten keine aktiven NOPASSWD-Einträge."
             });
         }
         catch (UnauthorizedAccessException)
         {
-            Logger.LogInfo("Kein Lesezugriff auf /etc/sudoers (Standard ohne Root/Sudo).");
+            Logger.LogWarning("Sudoers-Konfiguration ist ohne erhöhte Rechte nicht vollständig lesbar.");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Sudoers-Dateien geschützt (kein Lesezugriff ohne Root).",
-                Details = "Standard-Nutzer haben keinen Lesezugriff auf `/etc/sudoers`. Dies entspricht den Standard-Sicherheitsrichtlinien."
+                Status = CheckStatus.Warning,
+                Summary = "Sudoers-Konfiguration konnte nicht vollständig geprüft werden.",
+                Details = "Mindestens eine Sudoers-Datei ist für den aktuellen Benutzer nicht lesbar. Ihr Schutz ist sinnvoll, erlaubt aber keine Aussage darüber, ob NOPASSWD-Regeln enthalten sind."
             });
         }
         catch (Exception ex)
@@ -92,23 +85,24 @@ public sealed class SudoersChecker : IOpSecChecker
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Sudoers Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
+                Summary = "Sudoers-Audit fehlgeschlagen.",
+                Details = ex.Message
             });
         }
     }
 
-    private static bool CheckFileForNoPasswd(string filePath, out string matchInfo)
+    private static bool ContainsNoPasswdRule(string filePath)
     {
-        matchInfo = "";
         foreach (string line in File.ReadLines(filePath))
         {
             string trimmed = line.Trim();
-            if (trimmed.StartsWith("#") || string.IsNullOrWhiteSpace(trimmed)) continue;
+            if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith('#'))
+            {
+                continue;
+            }
 
             if (trimmed.Contains("NOPASSWD", StringComparison.OrdinalIgnoreCase))
             {
-                matchInfo = trimmed;
                 return true;
             }
         }
