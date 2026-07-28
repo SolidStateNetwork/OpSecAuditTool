@@ -49,7 +49,7 @@ Beide Pakete sind **vollständig portabel** (Self-Contained Single-File Option v
 
 ---
 
-## 🔍 Übersicht der 48 Core-Checker
+## 🔍 Übersicht der 58 Core-Checker
 
 Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker erbt von der robusten Basisklasse `OpSecCheckerBase`:
 
@@ -58,7 +58,13 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | :--- | :--- |
 | **`OpenPortsChecker`** | Universal-Scan aller 65.536 Ports via Kernel-Socket-Tabellen (`ss` / `/proc/net/tcp`) |
 | **`SshHardeningChecker`** | Prüfung von `/etc/ssh/sshd_config` & `/etc/ssh/sshd_config.d/*.conf` (Root-Login, Passwort-Auth) |
+| **`SshClientConfigChecker`** | Prüfung des SSH-Clients (`~/.ssh/config`) auf riskante HostKeyChecking- & ForwardAgent-Flags |
 | **`SudoersChecker`** | Erkennung von `NOPASSWD` / `!authenticate` in `/etc/sudoers` & `/etc/sudoers.d/` |
+| **`DockerPodmanSecurityChecker`** | Container-Sicherheit (`docker`-Gruppenrechte & Klartext-Registry-Tokens) |
+| **`GitSecurityConfigChecker`** | Prüfung auf unverschlüsselte `~/.git-credentials` und riskanten `store`-Helper |
+| **`ShellStartupPersistenceChecker`** | Analyse von Shell-Profilen (`~/.bashrc` etc.) auf Injektionen (`LD_PRELOAD`, alias-Überschreibungen) |
+| **`UserAutostartChecker`** | User-Space Autostart-Audit (`~/.config/autostart` & User-systemd Units) |
+| **`AgentSocketSecurityChecker`** | SSH- & GPG-Agent Socket-Prüfung auf unbegrenzt im Speicher gehaltene Schlüssel |
 | **`DiskEncryptionChecker`** | Prüfung auf aktive LUKS-, eCryptfs- oder dm-crypt Systemverschlüsselung |
 | **`FirewallChecker`** | Erkennung aktiver Linux-Firewalls (`UFW`, `firewalld`, `nftables`) |
 | **`SwapMemoryChecker`** | Verifikation verschlüsselter Swap-Speicher / ZRAM |
@@ -70,6 +76,7 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | Checker | Prüfziel |
 | :--- | :--- |
 | **`BrowserStorageChecker`** | Analyse von Browser-Profilen (Native, **Flatpak**, **Snap** für Chrome, Brave, Edge, Firefox) |
+| **`BrowserExtensionAuditChecker`** | Zählt und prüft installierte Browser-Erweiterungen und Extension-Berechtigungen |
 | **`TrashChecker`** | Safe-rekursiver Scan auf Datenreste im Papierkorb & externen `.Trash-1000` Verzeichnissen |
 | **`ClipboardChecker`** | Überwachung der Zwischenablage auf unverschlüsselte Private Keys oder Tokens |
 | **`TmpFsChecker`** | Prüfung, ob `/tmp` und `/var/tmp` als flüchtiges RAM-Dateisystem (`tmpfs`) gebunden sind |
@@ -81,6 +88,7 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | Checker | Prüfziel |
 | :--- | :--- |
 | **`EnvironmentSecretChecker`** | Spürt versehentlich exportierte AI-/Cloud-API-Tokens (`OPENAI_API_KEY`, `GEMINI_API_KEY`, AWS, GCP, JWT) auf |
+| **`AiToolingPrivacyChecker`** | Analyse lokaler AI- / LLM-Tools (Continue, Aider, Copilot, Cursor) auf Klartext-Tokens |
 | **`ShellHistoryChecker`** | Asynchrones Streaming der Shell-History auf im Klartext getippte Passwörter & Tokens (`max 15.000` Zeilen) |
 | **`CrashReportChecker`** | Coredump-Index-Prüfung (`coredumpctl`) und WER-Verzeichnisse auf Arbeitsspeicher-Auszüge |
 | **`FailedServicesChecker`** | Erkennung fehlerhafter `systemd`-Dienste im Status `failed` |
@@ -90,6 +98,7 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | Checker | Prüfziel |
 | :--- | :--- |
 | **`TorStatusChecker`** | Dynamischer Parser für `torrc`-Ports + Erkennung von Tor SOCKS5, ControlPort und TransPort |
+| **`EncryptedDnsChecker`** | Prüfung auf verschlüsseltes DNS-over-TLS (`DNSOverTLS=yes`) oder lokale DNS-Proxys |
 | **`DnsLeakChecker`** | Prüfung der DNS-Auflösung und Schutz vor unverschlüsseltem DNS-Leak |
 | **`IpPublicChecker`** | Lokale oder optionale Online-Erkennung der öffentlich sichtbaren IP-Adresse |
 | **`TorrentLeakChecker`** | Schutz vor IP-Leaks durch P2P-/Torrent-Dienste ohne aktiven VPN-Tunnel |
@@ -101,6 +110,7 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | Checker | Prüfziel |
 | :--- | :--- |
 | **`SecureBootChecker`** | Prüfung des UEFI SecureBoot-Status via `efivars` oder automatisch über `mokutil --sb-state` |
+| **`DisplayServerSecurityChecker`** | Prüfung auf modernes Wayland vs. X11 (welches globales Keylogging erlaubt) |
 | **`AslrChecker`** | Verifikation von Address Space Layout Randomization (`kernel.randomize_va_space = 2`) |
 | **`KernelModuleChecker`** | Prüfung der Sicherheitseinstellungen von Kernel-Modulen |
 | **`HostnameTimezoneChecker`** | Analyse auf forensisch oder zeitzonenbedingt identifizierende Hostnamen |
