@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="Assets/AppIcon.png" width="110" alt="OpSec Audit Tool">
+  <img src="Assets/AppIcon.png" width="100" alt="OpSec Audit Tool">
 </p>
 
 <h1 align="center">OpSec Audit Tool</h1>
 
 <p align="center">
-  <code>Zero-Admin</code> · <code>Zero-Telemetry</code> · <code>Offline-First</code><br>
-  <b>Portable Systemhärtungs- & Forensik-Engine für Linux und Windows.</b>
+  Portable Sicherheitsanalyse für Linux und Windows.<br>
+  <b>Keine Installation. Keine Admin-Rechte. Keine Telemetrie.</b>
 </p>
 
 <p align="center">
@@ -16,135 +16,118 @@
   <a href="https://github.com/SolidStateNetwork/OpSecAuditTool/actions/workflows/build.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/SolidStateNetwork/OpSecAuditTool/build.yml?branch=main&style=flat-square&label=build" alt="Build">
   </a>
-  <img src="https://img.shields.io/badge/checkers-67-00ff66?style=flat-square" alt="67 Checker">
-  <img src="https://img.shields.io/badge/telemetry-none-00ff66?style=flat-square" alt="Zero Telemetry">
-  <img src="https://img.shields.io/badge/sudo-not%20required-00ff66?style=flat-square" alt="No Sudo">
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/SolidStateNetwork/OpSecAuditTool?style=flat-square&color=555" alt="MIT">
   </a>
 </p>
 
-<br>
+---
+
+Das OpSec Audit Tool prüft dein System auf Härtungslücken, forensische Rückstände und Privacy-Leaks. 67 spezialisierte Checker laufen vollständig im User-Space – ohne Root-Rechte, ohne Netzwerkzugriff und ohne Daten an Dritte zu senden.
+
+Das Ergebnis ist ein nachvollziehbarer **Security Score** mit farbcodierten Befunden, technischen Details und automatisierten **Quick-Fixes** für häufige Schwachstellen.
 
 <p align="center">
-  <img src="docs/images/overview-cyber-terminal.png" width="820" alt="Cyber-Terminal Kontrollzentrum mit Live-Radar und OpSec-Statusanzeige">
+  <img src="docs/images/overview-cyber-terminal.png" width="820" alt="OpSec Audit Tool – Kontrollzentrum">
 </p>
 
 <p align="center">
-  <img src="docs/images/audit-expanded-results.png" width="820" alt="Audit-Ergebnisse mit Security Score, Signalfarben und Quick-Fix Buttons">
+  <img src="docs/images/audit-expanded-results.png" width="820" alt="OpSec Audit Tool – Audit-Ergebnisse">
 </p>
 
 ---
 
-## Was macht das Ding?
+## Funktionsumfang
 
-67 spezialisierte Checker scannen dein System nach Schwachstellen, forensischen Rückständen und Privacy-Leaks – **vollständig im User-Space**, ohne Root-Rechte, ohne Installation, ohne nach Hause zu telefonieren.
+**Systemhärtung** — SSH-Server- und Client-Konfiguration, Sudoers-Analyse, Disk-Encryption, Firewall-Status, Kernel-Flags (ASLR, ptrace, Lockdown), Secure Boot, Swap-Verschlüsselung und USB-Guard.
 
-Du bekommst einen **Security Score**, farbcodierte Ergebnisse mit technischen Details und für viele Befunde **1-Klick Quick-Fixes**, die das Problem direkt im User-Space beheben.
+**Netzwerk & Privacy** — Port-Scan aller 65.536 Ports über Kernel-Socket-Tabellen mit Bindungsanalyse (lokal vs. öffentlich), Tor-Konfigurationserkennung, DNS-Leak-Tests, VPN-Interface-Prüfung und MAC-Randomisierung.
 
-### Das Wichtigste auf einen Blick
+**Forensik & Anti-Forensik** — Browser-Profile und -Erweiterungen (Native, Flatpak, Snap), Messenger-Storage, WebRTC-Leak-Erkennung, Crash-Dumps, Clipboard-Inhalte, Thumbnail-Caches, Papierkorb und tmpfs-Status.
 
-| | |
-|:--|:--|
-| 🛡️ **Sudo-frei** | Tiefenanalyse von SSH, Sudoers, Kernel-Flags, Container-Rechten, GPG-Schlüsseln – alles ohne `root` |
-| 🌐 **Port-Scanner 0–65535** | Kernel-Socket-Tabellen (`ss` / `/proc/net/tcp`), Unterscheidung lokal vs. öffentlich exponiert |
-| 🧅 **Tor & Privacy** | Dynamische `torrc`-Erkennung (Native, Flatpak, Snap), SocksPort/ControlPort-Verifikation |
-| ⚡ **Quick-Fixes** | SSH `known_hosts` hashen, WebRTC-Leaks in Firefox stoppen, `pip`/`npm` härten, AI-Tokens scrubben |
-| 🔬 **Anti-Forensik** | Browser-Profile, Messenger-Storage, Crash-Dumps, Clipboard, Thumbnails, Trash, tmpfs |
-| 🔒 **Offline-First** | Kein Nachladen, keine Tracker, keine Cloud. Online-Checks nur nach expliziter Freigabe |
+**Diagnostik** — Umgebungsvariablen auf versehentlich exportierte API-Tokens (OpenAI, AWS, GCP), Shell-History auf Klartext-Passwörter, AI-Tooling-Konfigurationen, Telemetrie-Dienste und Systemd-Journal.
 
----
+**Container & Credentials** — Docker/Podman-Gruppenrechte, Git-Credential-Store, GPG-Schlüsselqualität, FIDO2/U2F-Hardware-Tokens, SSH/GPG-Agent-Socket-Konfiguration und Shell-Startup-Injektionen.
 
-## Die 67 Checker
-
-Organisiert in sechs Domänen, jeder Checker erbt von `OpSecCheckerBase`:
+**Windows** — Defender-Status, BitLocker, Credential Guard, Firewall-Profile, Datenschutzeinstellungen, RDP-Konfiguration und Autostart-Analyse.
 
 <details>
-<summary><b>🛡️ Security & Härtung</b> — 23 Checker</summary>
+<summary><b>Vollständige Liste aller 67 Checker anzeigen</b></summary>
+<br>
 
-| Checker | Was wird geprüft |
+#### Security & Härtung (23)
+
+| Checker | Prüfbereich |
 |:--|:--|
-| `OpenPortsChecker` | Vollständiger 65.536-Port-Scan via Kernel-Socket-Tabellen |
-| `SshHardeningChecker` | `sshd_config` & `sshd_config.d/*.conf` (Root-Login, Passwort-Auth) |
-| `SshClientConfigChecker` | `~/.ssh/config` auf riskante Flags (HostKeyChecking, ForwardAgent) |
-| `SshKnownHostsHygieneChecker` | Klartext-Hostnamen in `known_hosts` |
-| `GpgKeySecurityChecker` | Schwache Schlüssellängen (<2048 Bit) & abgelaufene Keys |
-| `HardwareAuthTokenChecker` | FIDO2/U2F Tokens am USB-Bus (YubiKey, Nitrokey, SoloKeys) |
-| `DockerPodmanSecurityChecker` | `docker`-Gruppenrechte & Klartext-Registry-Tokens |
-| `GitSecurityConfigChecker` | Unverschlüsselte `~/.git-credentials` & `store`-Helper |
-| `SudoersChecker` | `NOPASSWD` / `!authenticate` in Sudoers |
-| `ShellStartupPersistenceChecker` | Injektionen in `~/.bashrc` (`LD_PRELOAD`, Alias-Overwrites) |
-| `UserAutostartChecker` | `~/.config/autostart` & User-systemd Units |
-| `AgentSocketSecurityChecker` | SSH/GPG-Agent Sockets mit unbegrenzt gecachten Keys |
+| `OpenPortsChecker` | 65.536-Port-Scan via Kernel-Socket-Tabellen |
+| `SshHardeningChecker` | sshd_config (Root-Login, Passwort-Auth) |
+| `SshClientConfigChecker` | SSH-Client-Flags (HostKeyChecking, ForwardAgent) |
+| `SshKnownHostsHygieneChecker` | Klartext-Hostnamen in known_hosts |
+| `GpgKeySecurityChecker` | Schlüssellängen & abgelaufene Keys |
+| `HardwareAuthTokenChecker` | FIDO2/U2F am USB-Bus |
+| `DockerPodmanSecurityChecker` | Container-Gruppenrechte & Registry-Tokens |
+| `GitSecurityConfigChecker` | git-credentials & store-Helper |
+| `SudoersChecker` | NOPASSWD / !authenticate |
+| `ShellStartupPersistenceChecker` | Injektionen in Shell-Profile |
+| `UserAutostartChecker` | Autostart & User-systemd Units |
+| `AgentSocketSecurityChecker` | SSH/GPG-Agent Socket-Konfiguration |
 | `DiskEncryptionChecker` | LUKS, eCryptfs, dm-crypt |
 | `FirewallChecker` | UFW, firewalld, nftables |
 | `SwapMemoryChecker` | Verschlüsselter Swap / ZRAM |
-| `UsbGuardChecker` | BadUSB-Schutz via usbguard |
-| `UserDataPermissionsChecker` | Rechte auf `~/.ssh`, `~/.gnupg`, Browser-Profile |
-| `MacSpoofChecker` | MAC-Randomisierung im NetworkManager |
-| `DisplayServerSecurityChecker` | Wayland vs. X11 Sicherheitsbewertung |
-| `PackageManagerSecurityChecker` | pip/npm/yarn Härtung & Audit |
-| `SandboxPermissionChecker` | Flatpak/Snap Sandbox-Berechtigungen |
-| `ScreenLockTimeoutChecker` | Bildschirmsperre-Timeout |
+| `UsbGuardChecker` | BadUSB-Schutz |
+| `UserDataPermissionsChecker` | Rechte auf ~/.ssh, ~/.gnupg |
+| `MacSpoofChecker` | MAC-Randomisierung |
+| `DisplayServerSecurityChecker` | Wayland vs. X11 |
+| `PackageManagerSecurityChecker` | pip/npm/yarn Härtung |
+| `SandboxPermissionChecker` | Flatpak/Snap Berechtigungen |
+| `ScreenLockTimeoutChecker` | Bildschirmsperre |
 | `PtraceScopeChecker` | Kernel ptrace Scope |
 
-</details>
+#### Forensik & Anti-Forensik (10)
 
-<details>
-<summary><b>🔬 Forensik & Anti-Forensik</b> — 10 Checker</summary>
-
-| Checker | Was wird geprüft |
+| Checker | Prüfbereich |
 |:--|:--|
-| `WebRtcLeakChecker` | Browser-Profile auf WebRTC STUN IP-Leaks |
-| `MessengerStoragePrivacyChecker` | Lokale Profile von Signal, Telegram, Discord, Element |
-| `LocalCrashDumpFileChecker` | Verwaiste `.core`/`.dmp`-Dateien mit RAM-Auszügen |
-| `BrowserStorageChecker` | Chrome, Brave, Edge, Firefox (Native, Flatpak, Snap) |
+| `WebRtcLeakChecker` | WebRTC STUN IP-Leaks in Browser-Profilen |
+| `MessengerStoragePrivacyChecker` | Signal, Telegram, Discord, Element |
+| `LocalCrashDumpFileChecker` | .core/.dmp-Dateien mit RAM-Auszügen |
+| `BrowserStorageChecker` | Chrome, Brave, Edge, Firefox |
 | `BrowserExtensionAuditChecker` | Extension-Count & Berechtigungen |
-| `TrashChecker` | Papierkorb & externe `.Trash-1000` Verzeichnisse |
-| `ClipboardChecker` | Private Keys oder Tokens in der Zwischenablage |
-| `TmpFsChecker` | `/tmp` und `/var/tmp` als RAM-Dateisystem |
-| `RecentFilesChecker` | System-Verlauf zuletzt geöffneter Dokumente |
-| `ThumbnailCacheChecker` | Forensisch auswertbare Thumbnail-Caches |
+| `TrashChecker` | Papierkorb & .Trash-1000 |
+| `ClipboardChecker` | Private Keys in der Zwischenablage |
+| `TmpFsChecker` | /tmp als RAM-Dateisystem |
+| `RecentFilesChecker` | Dokumentenverlauf |
+| `ThumbnailCacheChecker` | Thumbnail-Caches |
 
-</details>
+#### Diagnostik & Hygiene (8)
 
-<details>
-<summary><b>🧪 Diagnostik & Hygiene</b> — 8 Checker</summary>
-
-| Checker | Was wird geprüft |
+| Checker | Prüfbereich |
 |:--|:--|
-| `EnvironmentSecretChecker` | `OPENAI_API_KEY`, AWS, GCP, JWT in Umgebungsvariablen |
-| `AiToolingPrivacyChecker` | Klartext-Tokens in Aider, Cursor, Copilot, Continue |
-| `ShellHistoryChecker` | Klartext-Passwörter in bis zu 15.000 Zeilen History |
-| `CrashReportChecker` | `coredumpctl`-Index & WER-Verzeichnisse |
-| `TelemetryChecker` | Aktive Telemetrie-Dienste & Opt-Out-Status |
+| `EnvironmentSecretChecker` | API-Tokens in Umgebungsvariablen |
+| `AiToolingPrivacyChecker` | Klartext-Tokens in AI-Tools |
+| `ShellHistoryChecker` | Passwörter in Shell-History |
+| `CrashReportChecker` | coredumpctl & WER-Verzeichnisse |
+| `TelemetryChecker` | Aktive Telemetrie-Dienste |
 | `CronJobChecker` | Verdächtige Cron-Einträge |
 | `FailedServicesChecker` | Fehlgeschlagene systemd Units |
-| `JournaldChecker` | Persistente Journal-Logs & Rotation |
+| `JournaldChecker` | Persistente Journal-Logs |
 
-</details>
+#### Netzwerk & Privacy (9)
 
-<details>
-<summary><b>🌐 Netzwerk & Privacy</b> — 9 Checker</summary>
-
-| Checker | Was wird geprüft |
+| Checker | Prüfbereich |
 |:--|:--|
-| `TorStatusChecker` | Tor-Daemon & dynamische `torrc`-Konfiguration |
+| `TorStatusChecker` | Tor-Daemon & torrc-Konfiguration |
 | `EncryptedDnsChecker` | DNS-over-TLS / DNS-over-HTTPS |
 | `DnsLeakChecker` | DNS-Leak-Erkennung |
 | `IpPublicChecker` | Öffentliche IP & Geolocation |
-| `LocalHostsFileChecker` | `/etc/hosts` auf verdächtige Einträge |
-| `BluetoothChecker` | Bluetooth-Status & Sichtbarkeit |
+| `LocalHostsFileChecker` | /etc/hosts Analyse |
+| `BluetoothChecker` | Bluetooth-Status |
 | `ExternalListenerChecker` | Extern erreichbare Dienste |
-| `TorrentLeakChecker` | BitTorrent-Client IP-Leaks |
-| `WifiSecurityChecker` | WLAN-Verschlüsselungsstandard |
+| `TorrentLeakChecker` | BitTorrent IP-Leaks |
+| `WifiSecurityChecker` | WLAN-Verschlüsselung |
 
-</details>
+#### System & Kernel (7)
 
-<details>
-<summary><b>🖥️ System-Kernel</b> — 7 Checker</summary>
-
-| Checker | Was wird geprüft |
+| Checker | Prüfbereich |
 |:--|:--|
 | `AslrChecker` | Address Space Layout Randomization |
 | `CoreDumpChecker` | Core-Dump-Konfiguration |
@@ -154,21 +137,18 @@ Organisiert in sechs Domänen, jeder Checker erbt von `OpSecCheckerBase`:
 | `DisplayServerChecker` | Display-Server Erkennung |
 | `HostnameTimezoneChecker` | Hostname & Zeitzone |
 
-</details>
+#### Windows (10)
 
-<details>
-<summary><b>🪟 Windows</b> — 10 Checker</summary>
-
-| Checker | Was wird geprüft |
+| Checker | Prüfbereich |
 |:--|:--|
-| `WindowsDefenderChecker` | Defender-Status & Echtzeit-Schutz |
-| `WindowsFirewallChecker` | Windows Firewall Profile |
+| `WindowsDefenderChecker` | Defender & Echtzeit-Schutz |
+| `WindowsFirewallChecker` | Firewall-Profile |
 | `WindowsBitLockerChecker` | BitLocker-Verschlüsselung |
 | `WindowsSecureBootChecker` | UEFI Secure Boot |
-| `WindowsPrivacyChecker` | Telemetrie & Datenschutzeinstellungen |
-| `WindowsAccountProtectionChecker` | Kontoschutz & PIN-Status |
+| `WindowsPrivacyChecker` | Telemetrie & Datenschutz |
+| `WindowsAccountProtectionChecker` | Kontoschutz |
 | `WindowsCredentialProtectionChecker` | Credential Guard |
-| `WindowsRemoteAccessChecker` | RDP & Remote-Zugriffe |
+| `WindowsRemoteAccessChecker` | RDP & Remote-Zugriff |
 | `WindowsStartupPersistenceChecker` | Autostart-Einträge |
 | `WindowsWirelessChecker` | WLAN-Sicherheit |
 
@@ -178,56 +158,35 @@ Organisiert in sechs Domänen, jeder Checker erbt von `OpSecCheckerBase`:
 
 ## Schnellstart
 
-**Portabel (kein Install nötig)** — Lade das Paket vom [Release](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/latest):
+**Portables Release** — Self-Contained, keine Installation nötig:
 
 ```bash
 tar -xzf OpSecAuditTool-v1.1.0-linux-x64.tar.gz
 ./OpSecAuditTool
 ```
 
-**Aus dem Source:**
+**Aus dem Source** — benötigt .NET 10 SDK:
 
 ```bash
 git clone https://github.com/SolidStateNetwork/OpSecAuditTool.git
 cd OpSecAuditTool
-dotnet run           # .NET 10 SDK
+dotnet run
 ```
 
-Beide Pakete sind Self-Contained (inkl. .NET Runtime) — SHA-256 im Release.
+Downloads und SHA-256-Prüfsummen unter [Releases](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/latest).
 
 ---
 
-## Architektur
+## Designprinzipien
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Avalonia UI  ·  Cyber-Terminal Theme  ·  Live-Konsole      │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │  ConsoleLogPresenter (80ms Batch · Auto-Scroll)       │  │
-│  └───────────────────────┬───────────────────────────────┘  │
-│                          │                                  │
-│  ┌───────────────────────▼───────────────────────────────┐  │
-│  │  AuditRunnerViewModel (async · SemaphoreSlim)         │  │
-│  └───────────────────────┬───────────────────────────────┘  │
-└──────────────────────────┼──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  OpSecCore · 67 Checker · Quick-Fix Engine · BackupService  │
-│  Security │ Forensics │ Diagnostics │ Network │ System │ Win│
-└──────────────────────────┬──────────────────────────────────┘
-                           │
-┌──────────────────────────▼──────────────────────────────────┐
-│  OS / Kernel (User-Space only)                              │
-│  /proc · ss · torrc · dbus · ~/.ssh · ~/.gnupg · ~Browser   │
-└─────────────────────────────────────────────────────────────┘
-```
+- **User-Space only** — Keine Root-Rechte, kein sudo, keine UAC-Elevation. Alle Abfragen sind fehlersicher gekapselt.
+- **Offline by default** — Kein Nachladen externer Ressourcen. Online-Prüfungen (DNS-Leak, Tor-Exit) erfordern explizite Freigabe in den Einstellungen.
+- **Transparenz** — Jeder Befund zeigt die geprüfte Konfiguration, den konkreten Befundtext und ggf. einen Quick-Fix.
+- **Portabilität** — Einstellungen, Logs und Berichte liegen neben der Anwendung. Kein Schreibzugriff außerhalb des eigenen Verzeichnisses.
 
 ---
 
-## Lizenz
+## Lizenz & Mitwirken
 
-[MIT](LICENSE) · Contributions willkommen → [CONTRIBUTING.md](CONTRIBUTING.md) · Sicherheitslücken → [SECURITY.md](SECURITY.md)
-
-<p align="center">
-  <sub>Built with 🛡️ by <b>SolidStateNetwork</b> · No telemetry · No cloud · No sudo · Your data stays yours.</sub>
-</p>
+Veröffentlicht unter der [MIT-Lizenz](LICENSE). Beiträge sind willkommen — siehe [CONTRIBUTING.md](CONTRIBUTING.md).  
+Sicherheitslücken bitte vertraulich melden — siehe [SECURITY.md](SECURITY.md).
