@@ -12,9 +12,9 @@
     <Product>OpSec Audit Tool</Product>
     <Description>Portable OpSec-, Datenschutz- und Systemhärtungsprüfung für Linux und Windows.</Description>
     <Copyright>Copyright © 2026 SolidStateNetwork</Copyright>
-    <Version>1.0.0</Version>
-    <FileVersion>1.0.0.0</FileVersion>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Version>1.1.0</Version>
+    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/SolidStateNetwork/OpSecAuditTool</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

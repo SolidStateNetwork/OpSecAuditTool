@@ -31,7 +31,8 @@
 - **🛡️ 100 % User-Space & Sudo-frei**: Führt tiefe Analysen (SSH, Sudoers, Kernel-Flags, Berechtigungen, Coredumps) im normalen Benutzerkontext aus, ohne Root-Rechte anzufordern oder bei Berechtigungsbarrieren abzustürzen.
 - **🌐 Universal-Port-Scanner (0–65535)**: Dynamisches Auslesen von Kernel-Socket-Tabellen (`ss -tln` / `/proc/net/tcp`) zur lückenlosen Erkennung sämtlicher offener Ports mit Unterscheidung zwischen **öffentlich exponiert (`0.0.0.0` / `[::]`)** und **lokal gebunden (`127.0.0.1` / `[::1]`)** inkl. AI-/DB-Dienste (`Ollama`, `Redis`, `PostgreSQL`, `MongoDB` etc.).
 - **🧅 Dynamischer Tor- & Privacy-Audit**: Liest lokale `torrc`-Dateien (`/etc/tor/torrc`, `~/.tor/torrc`, Flatpak/Snap) dynamisch ein, erkennt benutzerdefinierte `SocksPort`-, `ControlPort`- oder `HTTPTunnelPort`-Konfigurationen und verifiziert den aktiven Tor-Daemon.
-- **⚡ Parallele Audit-Engine**: 48+ spezialisierte Core-Checker werden asynchron und ressourcenschonend im Hintergrund ausgeführt (`SemaphoreSlim`), ohne das UI zu blockieren.
+- **⚡ Parallele Audit-Engine**: 68 spezialisierte Core-Checker werden asynchron und ressourcenschonend im Hintergrund ausgeführt (`SemaphoreSlim`), ohne das UI zu blockieren.
+- **⚡ Automatische Sofort-Härtung (Quick-Fixes)**: Ausgewählte Checker bieten per Knopfdruck direkte Automations-Fixes im User-Space (z. B. Deaktivierung von WebRTC in Firefox `user.js`, Hashen von SSH `known_hosts`, Härten von `pip`/`npm`, Löschen des Dokumentenverlaufs).
 - **🎨 Cyber-Terminal Design**: Kontrastreiches, reaktives Neon-Cyber-Terminal-Theme für Avalonia UI mit dynamischem Live-Radar, ausklappbaren Ergebniskarten und Echtzeit-Verbindungsstatus.
 - **📄 Multi-Format Reporting**: Lokaler Export von vollständigen Audit-Berichten als **Markdown**, **JSON**, **HTML** und **PDF**.
 - **🔒 Zero Telemetry & Offline-First**: Kein Nachladen externer Scripte, keine Tracker, vollständiger Offline-Betrieb. Online-Prüfungen (z. B. DNS-Leak oder Tor-Exit-Check) müssen in den Einstellungen explizit vom Nutzer freigegeben werden.
@@ -42,14 +43,14 @@
 
 | Plattform | Portables Paket | Beschreibung |
 |---|---|---|
-| **Linux x64** | [OpSecAuditTool-v1.0.0-linux-x64.tar.gz](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.0.0/OpSecAuditTool-v1.0.0-linux-x64.tar.gz) | Selbstenthaltenes Paket inkl. .NET Runtime |
-| **Windows x64** | [OpSecAuditTool-v1.0.0-windows-x64.zip](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.0.0/OpSecAuditTool-v1.0.0-windows-x64.zip) | Selbstenthaltenes Paket inkl. .NET Runtime |
+| **Linux x64** | [OpSecAuditTool-v1.1.0-linux-x64.tar.gz](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.1.0/OpSecAuditTool-v1.1.0-linux-x64.tar.gz) | Selbstenthaltenes Paket inkl. .NET Runtime |
+| **Windows x64** | [OpSecAuditTool-v1.1.0-windows-x64.zip](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/download/v1.1.0/OpSecAuditTool-v1.1.0-windows-x64.zip) | Selbstenthaltenes Paket inkl. .NET Runtime |
 
 Beide Pakete sind **vollständig portabel** (Self-Contained Single-File Option verfügbar) und erfordern **keine separate .NET-Installation**. SHA-256-Prüfsummen stehen beim [aktuellen Release](https://github.com/SolidStateNetwork/OpSecAuditTool/releases/latest) bereit.
 
 ---
 
-## 🔍 Übersicht der 58 Core-Checker
+## 🔍 Übersicht der 68 Core-Checker
 
 Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker erbt von der robusten Basisklasse `OpSecCheckerBase`:
 
@@ -59,6 +60,9 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | **`OpenPortsChecker`** | Universal-Scan aller 65.536 Ports via Kernel-Socket-Tabellen (`ss` / `/proc/net/tcp`) |
 | **`SshHardeningChecker`** | Prüfung von `/etc/ssh/sshd_config` & `/etc/ssh/sshd_config.d/*.conf` (Root-Login, Passwort-Auth) |
 | **`SshClientConfigChecker`** | Prüfung des SSH-Clients (`~/.ssh/config`) auf riskante HostKeyChecking- & ForwardAgent-Flags |
+| **`SshKnownHostsHygieneChecker`** | Prüfung von `~/.ssh/known_hosts` auf im Klartext gespeicherte Hostnamen und IP-Adressen |
+| **`GpgKeySecurityChecker`** | Prüfung des GPG-Schlüsselrings im User-Space auf schwache Schlüssellängen (< 2048 Bit) & Expired Keys |
+| **`HardwareAuthTokenChecker`** | Erkennung von FIDO2 / U2F Hardware-Tokens (YubiKey, Nitrokey, SoloKeys) am USB-Bus |
 | **`SudoersChecker`** | Erkennung von `NOPASSWD` / `!authenticate` in `/etc/sudoers` & `/etc/sudoers.d/` |
 | **`DockerPodmanSecurityChecker`** | Container-Sicherheit (`docker`-Gruppenrechte & Klartext-Registry-Tokens) |
 | **`GitSecurityConfigChecker`** | Prüfung auf unverschlüsselte `~/.git-credentials` und riskanten `store`-Helper |
@@ -75,6 +79,9 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 ### 2. Forensik & Anti-Forensik (`Core/Forensics/`)
 | Checker | Prüfziel |
 | :--- | :--- |
+| **`WebRtcLeakChecker`** | Browser-Profil-Audit (Firefox, Chrome, Brave) auf WebRTC STUN IP-Leaks |
+| **`MessengerStoragePrivacyChecker`** | Prüfung lokaler Profilordner von Desktop-Messengern (Signal, Telegram, Discord, Element) |
+| **`LocalCrashDumpFileChecker`** | Scannt User-Verzeichnisse auf verwaiste `.core`- und `.dmp`-Dateien mit RAM-Auszügen |
 | **`BrowserStorageChecker`** | Analyse von Browser-Profilen (Native, **Flatpak**, **Snap** für Chrome, Brave, Edge, Firefox) |
 | **`BrowserExtensionAuditChecker`** | Zählt und prüft installierte Browser-Erweiterungen und Extension-Berechtigungen |
 | **`TrashChecker`** | Safe-rekursiver Scan auf Datenreste im Papierkorb & externen `.Trash-1000` Verzeichnissen |
@@ -99,6 +106,7 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 | :--- | :--- |
 | **`TorStatusChecker`** | Dynamischer Parser für `torrc`-Ports + Erkennung von Tor SOCKS5, ControlPort und TransPort |
 | **`EncryptedDnsChecker`** | Prüfung auf verschlüsseltes DNS-over-TLS (`DNSOverTLS=yes`) oder lokale DNS-Proxys |
+| **`LocalHostsFileChecker`** | Prüfung der `/etc/hosts` Datei auf Manipulationen und DNS-Hijacking von Sicherheitsdomains |
 | **`DnsLeakChecker`** | Prüfung der DNS-Auflösung und Schutz vor unverschlüsseltem DNS-Leak |
 | **`IpPublicChecker`** | Lokale oder optionale Online-Erkennung der öffentlich sichtbaren IP-Adresse |
 | **`TorrentLeakChecker`** | Schutz vor IP-Leaks durch P2P-/Torrent-Dienste ohne aktiven VPN-Tunnel |
@@ -109,6 +117,9 @@ Das Tool teilt seine Prüfungen in sechs modulare Domänen auf. Jeder Checker er
 ### 5. System & Hardware (`Core/System/`)
 | Checker | Prüfziel |
 | :--- | :--- |
+| **`SandboxPermissionChecker`** | Prüfung von Flatpak & Snap Overrides auf riskante `--filesystem=home` / `--filesystem=host` Rechte |
+| **`PackageManagerSecurityChecker`** | Audit von `~/.config/pip/pip.conf` (`require-virtualenv`) und `~/.npmrc` (`ignore-scripts`) |
+| **`ScreenLockTimeoutChecker`** | Verifikation aktiver automatischer Bildschirmsperren & Idle-Timeouts (< 15 Min.) |
 | **`SecureBootChecker`** | Prüfung des UEFI SecureBoot-Status via `efivars` oder automatisch über `mokutil --sb-state` |
 | **`DisplayServerSecurityChecker`** | Prüfung auf modernes Wayland vs. X11 (welches globales Keylogging erlaubt) |
 | **`AslrChecker`** | Verifikation von Address Space Layout Randomization (`kernel.randomize_va_space = 2`) |

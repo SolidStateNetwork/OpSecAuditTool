@@ -16,6 +16,38 @@ public sealed class ClipboardChecker : IOpSecChecker
 {
     public string Name => "Prüfung der Zwischenablage auf sensible Daten";
     public string Category => "Anti-Forensik / Hygiene";
+    public bool CanFix => true;
+    public string FixDescription => "Leert die System-Zwischenablage sofort, um verbliebene Schlüssel, Passwörter oder Token zu entfernen.";
+
+    public async Task<FixResult> FixAsync()
+    {
+        try
+        {
+            Window? mainWindow = (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
+            if (mainWindow?.Clipboard != null)
+            {
+                await mainWindow.Clipboard.ClearAsync();
+                return new FixResult
+                {
+                    Success = true,
+                    Message = "Die System-Zwischenablage wurde erfolgreich geleert."
+                };
+            }
+            return new FixResult
+            {
+                Success = false,
+                Message = "Auf das Clipboard konnte nicht zugegriffen werden."
+            };
+        }
+        catch (Exception ex)
+        {
+            return new FixResult
+            {
+                Success = false,
+                Message = $"Fehler beim Leeren des Clipboards: {ex.Message}"
+            };
+        }
+    }
 
     private readonly string[] _sensitivePatterns = new[]
     {

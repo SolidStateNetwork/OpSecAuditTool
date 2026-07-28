@@ -14,6 +14,53 @@ public sealed class TrashChecker : OpSecCheckerBase
 {
     public override string Name => "Papierkorb-Inhalts- & Spurenprüfung";
     public override string Category => "Anti-Forensik / Hygiene";
+    public override bool CanFix => true;
+    public override string FixDescription => "Leert den lokalen Papierkorb (~/.local/share/Trash/files und info) vollständig und löscht alle verbleibenden gelöschten Dateien.";
+
+    public override Task<FixResult> FixAsync()
+    {
+        try
+        {
+            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string[] trashFolders =
+            {
+                Path.Combine(homeDir, ".local", "share", "Trash", "files"),
+                Path.Combine(homeDir, ".local", "share", "Trash", "info")
+            };
+
+            int deletedCount = 0;
+            foreach (var folder in trashFolders)
+            {
+                if (Directory.Exists(folder))
+                {
+                    foreach (var file in Directory.GetFiles(folder))
+                    {
+                        File.Delete(file);
+                        deletedCount++;
+                    }
+                    foreach (var subDir in Directory.GetDirectories(folder))
+                    {
+                        Directory.Delete(subDir, true);
+                        deletedCount++;
+                    }
+                }
+            }
+
+            return Task.FromResult(new FixResult
+            {
+                Success = true,
+                Message = $"Der Papierkorb wurde geleert ({deletedCount} Element(e) entfernt)."
+            });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new FixResult
+            {
+                Success = false,
+                Message = $"Fehler beim Leeren des Papierkorbs: {ex.Message}"
+            });
+        }
+    }
 
     protected override Task<CheckResult> PerformCheckAsync()
     {

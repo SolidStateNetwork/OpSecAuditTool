@@ -14,4 +14,5 @@ public static class AppPaths
     public static string SettingsDirectory => Path.Combine(DataDirectory, "Settings");
     public static string LogsDirectory => Path.Combine(DataDirectory, "Logs");
     public static string ReportsDirectory => Path.Combine(DataDirectory, "Reports");
+    public static string BackupsDirectory => Path.Combine(DataDirectory, "Backups");
 }

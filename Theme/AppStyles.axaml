@@ -1,0 +1,639 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Zentraler Style für alle Lucide-Vektor-Icons -->
+    <Style Selector="Path.Lucide">
+        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="StrokeThickness" Value="1.5"/>
+        <Setter Property="StrokeLineCap" Value="Round"/>
+        <Setter Property="StrokeJoin" Value="Round"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+    </Style>
+
+    <!--
+        Gemeinsame Designsprache aller Hauptseiten. Die Klassen halten
+        Farben, Radien und Abstände zentral, damit neue Tabs nicht erneut
+        mit leicht abweichenden Einzelwerten gestaltet werden.
+    -->
+    <Style Selector="Border.PageHeader">
+        <Setter Property="Background" Value="#151515"/>
+        <Setter Property="BorderBrush" Value="#414141"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="18"/>
+    </Style>
+    <Style Selector="Border.PageSurface">
+        <Setter Property="Background" Value="#151515"/>
+        <Setter Property="BorderBrush" Value="#414141"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
+    <Style Selector="Border.ModuleCard">
+        <Setter Property="Background" Value="#1B1B1B"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="15"/>
+    </Style>
+    <Style Selector="Border.SystemCard">
+        <Setter Property="Height" Value="155"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+    <Style Selector="Border.IconTile">
+        <Setter Property="Width" Value="38"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="CornerRadius" Value="7"/>
+        <Setter Property="Background" Value="#151515"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+    </Style>
+    <Style Selector="Border.FactTag">
+        <Setter Property="Background" Value="#1B1B1B"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="7"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="MinHeight" Value="48"/>
+    </Style>
+    <Style Selector="Border.FactTagIcon">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Background" Value="#151515"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+    </Style>
+
+    <Style Selector="TextBlock.Eyebrow">
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <Style Selector="TextBlock.PageTitle">
+        <Setter Property="Foreground" Value="#F4F4F4"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <Style Selector="TextBlock.PageDescription">
+        <Setter Property="Foreground" Value="#D7D9D8"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style Selector="TextBlock.ModuleTitle">
+        <Setter Property="Foreground" Value="#F4F4F4"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="TextBlock.ChapterTitle">
+        <Setter Property="Foreground" Value="#F4F4F4"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    <Style Selector="TextBlock.Muted">
+        <Setter Property="Foreground" Value="#D7D9D8"/>
+    </Style>
+    <Style Selector="TextBox.DataField">
+        <Setter Property="Background" Value="#0E0E0E"/>
+        <Setter Property="Foreground" Value="#D7D9D8"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <!-- Navigation & Tabs -->
+    <Style Selector="TabItem">
+        <Setter Property="Foreground" Value="#86908A"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="MinHeight" Value="48"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="Margin" Value="0,0,2,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="CornerRadius" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    </Style>
+    <Style Selector="TabItem:pointerover">
+        <Setter Property="Foreground" Value="#E0E6E2"/>
+        <Setter Property="Background" Value="#111613"/>
+        <Setter Property="BorderBrush" Value="#253A2B"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    </Style>
+    <Style Selector="TabItem:selected">
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="Background" Value="#132017"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    </Style>
+    <Style Selector="TabItem:selected:pointerover">
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="Background" Value="#15241A"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    </Style>
+    <Style Selector="TabItem:selected /template/ Border#PART_LayoutRoot">
+        <Setter Property="Background" Value="#132017"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+        <Setter Property="CornerRadius" Value="0"/>
+        <Setter Property="TextElement.Foreground" Value="#00FF66"/>
+    </Style>
+    <Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
+        <Setter Property="Background" Value="#15241A"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+        <Setter Property="CornerRadius" Value="0"/>
+        <Setter Property="TextElement.Foreground" Value="#00FF66"/>
+    </Style>
+    <Style Selector="TabControl#MainTabs /template/ ItemsPresenter#PART_ItemsPresenter">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Toggle Buttons & CheckBoxes -->
+    <Style Selector="ToggleButton.AuditResultToggle">
+        <Setter Property="Height" Value="108"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+    </Style>
+    <Style Selector="ToggleButton.AuditResultToggle /template/ ContentPresenter">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+    <Style Selector="ToggleButton.AuditResultToggle:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#282828"/>
+    </Style>
+    <Style Selector="ToggleButton.AuditResultToggle:checked /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style Selector="ToggleButton.AuditResultToggle:checked Viewbox.AuditResultChevron">
+        <Setter Property="RenderTransform">
+            <RotateTransform Angle="180"/>
+        </Setter>
+    </Style>
+
+    <Style Selector="CheckBox">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="#00FF66" />
+        <Setter Property="BorderBrush" Value="#00FF66" />
+    </Style>
+    <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
+        <Setter Property="Fill" Value="#000000" />
+    </Style>
+
+    <Style Selector="ToggleButton.SettingCard">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="#1B1B1B"/>
+        <Setter Property="BorderBrush" Value="#3A3A3A"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="15"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="SettingCardSurface"
+                        HorizontalAlignment="Stretch"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ToggleButton.SettingCard:pointerover /template/ Border#SettingCardSurface">
+        <Setter Property="Background" Value="#202020"/>
+        <Setter Property="BorderBrush" Value="#505050"/>
+    </Style>
+    <Style Selector="ToggleButton.SettingCard:checked /template/ Border#SettingCardSurface">
+        <Setter Property="Background" Value="#1C211E"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ToggleButton.SettingCard:pressed /template/ Border#SettingCardSurface">
+        <Setter Property="Background" Value="#242424"/>
+    </Style>
+
+    <!-- Standard Copy / Action Buttons -->
+    <Style Selector="Button.CopyBtn">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.CopyBtn Path.Lucide">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.CopyBtn StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.CopyBtn TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.CopyBtn /template/ ContentPresenter">
+        <Setter Property="Background" Value="#132017"/>
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="11,7"/>
+    </Style>
+    <Style Selector="Button.CopyBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#15241A"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="Button.CopyBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#111C14"/>
+        <Setter Property="BorderBrush" Value="#00C851"/>
+    </Style>
+
+    <!-- Txt Btn -->
+    <Style Selector="Button.CopyBtn.TxtBtn /template/ ContentPresenter">
+        <Setter Property="Background" Value="#2B260F"/>
+        <Setter Property="BorderBrush" Value="#FFD700"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.TxtBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#332D12"/>
+        <Setter Property="BorderBrush" Value="#FFD700"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.TxtBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#1C1808"/>
+        <Setter Property="BorderBrush" Value="#FFD700"/>
+    </Style>
+
+    <!-- Json Btn -->
+    <Style Selector="Button.CopyBtn.JsonBtn /template/ ContentPresenter">
+        <Setter Property="Background" Value="#0D2128"/>
+        <Setter Property="BorderBrush" Value="#48CAE4"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.JsonBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#112A32"/>
+        <Setter Property="BorderBrush" Value="#48CAE4"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.JsonBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#0A181C"/>
+        <Setter Property="BorderBrush" Value="#48CAE4"/>
+    </Style>
+
+    <!-- Markdown Btn -->
+    <Style Selector="Button.CopyBtn.MarkdownBtn /template/ ContentPresenter">
+        <Setter Property="Background" Value="#151221"/>
+        <Setter Property="BorderBrush" Value="#B79CFF"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.MarkdownBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#1A1729"/>
+        <Setter Property="BorderBrush" Value="#B79CFF"/>
+    </Style>
+    <Style Selector="Button.CopyBtn.MarkdownBtn:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#0E0D17"/>
+        <Setter Property="BorderBrush" Value="#B79CFF"/>
+    </Style>
+
+    <!-- Disclosure Buttons -->
+    <Style Selector="ToggleButton.DisclosureBtn">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn Viewbox">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn /template/ ContentPresenter">
+        <Setter Property="Background" Value="#132017"/>
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="11,7"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#15241A"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn:checked /template/ ContentPresenter">
+        <Setter Property="Background" Value="#111C14"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ToggleButton.DisclosureBtn:checked Viewbox.DisclosureChevron">
+        <Setter Property="RenderTransform">
+            <RotateTransform Angle="180"/>
+        </Setter>
+    </Style>
+
+    <!-- Header Block Button -->
+    <Style Selector="Button.HeaderBlockBtn">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="18"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+        <Setter Property="Transitions">
+            <Transitions/>
+        </Setter>
+        <Setter Property="CornerRadius" Value="0,9,9,0"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="HeaderActionSurface"
+                        Background="#132017"
+                        BorderBrush="#00FF66"
+                        BorderThickness="1"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        ClipToBounds="True">
+                    <ContentPresenter x:Name="HeaderActionContent"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pointerover /template/ Border#HeaderActionSurface">
+        <Setter Property="Background" Value="#15241A"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed">
+        <Setter Property="Padding" Value="18"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn /template/ Border#HeaderActionSurface">
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed /template/ Border#HeaderActionSurface">
+        <Setter Property="Background" Value="#111C14"/>
+        <Setter Property="BorderBrush" Value="#00C851"/>
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn /template/ ContentPresenter#HeaderActionContent">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed /template/ ContentPresenter#HeaderActionContent">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed StackPanel">
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed Path">
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+    <Style Selector="Button.HeaderBlockBtn:pressed TextBlock">
+        <Setter Property="RenderTransform" Value="{x:Null}"/>
+    </Style>
+
+    <!-- Profile Easter Egg -->
+    <Style Selector="Button.ProfileEasterEgg">
+        <Setter Property="Width" Value="110"/>
+        <Setter Property="Height" Value="110"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ClipToBounds" Value="False"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  ClipToBounds="False"/>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="Border.ProfileImageFrame">
+        <Setter Property="Width" Value="70"/>
+        <Setter Property="Height" Value="70"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Width" Duration="0:0:0.16"/>
+                <DoubleTransition Property="Height" Duration="0:0:0.16"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.ProfileEasterEgg:pointerover Border.ProfileImageFrame">
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Height" Value="80"/>
+    </Style>
+    <Style Selector="Button.ProfileEasterEgg:pressed Border.ProfileImageFrame">
+        <Setter Property="Width" Value="76"/>
+        <Setter Property="Height" Value="76"/>
+    </Style>
+
+    <!-- OpSec Bible ListBox & Buttons -->
+    <Style Selector="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="ItemBorder"
+                        Background="#121212"
+                        BorderBrush="#333333"
+                        BorderThickness="1"
+                        CornerRadius="7"
+                        Padding="12"
+                        ClipToBounds="True">
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalContentAlignment="Center"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ Border#ItemBorder">
+        <Setter Property="Background" Value="#2B2B2B"/>
+        <Setter Property="BorderBrush" Value="#505050"/>
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ Border#ItemBorder">
+        <Setter Property="Background" Value="#1B2B21"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ListBoxItem:selected TextBlock.ChapterTitle">
+        <Setter Property="Foreground" Value="#00FF66"/>
+    </Style>
+
+    <Style Selector="Button.BibleAction">
+        <Setter Property="Padding" Value="14,7"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.BibleAction Path.Lucide">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.BibleAction StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.BibleAction TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="Button.BibleAction /template/ ContentPresenter">
+        <Setter Property="Background" Value="#242424"/>
+        <Setter Property="Foreground" Value="#00FF66"/>
+        <Setter Property="BorderBrush" Value="#484848"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    <Style Selector="Button.BibleAction:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#2B2B2B"/>
+        <Setter Property="BorderBrush" Value="#00FF66"/>
+    </Style>
+    <Style Selector="Button.BibleAction:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#202020"/>
+    </Style>
+
+    <!-- Scrollbars im HUD-Design -->
+    <Style Selector="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="AllowAutoHide" Value="False"/>
+    </Style>
+
+    <Style Selector="ScrollBar:vertical">
+        <Setter Property="Width" Value="16"/>
+        <Setter Property="MinWidth" Value="16"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="Transparent">
+                    <Track Name="PART_Track"
+                           Minimum="{TemplateBinding Minimum}"
+                           Maximum="{TemplateBinding Maximum}"
+                           Value="{TemplateBinding Value, Mode=TwoWay}"
+                           ViewportSize="{TemplateBinding ViewportSize}"
+                           Orientation="Vertical"
+                           IsDirectionReversed="True">
+                        <Thumb Name="PART_Thumb" Cursor="Hand" MinWidth="0" MinHeight="15">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Border Background="Transparent" HorizontalAlignment="Stretch">
+                                        <Border x:Name="ThumbBorder"
+                                                Width="2"
+                                                HorizontalAlignment="Center"
+                                                Background="#585858"
+                                                CornerRadius="1"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Track>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ScrollBar:vertical /template/ Thumb /template/ Border#ThumbBorder">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ScrollBar:vertical /template/ Thumb:pointerover /template/ Border#ThumbBorder">
+        <Setter Property="Background" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ScrollBar:vertical /template/ Thumb:pressed /template/ Border#ThumbBorder">
+        <Setter Property="Background" Value="#00FF66"/>
+    </Style>
+
+    <Style Selector="ScrollBar:horizontal">
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="MinHeight" Value="16"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="Transparent">
+                    <Track Name="PART_Track"
+                           Minimum="{TemplateBinding Minimum}"
+                           Maximum="{TemplateBinding Maximum}"
+                           Value="{TemplateBinding Value, Mode=TwoWay}"
+                           ViewportSize="{TemplateBinding ViewportSize}"
+                           Orientation="Horizontal"
+                           IsDirectionReversed="False">
+                        <Thumb Name="PART_Thumb" Cursor="Hand" MinHeight="0" MinWidth="15">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Border Background="Transparent" VerticalAlignment="Stretch">
+                                        <Border x:Name="ThumbBorder"
+                                                Height="2"
+                                                VerticalAlignment="Center"
+                                                Background="#585858"
+                                                CornerRadius="1"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Track>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="ScrollBar:horizontal /template/ Thumb /template/ Border#ThumbBorder">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="ScrollBar:horizontal /template/ Thumb:pointerover /template/ Border#ThumbBorder">
+        <Setter Property="Background" Value="#00FF66"/>
+    </Style>
+    <Style Selector="ScrollBar:horizontal /template/ Thumb:pressed /template/ Border#ThumbBorder">
+        <Setter Property="Background" Value="#00FF66"/>
+    </Style>
+</Styles>

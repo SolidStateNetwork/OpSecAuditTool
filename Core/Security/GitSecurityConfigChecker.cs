@@ -13,6 +13,48 @@ public sealed class GitSecurityConfigChecker : OpSecCheckerBase
 {
     public override string Name => "Git-Credentials & Klartext-Passwort-Speicher Prüfung";
     public override string Category => "System / Härtung";
+    public override bool CanFix => true;
+    public override string FixDescription => "Sichert die Dateien ~/.gitconfig und ~/.git-credentials im Ordner 'Backups' und löscht anschließend unverschlüsselt gespeicherte Git-Credentials (~/.git-credentials).";
+
+    public override Task<FixResult> FixAsync()
+    {
+        try
+        {
+            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string gitConfigPath = Path.Combine(homeDir, ".gitconfig");
+            string gitCredentialsPath = Path.Combine(homeDir, ".git-credentials");
+
+            bool fixedSomething = false;
+
+            if (File.Exists(gitConfigPath))
+            {
+                BackupService.BackupFile(gitConfigPath);
+            }
+
+            if (File.Exists(gitCredentialsPath))
+            {
+                BackupService.BackupFile(gitCredentialsPath);
+                File.Delete(gitCredentialsPath);
+                fixedSomething = true;
+            }
+
+            return Task.FromResult(new FixResult
+            {
+                Success = true,
+                Message = fixedSomething
+                    ? "Klartext Git-Credentials (~/.git-credentials) wurden nach Backup gelöscht."
+                    : "Keine unverschlüsselten Credentials zum Löschen gefunden."
+            });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(new FixResult
+            {
+                Success = false,
+                Message = $"Fehler beim Härten der Git-Credentials: {ex.Message}"
+            });
+        }
+    }
 
     protected override async Task<CheckResult> PerformCheckAsync()
     {

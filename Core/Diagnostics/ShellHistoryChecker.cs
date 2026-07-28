@@ -15,6 +15,46 @@ public sealed class ShellHistoryChecker : OpSecCheckerBase
 {
     public override string Name => "Prüfung der Shell-Historie auf sensible Daten";
     public override string Category => "Anti-Forensik / Hygiene";
+    public override bool CanFix => true;
+    public override string FixDescription => "Sichert die aktuellen History-Dateien (.bash_history, .zsh_history) im Ordner 'Backups' und leert deren Inhalte, um sensible Befehle zu löschen.";
+
+    public override async Task<FixResult> FixAsync()
+    {
+        try
+        {
+            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string[] historyFiles =
+            {
+                Path.Combine(homeDir, ".bash_history"),
+                Path.Combine(homeDir, ".zsh_history")
+            };
+
+            int clearedCount = 0;
+            foreach (var file in historyFiles)
+            {
+                if (File.Exists(file))
+                {
+                    BackupService.BackupFile(file);
+                    await File.WriteAllTextAsync(file, string.Empty);
+                    clearedCount++;
+                }
+            }
+
+            return new FixResult
+            {
+                Success = true,
+                Message = $"{clearedCount} Shell-History-Datei(en) wurden gesichert und geleert."
+            };
+        }
+        catch (Exception ex)
+        {
+            return new FixResult
+            {
+                Success = false,
+                Message = $"Fehler beim Leeren der Shell-History: {ex.Message}"
+            };
+        }
+    }
 
     private static readonly string[] SensitiveKeywords =
     {

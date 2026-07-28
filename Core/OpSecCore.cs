@@ -29,6 +29,15 @@ public static class CheckStatusExtensions
 }
 
 /// <summary>
+/// Ergebnis einer automatischen Sofort-Härtung (Quick-Fix).
+/// </summary>
+public sealed class FixResult
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+}
+
+/// <summary>
 /// Fachliches Ergebnis eines Checkers; enthält keine UI-spezifischen Typen.
 /// </summary>
 public sealed class CheckResult
@@ -38,6 +47,9 @@ public sealed class CheckResult
     public CheckStatus Status { get; set; }
     public string Summary { get; set; } = string.Empty;
     public string Details { get; set; } = string.Empty;
+    public bool CanFix { get; set; }
+    public string FixDescription { get; set; } = string.Empty;
+    public IOpSecChecker? Checker { get; set; }
 }
 
 /// <summary>
@@ -47,7 +59,10 @@ public interface IOpSecChecker
 {
     string Name { get; }
     string Category { get; }
+    bool CanFix => false;
+    string FixDescription => string.Empty;
     Task<CheckResult> ExecuteAsync();
+    Task<FixResult> FixAsync() => Task.FromResult(new FixResult { Success = false, Message = "Für diese Prüfung ist kein automatischer Fix verfügbar." });
 }
 
 /// <summary>
@@ -58,6 +73,11 @@ public abstract class OpSecCheckerBase : IOpSecChecker
 {
     public abstract string Name { get; }
     public abstract string Category { get; }
+    public virtual bool CanFix => false;
+    public virtual string FixDescription => string.Empty;
+
+    public virtual Task<FixResult> FixAsync() =>
+        Task.FromResult(new FixResult { Success = false, Message = "Für diese Prüfung ist kein automatischer Fix verfügbar." });
 
     public async Task<CheckResult> ExecuteAsync()
     {
@@ -90,7 +110,10 @@ public abstract class OpSecCheckerBase : IOpSecChecker
         Category = Category,
         Status = status,
         Summary = summary,
-        Details = details
+        Details = details,
+        CanFix = CanFix,
+        FixDescription = FixDescription,
+        Checker = this
     };
 
     protected CheckResult ErrorResult(string summary, Exception ex) =>

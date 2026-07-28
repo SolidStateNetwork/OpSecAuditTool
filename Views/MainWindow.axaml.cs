@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Concurrent;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
@@ -14,32 +12,21 @@ using Avalonia.Threading;
 using OpSecAuditTool.Services;
 using OpSecAuditTool.Theme;
 using OpSecAuditTool.ViewModels;
+using OpSecAuditTool.Views.Helpers;
 
 namespace OpSecAuditTool.Views;
 
 /// <summary>
 /// Hauptfenster und ausschließlich UI-nahe Koordination für Animationen,
-/// Scroll-Effekte und die farbige Live-Konsole.
+/// Scroll-Effekte und das Layout.
 /// </summary>
 public sealed partial class MainWindow : Window
 {
-    private static readonly IBrush TimestampBrush = UiPalette.TextMuted;
-    private static readonly IBrush TraceBrush = CreateBrush("#9CA29F");
-    private static readonly IBrush InfoBrush = UiPalette.Info;
-    private static readonly IBrush WarningBrush = UiPalette.Warning;
-    private static readonly IBrush ErrorBrush = UiPalette.Error;
-    private static readonly IBrush CriticalBrush = UiPalette.Critical;
-    private static readonly IBrush ComponentBrush = CreateBrush("#B79CFF");
-    private static readonly IBrush TraceMessageBrush = CreateBrush("#A8ADAA");
-    private static readonly IBrush MessageBrush = CreateBrush("#E1E3E2");
-    private static readonly IBrush ExceptionBrush = CreateBrush("#FF8A8A");
-
     private DispatcherTimer? _waveTimer;
     private DispatcherTimer? _radarTimer;
     private DispatcherTimer? _starTimer;
-    private DispatcherTimer? _logFlushTimer;
     private DispatcherTimer? _profileTiltTimer;
-    private readonly ConcurrentQueue<LogEntry> _pendingLogEntries = new();
+    private ConsoleLogPresenter? _consoleLogPresenter;
     private readonly RotateTransform _profileRotateTransform = new();
     private readonly TranslateTransform _profileTranslateTransform = new();
     private readonly RotateTransform _radarRotateTransform = new();
@@ -49,8 +36,6 @@ public sealed partial class MainWindow : Window
     private double _waveOffset;
     private double _radarAngle;
     private TranslateTransform? _waveTranslate;
-    private Action<LogEntry>? _logEntryHandler;
-    private bool _followConsoleOutput;
     private double _profileRotation;
     private double _profileOffsetX;
     private double _profileOffsetY;
@@ -119,36 +104,17 @@ public sealed partial class MainWindow : Window
         var aboutTopFade = this.FindControl<Rectangle>("AboutTopFade");
         var aboutBottomFade = this.FindControl<Rectangle>("AboutBottomFade");
 
-        _logFlushTimer = new DispatcherTimer(DispatcherPriority.Background)
-        {
-            Interval = TimeSpan.FromMilliseconds(80)
-        };
-        _logFlushTimer.Tick += (_, _) =>
-            FlushPendingLogEntries(consoleScroll, consoleTopFade, consoleBottomFade, vm);
-        _logFlushTimer.Start();
-
-        // Bereits vorhandene Sitzungseinträge beim Öffnen des Fensters anzeigen.
         if (ConsoleOutput != null)
         {
-            RenderVisibleLogs(vm.ShowVerboseLogs);
-
-            // Sofortige Neuberechnung der Fade-Effekte für die Konsole beim Start
-            Dispatcher.UIThread.Post(() => UpdateFadeEffects(consoleScroll, consoleTopFade, consoleBottomFade), DispatcherPriority.Loaded);
+            _consoleLogPresenter = new ConsoleLogPresenter(
+                ConsoleOutput,
+                consoleScroll,
+                consoleTopFade,
+                consoleBottomFade,
+                vm,
+                () => MainTabs?.SelectedIndex == 3,
+                UpdateFadeEffects);
         }
-
-        // Rohe Diagnoseblöcke gehören nur in die Datei; Trace-Einträge sind optional.
-        _logEntryHandler = entry =>
-        {
-            // Vor dem Dispatch filtern, damit ausgeblendete Trace-Einträge die UI-Queue
-            // während umfangreicher Hintergrundarbeiten nicht unnötig belasten.
-            if (entry.IsRaw || (entry.Level == LogLevel.Trace && !vm.ShowVerboseLogs))
-            {
-                return;
-            }
-
-            _pendingLogEntries.Enqueue(entry);
-        };
-        Logger.OnLogAdded += _logEntryHandler;
 
         // Tab-Wechsel aktualisieren nur Animationen, Logs und echte Scroll-Fades.
         // Die Fenstergröße bleibt davon bewusst unberührt.
@@ -188,11 +154,7 @@ public sealed partial class MainWindow : Window
             {
                 Dispatcher.UIThread.Post(() =>
                 {
-                    if (ConsoleOutput != null)
-                    {
-                        RenderVisibleLogs(vm.ShowVerboseLogs);
-                        UpdateFadeEffects(consoleScroll, consoleTopFade, consoleBottomFade);
-                    }
+                    _consoleLogPresenter?.RenderVisibleLogs(vm.ShowVerboseLogs);
                 });
             }
         };
@@ -247,49 +209,7 @@ public sealed partial class MainWindow : Window
             ConfigureFadeTracking(consoleScroll, consoleTopFade, consoleBottomFade);
             ConfigureFadeTracking(auditScroll, auditTopFade, auditBottomFade);
             ConfigureFadeTracking(aboutScroll, aboutTopFade, aboutBottomFade);
-            ConfigureConsoleAutoFollow(consoleScroll);
         };
-    }
-
-    private void FlushPendingLogEntries(
-        ScrollViewer? consoleScroll,
-        Rectangle? consoleTopFade,
-        Rectangle? consoleBottomFade,
-        MainViewModel viewModel)
-    {
-        if (ConsoleOutput == null || MainTabs?.SelectedIndex != 3)
-        {
-            return;
-        }
-
-        bool entryWasAppended = false;
-        int processedEntries = 0;
-        const int maximumEntriesPerTick = 40;
-
-        while (processedEntries < maximumEntriesPerTick &&
-               _pendingLogEntries.TryDequeue(out LogEntry? entry))
-        {
-            processedEntries++;
-            if (entry.Level == LogLevel.Trace && !viewModel.ShowVerboseLogs)
-            {
-                continue;
-            }
-
-            AppendLogEntry(entry);
-            entryWasAppended = true;
-        }
-
-        if (!entryWasAppended)
-        {
-            return;
-        }
-
-        // Nur ein Layout- und Scrollupdate pro Paket statt pro einzelner Logzeile.
-        UpdateFadeEffects(consoleScroll, consoleTopFade, consoleBottomFade);
-        if (_followConsoleOutput && consoleScroll != null)
-        {
-            Dispatcher.UIThread.Post(consoleScroll.ScrollToEnd, DispatcherPriority.Loaded);
-        }
     }
 
     private void UpdateTabAnimations(int selectedTabIndex)
@@ -374,42 +294,6 @@ public sealed partial class MainWindow : Window
         {
             MainTabs.SelectedIndex = 2;
         }
-    }
-
-    /// <summary>
-    /// Aktiviert die automatische Nachführung nur, solange sich die Konsole am
-    /// unteren Ende befindet. Eine Scrollbewegung nach oben gibt die Position frei.
-    /// </summary>
-    private void ConfigureConsoleAutoFollow(ScrollViewer? scrollViewer)
-    {
-        if (scrollViewer == null)
-        {
-            return;
-        }
-
-        scrollViewer.PropertyChanged += (_, args) =>
-        {
-            if (args.Property == ScrollViewer.OffsetProperty)
-            {
-                _followConsoleOutput = IsScrolledToBottom(scrollViewer);
-            }
-            else if ((args.Property == ScrollViewer.ExtentProperty ||
-                      args.Property == ScrollViewer.ViewportProperty) &&
-                     scrollViewer.Extent.Height <= scrollViewer.Viewport.Height)
-            {
-                // Ohne Überlauf ist der Anfang zugleich das Ende.
-                _followConsoleOutput = true;
-            }
-        };
-
-        _followConsoleOutput = IsScrolledToBottom(scrollViewer);
-    }
-
-    private static bool IsScrolledToBottom(ScrollViewer scrollViewer)
-    {
-        double maxOffset = Math.Max(0, scrollViewer.Extent.Height - scrollViewer.Viewport.Height);
-        const double tolerance = 2;
-        return scrollViewer.Offset.Y >= maxOffset - tolerance;
     }
 
     /// <summary>
@@ -656,101 +540,14 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    /// <summary>
-    /// Baut die sichtbare Sitzungshistorie neu auf, beispielsweise nach Änderung
-    /// des Trace-Filters. Alle farbigen Segmente bleiben gemeinsam auswählbar.
-    /// </summary>
-    private void RenderVisibleLogs(bool showVerboseLogs)
-    {
-        if (ConsoleOutput == null)
-        {
-            return;
-        }
-
-        InlineCollection inlines = ConsoleOutput.Inlines ??= new InlineCollection();
-        inlines.Clear();
-
-        foreach (LogEntry entry in Logger.GetSessionLogs())
-        {
-            if (entry.IsRaw || (entry.Level == LogLevel.Trace && !showVerboseLogs))
-            {
-                continue;
-            }
-
-            AppendLogEntry(entry);
-        }
-    }
-
-    private void AppendLogEntry(LogEntry entry)
-    {
-        if (ConsoleOutput == null)
-        {
-            return;
-        }
-
-        InlineCollection inlines = ConsoleOutput.Inlines ??= new InlineCollection();
-        inlines.Add(new Run($"[{entry.Timestamp:HH:mm:ss}] ")
-        {
-            Foreground = TimestampBrush
-        });
-        inlines.Add(new Run($"[{entry.Level}] ")
-        {
-            Foreground = GetLevelBrush(entry.Level),
-            FontWeight = FontWeight.SemiBold
-        });
-        string message = entry.Message;
-        int componentEnd = message.StartsWith('[') ? message.IndexOf(']') : -1;
-        if (componentEnd is > 1 and < 40)
-        {
-            inlines.Add(new Run($"{message[..(componentEnd + 1)]} ")
-            {
-                Foreground = ComponentBrush,
-                FontWeight = FontWeight.SemiBold
-            });
-            message = message[(componentEnd + 1)..].TrimStart();
-        }
-
-        inlines.Add(new Run(message)
-        {
-            Foreground = entry.Level == LogLevel.Trace ? TraceMessageBrush : MessageBrush
-        });
-
-        if (!string.IsNullOrWhiteSpace(entry.ExceptionDetails))
-        {
-            inlines.Add(new Run($"  |  {entry.ExceptionDetails}")
-            {
-                Foreground = ExceptionBrush
-            });
-        }
-
-        inlines.Add(new LineBreak());
-    }
-
-    private static IBrush GetLevelBrush(LogLevel level) => level switch
-    {
-        LogLevel.Trace => TraceBrush,
-        LogLevel.Info => InfoBrush,
-        LogLevel.Warning => WarningBrush,
-        LogLevel.Error => ErrorBrush,
-        LogLevel.Critical => CriticalBrush,
-        _ => MessageBrush
-    };
-
-    private static IBrush CreateBrush(string hexColor) =>
-        new SolidColorBrush(Color.Parse(hexColor));
-
     protected override void OnClosed(EventArgs e)
     {
         // DispatcherTimer laufen andernfalls weiter und halten das geschlossene Fenster am Leben.
         _waveTimer?.Stop();
         _radarTimer?.Stop();
         _starTimer?.Stop();
-        _logFlushTimer?.Stop();
         _profileTiltTimer?.Stop();
-        if (_logEntryHandler != null)
-        {
-            Logger.OnLogAdded -= _logEntryHandler;
-        }
+        _consoleLogPresenter?.Dispose();
 
         if (DataContext is IDisposable disposableViewModel)
         {

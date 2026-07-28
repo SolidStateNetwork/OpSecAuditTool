@@ -225,7 +225,10 @@ public sealed partial class AuditRunnerViewModel : ObservableObject
             Summary = result.Summary,
             Details = result.Details,
             BorderColor = borderColor,
-            Status = result.Status
+            Status = result.Status,
+            CanFix = result.CanFix && result.Status != CheckStatus.Pass,
+            FixDescription = result.FixDescription,
+            Checker = result.Checker
         };
     }
 }

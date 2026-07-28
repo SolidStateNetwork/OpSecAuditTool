@@ -64,7 +64,12 @@ public static class AuditCheckerCatalog
         new AiToolingPrivacyChecker(),
         new GitSecurityConfigChecker(),
         new BrowserExtensionAuditChecker(),
-        new AgentSocketSecurityChecker()
+        new AgentSocketSecurityChecker(),
+        new WebRtcLeakChecker(),
+        new MessengerStoragePrivacyChecker(),
+        new LocalCrashDumpFileChecker(),
+        new HardwareAuthTokenChecker(),
+        new LocalHostsFileChecker()
     ];
 
     private static IOpSecChecker[] CreateLinux() =>
@@ -98,6 +103,11 @@ public static class AuditCheckerCatalog
         new ShellStartupPersistenceChecker(),
         new DisplayServerSecurityChecker(),
         new UserAutostartChecker(),
-        new EncryptedDnsChecker()
+        new EncryptedDnsChecker(),
+        new GpgKeySecurityChecker(),
+        new SshKnownHostsHygieneChecker(),
+        new SandboxPermissionChecker(),
+        new PackageManagerSecurityChecker(),
+        new ScreenLockTimeoutChecker()
     ];
 }

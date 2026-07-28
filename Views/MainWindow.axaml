@@ -20,556 +20,6 @@
         <SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">Transparent</SolidColorBrush>
     </Window.Resources>
 
-    <Window.Styles>
-
-        <FluentTheme />
-
-        <!-- Zentraler Style für alle Lucide-Vektor-Icons -->
-        <Style Selector="Path.Lucide">
-            <Setter Property="Fill" Value="Transparent"/>
-            <Setter Property="StrokeThickness" Value="1.5"/>
-            <Setter Property="StrokeLineCap" Value="Round"/>
-            <Setter Property="StrokeJoin" Value="Round"/>
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="Stretch" Value="Uniform"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="UseLayoutRounding" Value="True"/>
-        </Style>
-
-        <!--
-            Gemeinsame Designsprache aller Hauptseiten. Die Klassen halten
-            Farben, Radien und Abstände zentral, damit neue Tabs nicht erneut
-            mit leicht abweichenden Einzelwerten gestaltet werden.
-        -->
-        <Style Selector="Border.PageHeader">
-            <Setter Property="Background" Value="#151515"/>
-            <Setter Property="BorderBrush" Value="#414141"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Padding" Value="18"/>
-        </Style>
-        <Style Selector="Border.PageSurface">
-            <Setter Property="Background" Value="#151515"/>
-            <Setter Property="BorderBrush" Value="#414141"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
-        </Style>
-        <Style Selector="Border.ModuleCard">
-            <Setter Property="Background" Value="#1B1B1B"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="15"/>
-        </Style>
-        <Style Selector="Border.SystemCard">
-            <!-- Alle sechs Diagnosemodule bilden wieder ein ruhiges 2x3-Raster. -->
-            <Setter Property="Height" Value="155"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-        </Style>
-        <Style Selector="Border.IconTile">
-            <Setter Property="Width" Value="38"/>
-            <Setter Property="Height" Value="38"/>
-            <Setter Property="CornerRadius" Value="7"/>
-            <Setter Property="Background" Value="#151515"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="UseLayoutRounding" Value="True"/>
-        </Style>
-        <!-- Kompakte Faktenkarten verwenden dieselbe Hierarchie wie die
-             größeren Modul-Tags, bleiben im Audit-Cockpit aber platzsparend. -->
-        <Style Selector="Border.FactTag">
-            <Setter Property="Background" Value="#1B1B1B"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="7"/>
-            <Setter Property="Padding" Value="8"/>
-            <Setter Property="MinHeight" Value="48"/>
-        </Style>
-        <Style Selector="Border.FactTagIcon">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Background" Value="#151515"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="UseLayoutRounding" Value="True"/>
-        </Style>
-        <Style Selector="TextBlock.Eyebrow">
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style Selector="TextBlock.PageTitle">
-            <Setter Property="Foreground" Value="#F4F4F4"/>
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-        </Style>
-        <Style Selector="TextBlock.PageDescription">
-            <Setter Property="Foreground" Value="#D7D9D8"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-        </Style>
-        <Style Selector="TextBlock.ModuleTitle">
-            <!-- Modulnamen bleiben neutral; Icon und Interaktion tragen den Akzent. -->
-            <Setter Property="Foreground" Value="#F4F4F4"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="TextBlock.Muted">
-            <Setter Property="Foreground" Value="#D7D9D8"/>
-        </Style>
-        <Style Selector="TextBox.DataField">
-            <Setter Property="Background" Value="#0E0E0E"/>
-            <Setter Property="Foreground" Value="#D7D9D8"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="CornerRadius" Value="6"/>
-        </Style>
-
-        <Style Selector="TabItem">
-            <Setter Property="Foreground" Value="#969D99"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <!-- Die Auswahl bleibt vollständig innerhalb der 48px Navigation.
-                 So werden weder Border noch CornerRadius am Fensterrand geclippt. -->
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="MinHeight" Value="44"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="12,0"/>
-            <Setter Property="Margin" Value="0,2,3,2"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="TabItem:pointerover">
-            <Setter Property="Foreground" Value="#ECEEED"/>
-            <Setter Property="Background" Value="#2B2B2B"/>
-            <Setter Property="BorderBrush" Value="#505050"/>
-        </Style>
-        <Style Selector="TabItem:selected">
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="Background" Value="#1B2B21"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
-        </Style>
-        <Style Selector="TabItem:selected:pointerover">
-            <!-- Wie in der Bibel bleibt die aktive Auswahl beim Hover stabil. -->
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="Background" Value="#1B2B21"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
-        </Style>
-        <!-- Avalonia färbt beim Hover nicht den ContentPresenter, sondern den
-             inneren PART_LayoutRoot. Deshalb wird der kombinierte Zustand
-             hier gezielt überschrieben. -->
-        <Style Selector="TabItem:selected /template/ Border#PART_LayoutRoot">
-            <Setter Property="Background" Value="#1B2B21"/>
-            <Setter Property="TextElement.Foreground" Value="#00FF66"/>
-        </Style>
-        <Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
-            <Setter Property="Background" Value="#1B2B21"/>
-            <Setter Property="TextElement.Foreground" Value="#00FF66"/>
-        </Style>
-        <!-- Nur die Kopfzeile wird als Gruppe zentriert; der eigentliche
-             Seiteninhalt bleibt weiterhin über die volle Breite gestreckt. -->
-        <Style Selector="TabControl#MainTabs /template/ ItemsPresenter#PART_ItemsPresenter">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-
-        <!-- Chromloser Kopf einer Audit-Ergebniskarte. -->
-        <Style Selector="ToggleButton.AuditResultToggle">
-            <!-- Kategorie, Titel und Zusammenfassung dürfen jeweils unterschiedlich
-                 viele Zeilen belegen. Eine feste Kopfhöhe hält geschlossene Karten
-                 trotzdem bündig; nur der optionale Detailbereich wächst darunter. -->
-            <Setter Property="Height" Value="108"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Focusable" Value="False"/>
-        </Style>
-        <Style Selector="ToggleButton.AuditResultToggle /template/ ContentPresenter">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-        <Style Selector="ToggleButton.AuditResultToggle:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#282828"/>
-        </Style>
-        <Style Selector="ToggleButton.AuditResultToggle:checked /template/ ContentPresenter">
-            <!-- Der aufgeklappte Zustand darf keine zweite, nur auf den Kopf
-                 begrenzte Fläche erzeugen. Der Hintergrund der wachsenden
-                 Mutterkarte bleibt dadurch über die gesamte Höhe durchgehend. -->
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-        <Style Selector="ToggleButton.AuditResultToggle:checked Viewbox.AuditResultChevron">
-            <Setter Property="RenderTransform">
-                <RotateTransform Angle="180"/>
-            </Setter>
-        </Style>
-        <Style Selector="CheckBox">
-            <Setter Property="Cursor" Value="Hand" />
-        </Style>
-        <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
-            <Setter Property="Background" Value="#00FF66" />
-            <Setter Property="BorderBrush" Value="#00FF66" />
-        </Style>
-        <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
-            <Setter Property="Fill" Value="#000000" />
-        </Style>
-
-        <!-- Die gesamte Einstellungskarte arbeitet als Umschalter. Die kleine
-             Checkbox bleibt nur als gut erkennbarer Zustandsindikator sichtbar. -->
-        <Style Selector="ToggleButton.SettingCard">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="Background" Value="#1B1B1B"/>
-            <Setter Property="BorderBrush" Value="#3A3A3A"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="15"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border x:Name="SettingCardSurface"
-                            HorizontalAlignment="Stretch"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            Padding="{TemplateBinding Padding}">
-                        <ContentPresenter Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          HorizontalAlignment="Stretch"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="ToggleButton.SettingCard:pointerover /template/ Border#SettingCardSurface">
-            <Setter Property="Background" Value="#202020"/>
-            <Setter Property="BorderBrush" Value="#505050"/>
-        </Style>
-        <Style Selector="ToggleButton.SettingCard:checked /template/ Border#SettingCardSurface">
-            <Setter Property="Background" Value="#1C211E"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
-        </Style>
-        <Style Selector="ToggleButton.SettingCard:pressed /template/ Border#SettingCardSurface">
-            <Setter Property="Background" Value="#242424"/>
-        </Style>
-
-        <!-- Standard Copy Button -->
-        <Style Selector="Button.CopyBtn">
-            <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.CopyBtn Path.Lucide">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.CopyBtn StackPanel">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.CopyBtn TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="Button.CopyBtn /template/ ContentPresenter">
-            <Setter Property="Background" Value="#242424"/>
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="BorderBrush" Value="#484848"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-        <Style Selector="Button.CopyBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#2B2B2B"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
-        </Style>
-        <Style Selector="Button.CopyBtn:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="#202020"/>
-        </Style>
-        <!-- Projekt-Disclosure für lange Kontaktinformationen. -->
-        <Style Selector="ToggleButton.DisclosureBtn">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn StackPanel">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn Viewbox">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn /template/ ContentPresenter">
-            <!-- Ruhige Standardfläche wie bei den Kopieren-Buttons. Der
-                 Neon-Akzent bleibt auf Beschriftung und Chevron begrenzt. -->
-            <Setter Property="Background" Value="#242424"/>
-            <Setter Property="Foreground" Value="#00FF66"/>
-            <Setter Property="BorderBrush" Value="#484848"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="6"/>
-            <Setter Property="Padding" Value="11,7"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#2B2B2B"/>
-            <Setter Property="BorderBrush" Value="#505050"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn:checked /template/ ContentPresenter">
-            <Setter Property="Background" Value="#2B2B2B"/>
-            <Setter Property="BorderBrush" Value="#505050"/>
-        </Style>
-        <Style Selector="ToggleButton.DisclosureBtn:checked Viewbox.DisclosureChevron">
-            <Setter Property="RenderTransform">
-                <RotateTransform Angle="180"/>
-            </Setter>
-        </Style>
-
-        <!-- Nahtloser Header Block Button -->
-        <Style Selector="Button.HeaderBlockBtn">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="18"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Opacity" Value="1"/>
-            <!-- Das Fluent-Theme skaliert Buttons beim Drücken minimal.
-                 Für die fest mit dem Header verbundene Fläche darf sich jedoch
-                 weder die Geometrie noch der Inhalt bewegen. -->
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-            <Setter Property="Transitions">
-                <Transitions/>
-            </Setter>
-            <!-- Die Aktion bildet das rechte Abschlusssegment des Headers:
-                 links bündig und rechts mit demselben Radius wie die Mutterbox. -->
-            <Setter Property="CornerRadius" Value="0,9,9,0"/>
-            <!-- Ein eigenes Template verhindert, dass das Fluent-Theme beim
-                 Hover eine zweite, versetzte Buttonfläche darüber zeichnet. -->
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border x:Name="HeaderActionSurface"
-                            Background="#151515"
-                            BorderBrush="#00FF66"
-                            BorderThickness="1"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            ClipToBounds="True">
-                        <ContentPresenter x:Name="HeaderActionContent"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Padding="{TemplateBinding Padding}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pointerover /template/ Border#HeaderActionSurface">
-            <Setter Property="Background" Value="#242424"/>
-            <Setter Property="BorderBrush" Value="#00FF66"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed">
-            <Setter Property="Padding" Value="18"/>
-            <Setter Property="Opacity" Value="1"/>
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn /template/ Border#HeaderActionSurface">
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed /template/ Border#HeaderActionSurface">
-            <Setter Property="Background" Value="#202020"/>
-            <Setter Property="BorderBrush" Value="#00C851"/>
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn /template/ ContentPresenter#HeaderActionContent">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Opacity" Value="1"/>
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed /template/ ContentPresenter#HeaderActionContent">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Opacity" Value="1"/>
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed StackPanel">
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed Path">
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-        <Style Selector="Button.HeaderBlockBtn:pressed TextBlock">
-            <Setter Property="RenderTransform" Value="{x:Null}"/>
-        </Style>
-
-        <!-- Chromloser Profilbutton für das versteckte Easter Egg. -->
-        <Style Selector="Button.ProfileEasterEgg">
-            <!-- Die größere unsichtbare Fläche gibt dem Glow genügend Renderraum. -->
-            <Setter Property="Width" Value="110"/>
-            <Setter Property="Height" Value="110"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="ClipToBounds" Value="False"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <ContentPresenter Content="{TemplateBinding Content}"
-                                      HorizontalContentAlignment="Stretch"
-                                      VerticalContentAlignment="Stretch"
-                                      ClipToBounds="False"/>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="Border.ProfileImageFrame">
-            <Setter Property="Width" Value="70"/>
-            <Setter Property="Height" Value="70"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Width" Duration="0:0:0.16"/>
-                    <DoubleTransition Property="Height" Duration="0:0:0.16"/>
-                </Transitions>
-            </Setter>
-        </Style>
-        <Style Selector="Button.ProfileEasterEgg:pointerover Border.ProfileImageFrame">
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Height" Value="80"/>
-        </Style>
-        <Style Selector="Button.ProfileEasterEgg:pressed Border.ProfileImageFrame">
-            <Setter Property="Width" Value="76"/>
-            <Setter Property="Height" Value="76"/>
-        </Style>
-
-        <!-- Globale Scrollbar-Styles im HUD-Design -->
-
-        <Style Selector="ScrollViewer">
-            <!-- Eine reservierte 16px-Spur verhindert Layoutsprünge beim Scrollen. -->
-            <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
-            <Setter Property="AllowAutoHide" Value="False"/>
-        </Style>
-
-        <!-- Vertikale Scrollbar -->
-        <Style Selector="ScrollBar:vertical">
-            <Setter Property="Width" Value="16"/>
-            <Setter Property="MinWidth" Value="16"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Background="Transparent">
-                        <Track Name="PART_Track"
-                               Minimum="{TemplateBinding Minimum}"
-                               Maximum="{TemplateBinding Maximum}"
-                               Value="{TemplateBinding Value, Mode=TwoWay}"
-                               ViewportSize="{TemplateBinding ViewportSize}"
-                               Orientation="Vertical"
-                               IsDirectionReversed="True">
-
-                            <Thumb Name="PART_Thumb" Cursor="Hand" MinWidth="0" MinHeight="15">
-                                <Thumb.Template>
-                                    <ControlTemplate>
-                                        <Border Background="Transparent" HorizontalAlignment="Stretch">
-                                            <Border x:Name="ThumbBorder"
-                                                    Width="2"
-                                                    HorizontalAlignment="Center"
-                                                    Background="#585858"
-                                                    CornerRadius="1"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
-
-                        </Track>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-
-        <Style Selector="ScrollBar:vertical /template/ Thumb /template/ Border#ThumbBorder">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
-                </Transitions>
-            </Setter>
-        </Style>
-        <Style Selector="ScrollBar:vertical /template/ Thumb:pointerover /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
-        </Style>
-        <Style Selector="ScrollBar:vertical /template/ Thumb:pressed /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
-        </Style>
-
-        <!-- Horizontale Scrollbar; sie erscheint nur bei tatsächlich überbreitem Inhalt. -->
-        <Style Selector="ScrollBar:horizontal">
-            <Setter Property="Height" Value="16"/>
-            <Setter Property="MinHeight" Value="16"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Background="Transparent">
-                        <Track Name="PART_Track"
-                               Minimum="{TemplateBinding Minimum}"
-                               Maximum="{TemplateBinding Maximum}"
-                               Value="{TemplateBinding Value, Mode=TwoWay}"
-                               ViewportSize="{TemplateBinding ViewportSize}"
-                               Orientation="Horizontal"
-                               IsDirectionReversed="False">
-
-                            <Thumb Name="PART_Thumb" Cursor="Hand" MinHeight="0" MinWidth="15">
-                                <Thumb.Template>
-                                    <ControlTemplate>
-                                        <Border Background="Transparent" VerticalAlignment="Stretch">
-                                            <Border x:Name="ThumbBorder"
-                                                    Height="2"
-                                                    VerticalAlignment="Center"
-                                                    Background="#585858"
-                                                    CornerRadius="1"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
-
-                        </Track>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-
-        <Style Selector="ScrollBar:horizontal /template/ Thumb /template/ Border#ThumbBorder">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
-                </Transitions>
-            </Setter>
-        </Style>
-        <Style Selector="ScrollBar:horizontal /template/ Thumb:pointerover /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
-        </Style>
-        <Style Selector="ScrollBar:horizontal /template/ Thumb:pressed /template/ Border#ThumbBorder">
-            <Setter Property="Background" Value="#00FF66"/>
-        </Style>
-
-    </Window.Styles>
 
     <Grid RowDefinitions="*">
         <Grid.Background>
@@ -1250,19 +700,19 @@
                                                             Command="{Binding ExportReportCommand}"
                                                             HorizontalAlignment="Stretch"
                                                             Height="38"
-                                                            Classes="CopyBtn"
+                                                            Classes="CopyBtn TxtBtn"
                                                             CornerRadius="6"
                                                             ToolTip.Tip="Als Textdatei (.txt) exportieren">
                                                         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                            <Path Classes="Lucide" Stroke="#00FF66" Width="14" Height="14" Data="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"/>
-                                                            <TextBlock Text="TXT" FontSize="12" FontWeight="SemiBold" Foreground="#00FF66" VerticalAlignment="Center"/>
+                                                            <Path Classes="Lucide" Stroke="#FFD700" Width="14" Height="14" Data="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z M17 21v-8H7v8 M7 3v5h8"/>
+                                                            <TextBlock Text="TXT" FontSize="12" FontWeight="SemiBold" Foreground="#FFD700" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                     </Button>
                                                     <Button Grid.Column="2"
                                                             Command="{Binding ExportJsonReportCommand}"
                                                             HorizontalAlignment="Stretch"
                                                             Height="38"
-                                                            Classes="CopyBtn"
+                                                            Classes="CopyBtn JsonBtn"
                                                             CornerRadius="6"
                                                             ToolTip.Tip="Als strukturierte JSON-Datei (.json) exportieren">
                                                         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -1274,7 +724,7 @@
                                                             Command="{Binding ExportMarkdownReportCommand}"
                                                             HorizontalAlignment="Stretch"
                                                             Height="38"
-                                                            Classes="CopyBtn"
+                                                            Classes="CopyBtn MarkdownBtn"
                                                             CornerRadius="6"
                                                             ToolTip.Tip="Als GitHub-Markdown-Datei (.md) exportieren">
                                                         <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -1351,9 +801,9 @@
                                                     <ToggleButton x:Name="AuditResultDisclosure"
                                                                   Classes="AuditResultToggle">
                                                         <Grid ColumnDefinitions="*,Auto"
-                                                              ColumnSpacing="12"
+                                                              ColumnSpacing="14"
                                                               Margin="16,13,13,13">
-                                                            <StackPanel Spacing="5">
+                                                            <StackPanel Spacing="5" VerticalAlignment="Top">
                                                                 <TextBlock Text="{Binding Category}"
                                                                            Foreground="#89908C"
                                                                            FontSize="10"
@@ -1374,34 +824,66 @@
                                                                            TextTrimming="CharacterEllipsis"/>
                                                             </StackPanel>
 
-                                                            <StackPanel Grid.Column="1"
-                                                                        Spacing="10"
-                                                                        HorizontalAlignment="Right">
-                                                                <Border Background="#0E0E0E"
-                                                                        BorderBrush="{Binding BorderColor}"
-                                                                        BorderThickness="1"
+                                                            <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
+                                                                <StackPanel Grid.Row="0"
+                                                                            Orientation="Horizontal" 
+                                                                            Spacing="6" 
+                                                                            HorizontalAlignment="Right"
+                                                                            VerticalAlignment="Top">
+                                                                    <Border Background="#152E21"
+                                                                            BorderBrush="#336D4D"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="9"
+                                                                            Padding="7,3"
+                                                                            IsVisible="{Binding CanFix}"
+                                                                            VerticalAlignment="Center"
+                                                                            ToolTip.Tip="Ein automatischer Quick-Fix ist für diesen Befund verfügbar.">
+                                                                        <TextBlock Text="⚡"
+                                                                                   Foreground="#4ADE80"
+                                                                                   FontSize="11"
+                                                                                   FontWeight="Bold"
+                                                                                   VerticalAlignment="Center"
+                                                                                   HorizontalAlignment="Center"/>
+                                                                    </Border>
+                                                                    <Border Background="#0E0E0E"
+                                                                            BorderBrush="{Binding BorderColor}"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="9"
+                                                                            Padding="8,3"
+                                                                            VerticalAlignment="Center">
+                                                                        <TextBlock Text="{Binding StatusLabel}"
+                                                                                   Foreground="{Binding BorderColor}"
+                                                                                   FontSize="9"
+                                                                                   FontWeight="Bold"/>
+                                                                    </Border>
+                                                                </StackPanel>
+
+                                                                <Border Grid.Row="2"
                                                                         CornerRadius="9"
-                                                                        Padding="8,3">
-                                                                    <TextBlock Text="{Binding StatusLabel}"
-                                                                               Foreground="{Binding BorderColor}"
-                                                                               FontSize="9"
-                                                                               FontWeight="Bold"/>
+                                                                        Padding="11,4"
+                                                                        Background="#121212"
+                                                                        BorderBrush="#252525"
+                                                                        BorderThickness="1"
+                                                                        VerticalAlignment="Bottom"
+                                                                        HorizontalAlignment="Right"
+                                                                        Margin="0,10,0,0">
+                                                                    <Viewbox Classes="AuditResultChevron"
+                                                                             Width="12"
+                                                                             Height="12"
+                                                                             HorizontalAlignment="Center"
+                                                                             VerticalAlignment="Center"
+                                                                             RenderTransformOrigin="50%,50%">
+                                                                        <Canvas Width="24" Height="24">
+                                                                            <Path Fill="Transparent"
+                                                                                  Stroke="#A0A5A2"
+                                                                                  StrokeThickness="2"
+                                                                                  StrokeLineCap="Round"
+                                                                                  StrokeJoin="Round"
+                                                                                  Data="M6 9l6 6 6-6"/>
+                                                                        </Canvas>
+                                                                    </Viewbox>
                                                                 </Border>
-                                                                <Viewbox Classes="AuditResultChevron"
-                                                                         Width="14"
-                                                                         Height="14"
-                                                                         HorizontalAlignment="Center"
-                                                                         RenderTransformOrigin="50%,50%">
-                                                                    <Canvas Width="24" Height="24">
-                                                                        <Path Fill="Transparent"
-                                                                              Stroke="#89908C"
-                                                                              StrokeThickness="2"
-                                                                              StrokeLineCap="Round"
-                                                                              StrokeJoin="Round"
-                                                                              Data="M6 9l6 6 6-6"/>
-                                                                    </Canvas>
-                                                                </Viewbox>
-                                                            </StackPanel>
+                                                            </Grid>
                                                         </Grid>
                                                     </ToggleButton>
 
@@ -1421,6 +903,31 @@
                                                                        FontSize="11"
                                                                        LineHeight="17"
                                                                        TextWrapping="Wrap"/>
+
+                                                            <StackPanel Spacing="6" IsVisible="{Binding CanFix}" Margin="0,4,0,0">
+                                                                <Border Height="1" Background="#262626" Margin="0,4"/>
+                                                                <TextBlock Text="EMPFOHLENER QUICK-FIX"
+                                                                           Classes="Eyebrow"/>
+                                                                <TextBlock Text="{Binding FixDescription}"
+                                                                           Foreground="#A8B3AD"
+                                                                           FontSize="11"
+                                                                           TextWrapping="Wrap"/>
+                                                                <Button Command="{Binding ExecuteFixCommand}"
+                                                                        Content="⚡ Quick-Fix ausführen"
+                                                                        HorizontalAlignment="Left"
+                                                                        Classes="HeaderBlockBtn"
+                                                                        Foreground="#00FF66"
+                                                                        Padding="10,6"
+                                                                        FontSize="11"
+                                                                        FontWeight="Bold"
+                                                                        Margin="0,4,0,0"/>
+                                                                <TextBlock Text="{Binding FixStatusText}"
+                                                                           Foreground="#4ADE80"
+                                                                           FontSize="11"
+                                                                           FontWeight="SemiBold"
+                                                                           TextWrapping="Wrap"
+                                                                           IsVisible="{Binding FixStatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                                            </StackPanel>
                                                         </StackPanel>
                                                     </Border>
                                                 </Grid>

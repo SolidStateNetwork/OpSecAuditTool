@@ -13,6 +13,28 @@ public sealed class RecentFilesChecker : IOpSecChecker
 {
     public string Name => "Verlauf kürzlich geöffneter Dateien";
     public string Category => "Anti-Forensik / Hygiene";
+    public bool CanFix => true;
+    public string FixDescription => "Löscht den Verlauf (~/.local/share/recently-used.xbel) und schreibt eine leere XBEL-Struktur.";
+
+    public async Task<FixResult> FixAsync()
+    {
+        try
+        {
+            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string recentXbelPath = Path.Combine(homeDir, ".local", "share", "recently-used.xbel");
+            string emptyXbel = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<xbel version=\"1.0\"\n      xmlns:bookmark=\"http://www.freedesktop.org/standards/desktop-bookmarks\"\n      xmlns:mime=\"http://www.freedesktop.org/standards/shared-mime-info\">\n</xbel>";
+            if (File.Exists(recentXbelPath))
+            {
+                BackupService.BackupFile(recentXbelPath);
+            }
+            await File.WriteAllTextAsync(recentXbelPath, emptyXbel);
+            return new FixResult { Success = true, Message = "Verlauf kürlich geöffneter Dokumente wurde gelöscht (Sicherung im 'Backups'-Ordner)." };
+        }
+        catch (Exception ex)
+        {
+            return new FixResult { Success = false, Message = $"Fehler beim Löschen des Verlaufs: {ex.Message}" };
+        }
+    }
 
     public Task<CheckResult> ExecuteAsync()
     {
@@ -37,7 +59,10 @@ public sealed class RecentFilesChecker : IOpSecChecker
                     Category = Category,
                     Status = CheckStatus.Pass,
                     Summary = "Keine Dateihistorie vorhanden.",
-                    Details = "Die Datei `~/.local/share/recently-used.xbel` existiert nicht."
+                    Details = "Die Datei `~/.local/share/recently-used.xbel` existiert nicht.",
+                    CanFix = CanFix,
+                    FixDescription = FixDescription,
+                    Checker = this
                 });
             }
 
@@ -51,7 +76,10 @@ public sealed class RecentFilesChecker : IOpSecChecker
                     Category = Category,
                     Status = CheckStatus.Pass,
                     Summary = "Dateihistorie ist leer.",
-                    Details = "Die Protokolldatei für zuletzt geöffnete Dateien ist vollständig leer."
+                    Details = "Die Protokolldatei für zuletzt geöffnete Dateien ist vollständig leer.",
+                    CanFix = CanFix,
+                    FixDescription = FixDescription,
+                    Checker = this
                 });
             }
 
@@ -78,7 +106,10 @@ public sealed class RecentFilesChecker : IOpSecChecker
                     Status = CheckStatus.Warning,
                     Summary = $"{itemCount} geöffnete Dateien in der Desktop-Historie protokolliert!",
                     Details = $"In `~/.local/share/recently-used.xbel` wurden {itemCount} historische Dateizugriffe gefunden.\n\n" +
-                              "Hinweis: Diese Datei speichert Pfade und Metadaten zu allen geöffneten Medien und Dokumenten. Lösche die Datei oder verlinke sie auf `/dev/null`."
+                              "Hinweis: Diese Datei speichert Pfade und Metadaten zu allen geöffneten Medien und Dokumenten. Lösche die Datei oder verlinke sie auf `/dev/null`.",
+                    CanFix = CanFix,
+                    FixDescription = FixDescription,
+                    Checker = this
                 });
             }
 
