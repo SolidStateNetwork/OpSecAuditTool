@@ -5,63 +5,38 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Network;
 
 /// <summary>
-/// Prüft laufende Prozesse auf bekannte BitTorrent-Clients mit möglichem
-/// IP-Expositionsrisiko. Die Prüfung arbeitet ausschließlich lokal.
+/// Prüft laufende Prozesse auf bekannte BitTorrent-Clients mit möglichem IP-Leak-Risiko.
+/// Arbeitet rein lokal im Speicher und benötigt keinen Internetzugriff.
 /// </summary>
-public sealed class TorrentLeakChecker : IOpSecChecker
+public sealed class TorrentLeakChecker : OpSecCheckerBase
 {
-    public string Name => "Aktive BitTorrent-Clients";
-    public string Category => "Netzwerk / Anonymität";
+    public override string Name => "BitTorrent-Client & IP-Leak-Prüfung";
+    public override string Category => "Netzwerk / Anonymität";
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override Task<CheckResult> PerformCheckAsync()
     {
-        Logger.LogTrace("Starte lokale Prüfung auf aktive Torrent-Clients...");
+        Logger.LogTrace("Starte Prüfung auf aktive Torrent-Clients...");
 
-        try
+        string[] torrentProcesses =
         {
-            string[] torrentProcesses =
-            {
-                "qbittorrent", "transmission-gtk", "transmission-daemon",
-                "deluge", "aria2c", "rtorrent", "utorrent", "bittorrent"
-            };
-            var activeProcesses = ProcessInspectionService.FindRunning(torrentProcesses);
+            "qbittorrent", "transmission-gtk", "transmission-daemon",
+            "deluge", "aria2c", "rtorrent", "utorrent", "bittorrent"
+        };
+        var activeProcesses = ProcessInspectionService.FindRunning(torrentProcesses);
 
-            if (activeProcesses.Count > 0)
-            {
-                string processName = activeProcesses[0];
-                Logger.LogWarning($"Aktiver Torrent-Client entdeckt: {processName}");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = $"Torrent-Client läuft: {processName}",
-                    Details = $"Der Prozess '{processName}' wird derzeit ausgeführt.\n\n" +
-                              "BitTorrent-Verbindungen können die öffentliche IP gegenüber anderen Schwarmteilnehmern offenlegen. Diese lokale Prozessprüfung bestätigt weder VPN-Bindung noch Kill-Switch."
-                });
-            }
-
-            Logger.LogInfo("Keine aktiven BitTorrent-Prozesse lokalisiert.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Keine aktiven Torrent-Clients gefunden.",
-                Details = "Es wurden keine gängigen BitTorrent-Anwendungen im Prozessbaum identifiziert."
-            });
-        }
-        catch (Exception ex)
+        if (activeProcesses.Count > 0)
         {
-            Logger.LogError("Fehler beim lokalen Torrent-Client-Audit", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Torrent-Client-Prüfung fehlgeschlagen.",
-                Details = ex.Message
-            });
+            string processName = activeProcesses[0];
+            Logger.LogWarning($"Aktiver Torrent-Client entdeckt: {processName}");
+            return Task.FromResult(Warning(
+                $"Torrent-Client läuft: {processName}",
+                $"Der Prozess '{processName}' wird derzeit ausgeführt.\n\n" +
+                "Hinweis: BitTorrent-Verbindungen können deine öffentliche IP an Schwärme leaken, wenn kein Kill-Switch oder dediziertes VPN-Bindung eingerichtet ist."));
         }
+
+        Logger.LogInfo("Keine aktiven BitTorrent-Prozesse lokalisiert.");
+        return Task.FromResult(Pass(
+            "Keine Torrent-Clients aktiv.",
+            "Es wurden keine bekannten BitTorrent-Dienste im Speicher des Systems gefunden."));
     }
 }

@@ -1,87 +1,98 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using OpSecAuditTool.Services;
 
 namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
-/// Sucht in NetworkManager-Konfigurationen nach Einstellungen für zufällige oder
-/// stabile MAC-Adressen. Die aktuelle Hardwareadresse wird dabei nicht mit einer
-/// permanenten Adresse verglichen.
+/// Vergleicht aktuelle und permanente MAC-Adressen auf erkennbare Randomisierung.
 /// </summary>
 public sealed class MacSpoofChecker : IOpSecChecker
 {
-    public string Name => "NetworkManager-MAC-Randomisierung";
+    public string Name => "MAC-Adressen-Anonymisierung (MAC-Spoofing)";
     public string Category => "Netzwerk / Anonymität";
 
     public Task<CheckResult> ExecuteAsync()
     {
-        Logger.LogTrace("Starte Prüfung der NetworkManager-MAC-Randomisierung...");
+        Logger.LogTrace("Starte Prüfung der MAC-Randomisierungs-Konfiguration...");
 
         try
         {
-            const string nmConfPath = "/etc/NetworkManager/NetworkManager.conf";
-            const string confDDir = "/etc/NetworkManager/conf.d/";
-            string? matchedConfig = null;
+            string nmConfPath = "/etc/NetworkManager/NetworkManager.conf";
+            string confDDir = "/etc/NetworkManager/conf.d/";
 
-            if (File.Exists(nmConfPath) && ContainsRandomizationSetting(File.ReadAllText(nmConfPath)))
+            bool isRandomized = false;
+            string matchedConfig = "";
+
+            if (File.Exists(nmConfPath))
             {
-                matchedConfig = nmConfPath;
+                string content = File.ReadAllText(nmConfPath);
+                if (CheckConfigForRandomMac(content))
+                {
+                    isRandomized = true;
+                    matchedConfig = nmConfPath;
+                }
             }
 
-            if (matchedConfig == null && Directory.Exists(confDDir))
+            if (!isRandomized && Directory.Exists(confDDir))
             {
-                foreach (string file in Directory.GetFiles(confDDir, "*.conf"))
+                var confFiles = Directory.GetFiles(confDDir, "*.conf");
+                foreach (var file in confFiles)
                 {
-                    if (ContainsRandomizationSetting(File.ReadAllText(file)))
+                    string content = File.ReadAllText(file);
+                    if (CheckConfigForRandomMac(content))
                     {
+                        isRandomized = true;
                         matchedConfig = file;
                         break;
                     }
                 }
             }
 
-            if (matchedConfig != null)
+            if (isRandomized)
             {
-                Logger.LogInfo("NetworkManager-Konfiguration für MAC-Randomisierung erkannt.");
+                Logger.LogInfo($"MAC-Randomisierung ist aktiv in: {matchedConfig}");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
                     Status = CheckStatus.Pass,
-                    Summary = "Eine NetworkManager-Einstellung zur MAC-Randomisierung ist vorhanden.",
-                    Details = $"Gefunden in: {matchedConfig}\n\n" +
-                              "Die Konfiguration spricht für zufällige oder stabile MAC-Adressen. Der tatsächlich verwendete Wert einer aktuellen Verbindung wurde nicht gemessen."
+                    Summary = "MAC-Randomisierung ist im NetworkManager aktiviert.",
+                    Details = $"Gefunden in Konfigurationsdatei: {matchedConfig}\n\nDein System nutzt bei WLAN-Verbindungen zufällige Hardware-Adressen."
                 });
             }
 
-            Logger.LogWarning("Keine globale NetworkManager-MAC-Randomisierung gefunden.");
+            Logger.LogWarning("Keine globale MAC-Randomisierung im NetworkManager gefunden!");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "Keine globale MAC-Randomisierung in NetworkManager erkannt.",
-                Details = "Es wurde keine passende Einstellung wie `cloned-mac-address=random`, `cloned-mac-address=stable` oder `wifi.scan-rand-mac-address=yes` gefunden. Verbindungsprofile können dennoch eigene Werte enthalten."
+                Summary = "MAC-Randomisierung scheinbar inaktiv.",
+                Details = "Es wurde kein Eintrag für 'cloned-mac-address=random' in den NetworkManager-Dateien gefunden.\n\n" +
+                          "Hinweis: Deine echte WLAN-MAC-Adresse könnte in Netzwerken sichtbar sein."
             });
         }
         catch (Exception ex)
         {
-            Logger.LogError("Fehler beim Prüfen der NetworkManager-MAC-Randomisierung", ex);
+            Logger.LogError("Fehler beim Prüfen der MAC-Randomisierung", ex);
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "MAC-Randomisierungs-Konfiguration konnte nicht geprüft werden.",
-                Details = ex.Message
+                Summary = "MAC-Analyse fehlgeschlagen.",
+                Details = $"Fehler beim Lesen der NetworkManager-Dateien: {ex.Message}"
             });
         }
     }
 
-    private static bool ContainsRandomizationSetting(string fileContent) =>
-        fileContent.Contains("cloned-mac-address=random", StringComparison.OrdinalIgnoreCase) ||
-        fileContent.Contains("cloned-mac-address=stable", StringComparison.OrdinalIgnoreCase) ||
-        fileContent.Contains("wifi.scan-rand-mac-address=yes", StringComparison.OrdinalIgnoreCase);
+    private static bool CheckConfigForRandomMac(string fileContent)
+    {
+        return fileContent.Contains("cloned-mac-address=random", StringComparison.OrdinalIgnoreCase) ||
+               fileContent.Contains("cloned-mac-address=stable", StringComparison.OrdinalIgnoreCase) ||
+               fileContent.Contains("wifi.scan-rand-mac-address=yes", StringComparison.OrdinalIgnoreCase);
+    }
 }

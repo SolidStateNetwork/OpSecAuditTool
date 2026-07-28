@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using OpSecAuditTool.Services;
@@ -7,97 +8,124 @@ namespace OpSecAuditTool.Core.Forensics;
 
 /// <summary>
 /// Prüft Benutzer-Papierkörbe auf zurückgebliebene Dateien und Metadaten.
+/// Inklusive fehlerresistentem Scan von ~ und externen Datenträgern (.Trash-1000).
 /// </summary>
-public sealed class TrashChecker : IOpSecChecker
+public sealed class TrashChecker : OpSecCheckerBase
 {
-    public string Name => "Papierkorb-Inhalts- & Spurenprüfung";
-    public string Category => "Anti-Forensik / Hygiene";
+    public override string Name => "Papierkorb-Inhalts- & Spurenprüfung";
+    public override string Category => "Anti-Forensik / Hygiene";
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override Task<CheckResult> PerformCheckAsync()
     {
-        Logger.LogTrace("Starte Prüfung des Papierkorbs auf verbleibende Dateien...");
+        Logger.LogTrace("Starte Prüfung der Papierkörbe auf verbleibende Dateien...");
 
+        string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        var trashDirs = new List<string>
+        {
+            Path.Combine(homeDir, ".local", "share", "Trash", "files")
+        };
+
+        // Überprüfe auch nach FreeDesktop-Standard gemountete Volumes auf .Trash-1000
         try
         {
-            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string trashFilesDir = Path.Combine(homeDir, ".local", "share", "Trash", "files");
+            string mediaDir = "/run/media";
+            if (!Directory.Exists(mediaDir)) mediaDir = "/media";
 
-            if (!Directory.Exists(trashFilesDir))
+            if (Directory.Exists(mediaDir))
             {
-                Logger.LogInfo("Kein Papierkorb-Ordner gefunden.");
-                return Task.FromResult(new CheckResult
+                foreach (var userDir in Directory.GetDirectories(mediaDir))
                 {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = "Papierkorb existiert nicht / ist leer.",
-                    Details = "Das Verzeichnis `~/.local/share/Trash/files/` ist nicht vorhanden."
-                });
-            }
-
-            var entries = Directory.GetFileSystemEntries(trashFilesDir);
-            int count = entries.Length;
-
-            if (count > 0)
-            {
-                long totalBytes = 0;
-                foreach (var entry in entries)
-                {
-                    if (File.Exists(entry))
+                    foreach (var mountDir in Directory.GetDirectories(userDir))
                     {
-                        totalBytes += new FileInfo(entry).Length;
-                    }
-                    else if (Directory.Exists(entry))
-                    {
-                        totalBytes += GetDirectorySize(entry);
+                        string trash1000 = Path.Combine(mountDir, ".Trash-1000", "files");
+                        if (Directory.Exists(trash1000))
+                        {
+                            trashDirs.Add(trash1000);
+                        }
                     }
                 }
-
-                double sizeMb = Math.Round((double)totalBytes / (1024 * 1024), 2);
-
-                Logger.LogWarning($"Papierkorb enthält {count} Objekt(e) ({sizeMb} MB)!");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = $"{count} Objekt(e) ({sizeMb} MB) im Papierkorb gefunden!",
-                    Details = $"Im Ordner `~/.local/share/Trash/files/` befinden sich {count} gelöschte Dateien/Ordner.\n\n" +
-                              "Hinweis: Objekte im Papierkorb verbleiben unverschlüsselt auf dem Datenträger. Leere den Papierkorb regelmäßig oder nutze `shred` / `rm` im Terminal."
-                });
             }
-
-            Logger.LogTrace("Papierkorb ist vollständig leer.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Papierkorb ist vollständig leer.",
-                Details = "Es befinden sich keine verbleibenden Objekte in `~/.local/share/Trash/files/`."
-            });
         }
         catch (Exception ex)
         {
-            Logger.LogError("Fehler beim Trash Audit", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Trash Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
-            });
+            Logger.LogTrace($"Externe Medienprüfung auf Trash übersprungen: {ex.Message}");
         }
+
+        int totalCount = 0;
+        long totalBytes = 0;
+        var activeTrashLocations = new List<string>();
+
+        foreach (var trashDir in trashDirs)
+        {
+            if (!Directory.Exists(trashDir)) continue;
+
+            try
+            {
+                var entries = Directory.GetFileSystemEntries(trashDir);
+                if (entries.Length > 0)
+                {
+                    totalCount += entries.Length;
+                    long dirBytes = GetDirectorySizeSafe(trashDir);
+                    totalBytes += dirBytes;
+                    activeTrashLocations.Add($"{trashDir} ({entries.Length} Objekte)");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogTrace($"Zugriff auf Trash-Ordner {trashDir} eingeschränkt: {ex.Message}");
+            }
+        }
+
+        if (totalCount > 0)
+        {
+            double sizeMb = Math.Round((double)totalBytes / (1024 * 1024), 2);
+            string locationList = string.Join("\n• ", activeTrashLocations);
+
+            Logger.LogWarning($"Papierkorb enthält {totalCount} Objekt(e) (~{sizeMb} MB)!");
+            return Task.FromResult(Warning(
+                $"{totalCount} Objekt(e) (~{sizeMb} MB) in Papierkörben gefunden!",
+                $"In folgenden Papierkorb-Verzeichnissen befinden sich gelöschte Dateien/Ordner:\n• {locationList}\n\n" +
+                "Hinweis: Objekte im Papierkorb verbleiben unverschlüsselt auf dem Datenträger. Leere den Papierkorb regelmäßig oder nutze `shred` / `rm` im Terminal."));
+        }
+
+        Logger.LogTrace("Alle überprüften Papierkörbe sind vollständig leer.");
+        return Task.FromResult(Pass(
+            "Papierkorb ist vollständig leer.",
+            "Es befinden sich keine verbleibenden Objekte in `~/.local/share/Trash/files/` oder auf externen Medien."));
     }
 
-    private static long GetDirectorySize(string path)
+    private static long GetDirectorySizeSafe(string rootPath)
     {
         long size = 0;
+        var stack = new Stack<string>();
+        stack.Push(rootPath);
 
-        foreach (string file in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+        while (stack.Count > 0)
         {
-            size += new FileInfo(file).Length;
+            string currentDir = stack.Pop();
+            try
+            {
+                foreach (string file in Directory.GetFiles(currentDir))
+                {
+                    try
+                    {
+                        size += new FileInfo(file).Length;
+                    }
+                    catch
+                    {
+                        // Einzelne unlesbare Dateien überspringen
+                    }
+                }
+
+                foreach (string subDir in Directory.GetDirectories(currentDir))
+                {
+                    stack.Push(subDir);
+                }
+            }
+            catch
+            {
+                // Unlesbare Unterordner sicher überspringen (kein Crash bei Permission Denied)
+            }
         }
 
         return size;

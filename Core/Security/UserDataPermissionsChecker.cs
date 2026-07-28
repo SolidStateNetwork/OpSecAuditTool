@@ -27,7 +27,7 @@ public sealed class UserDataPermissionsChecker : IOpSecChecker
                 {
                     Name = Name,
                     Category = Category,
-                    Status = CheckStatus.Fail,
+                    Status = CheckStatus.Warning,
                     Summary = "Nicht-Linux System übersprungen.",
                     Details = "Zugriffsrechte-Audit ist aktuell für Linux-Systeme optimiert."
                 });

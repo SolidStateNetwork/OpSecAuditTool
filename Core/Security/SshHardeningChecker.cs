@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using OpSecAuditTool.Services;
@@ -7,40 +8,61 @@ namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
 /// Bewertet sicherheitsrelevante Optionen der lokalen OpenSSH-Serverkonfiguration.
+/// Unterstützt moderne Linux-Distributionen inklusive /etc/ssh/sshd_config.d/*.conf.
 /// </summary>
-public sealed class SshHardeningChecker : IOpSecChecker
+public sealed class SshHardeningChecker : OpSecCheckerBase
 {
-    public string Name => "SSH-Dienst-Härtungsprüfung";
-    public string Category => "System / Härtung";
+    public override string Name => "SSH-Dienst-Härtungsprüfung";
+    public override string Category => "System / Härtung";
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override Task<CheckResult> PerformCheckAsync()
     {
         Logger.LogTrace("Starte Prüfung der SSH-Server-Härtung...");
 
-        try
+        bool isSshdRunning = ProcessInspectionService.IsAnyRunning("sshd");
+
+        if (!isSshdRunning)
         {
-            bool isSshdRunning = ProcessInspectionService.IsAnyRunning("sshd");
+            Logger.LogInfo("SSH Server (sshd) läuft nicht.");
+            return Task.FromResult(Pass(
+                "SSH Server ist inaktiv.",
+                "Der SSH-Daemon ('sshd') läuft nicht im Hintergrund. Keine Fernwartungs-Schnittstelle geöffnet."));
+        }
 
-            if (!isSshdRunning)
+        var configFiles = new List<string>();
+        string mainConfig = "/etc/ssh/sshd_config";
+        string dropInDir = "/etc/ssh/sshd_config.d";
+
+        if (File.Exists(mainConfig))
+        {
+            configFiles.Add(mainConfig);
+        }
+
+        if (Directory.Exists(dropInDir))
+        {
+            try
             {
-                Logger.LogInfo("SSH Server (sshd) läuft nicht.");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = "SSH Server ist inaktiv.",
-                    Details = "Der SSH-Daemon ('sshd') läuft nicht im Hintergrund. Keine Fernwartungs-Schnittstelle geöffnet."
-                });
+                configFiles.AddRange(Directory.GetFiles(dropInDir, "*.conf"));
             }
-
-            string mainConfig = "/etc/ssh/sshd_config";
-            bool rootAllowed = true;
-            bool passwordAuthAllowed = true;
-
-            if (File.Exists(mainConfig))
+            catch (Exception ex)
             {
-                var lines = File.ReadAllLines(mainConfig);
+                Logger.LogTrace($"Konnte {dropInDir} nicht auslesen: {ex.Message}");
+            }
+        }
+
+        bool rootAllowed = true;
+        bool passwordAuthAllowed = true;
+        var inspectedFiles = new List<string>();
+
+        foreach (var file in configFiles)
+        {
+            if (!File.Exists(file)) continue;
+
+            try
+            {
+                var lines = File.ReadAllLines(file);
+                inspectedFiles.Add(Path.GetFileName(file));
+
                 foreach (var line in lines)
                 {
                     string trimmed = line.Trim();
@@ -51,52 +73,43 @@ public sealed class SshHardeningChecker : IOpSecChecker
                     {
                         rootAllowed = false;
                     }
+                    else if (trimmed.StartsWith("PermitRootLogin yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        rootAllowed = true;
+                    }
 
                     if (trimmed.StartsWith("PasswordAuthentication no", StringComparison.OrdinalIgnoreCase))
                     {
                         passwordAuthAllowed = false;
                     }
+                    else if (trimmed.StartsWith("PasswordAuthentication yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        passwordAuthAllowed = true;
+                    }
                 }
             }
-
-            if (!rootAllowed && !passwordAuthAllowed)
+            catch (Exception ex)
             {
-                Logger.LogInfo("SSH-Server ist vollständig gehärtet.");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = "SSH Server ist streng gehärtet.",
-                    Details = "• Root-Login ist deaktiviert.\n• Passwort-Authentifizierung ist deaktiviert (nur Key-Auth erlaubt)."
-                });
+                Logger.LogTrace($"Konfigurationsdatei {file} übersprungen: {ex.Message}");
             }
-
-            string warningDetails = "Der SSH-Server ('sshd') ist aktiv, aber nicht vollständig gehärtet:\n";
-            if (rootAllowed) warningDetails += "• Root-Login ist möglicherweise erlaubt ('PermitRootLogin yes').\n";
-            if (passwordAuthAllowed) warningDetails += "• Passwort-Login ist erlaubt ('PasswordAuthentication yes').\n";
-
-            Logger.LogWarning("SSH-Server läuft mit potenziell schwacher Konfiguration!");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "SSH Server ist aktiv & unvollständig gehärtet!",
-                Details = warningDetails + "\nEmpfehlung: Nutze ausschließlich SSH-Keys und setze 'PermitRootLogin no' sowie 'PasswordAuthentication no' in /etc/ssh/sshd_config."
-            });
         }
-        catch (Exception ex)
+
+        if (!rootAllowed && !passwordAuthAllowed)
         {
-            Logger.LogError("Fehler bei der SSH-Härtungsprüfung", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "SSH Audit fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
-            });
+            Logger.LogInfo("SSH-Server ist vollständig gehärtet.");
+            return Task.FromResult(Pass(
+                "SSH Server ist streng gehärtet.",
+                $"Geprüfte Konfigurationsdateien: {string.Join(", ", inspectedFiles)}\n\n• Root-Login ist deaktiviert.\n• Passwort-Authentifizierung ist deaktiviert (nur Key-Auth erlaubt)."));
         }
+
+        string warningDetails = "Der SSH-Server ('sshd') ist aktiv, aber nicht vollständig gehärtet:\n";
+        if (rootAllowed) warningDetails += "• Root-Login ist möglicherweise erlaubt ('PermitRootLogin yes/unconfigured').\n";
+        if (passwordAuthAllowed) warningDetails += "• Passwort-Login ist erlaubt ('PasswordAuthentication yes/unconfigured').\n";
+
+        Logger.LogWarning("SSH-Server läuft mit potenziell schwacher Konfiguration!");
+        return Task.FromResult(Warning(
+            "SSH Server ist aktiv & unvollständig gehärtet!",
+            warningDetails + $"\nGeprüfte Konfigurationsdateien: {string.Join(", ", inspectedFiles)}\n" +
+            "Empfehlung: Nutze ausschließlich SSH-Keys und setze 'PermitRootLogin no' sowie 'PasswordAuthentication no' in /etc/ssh/sshd_config oder in /etc/ssh/sshd_config.d/."));
     }
 }

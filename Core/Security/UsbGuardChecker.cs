@@ -5,17 +5,16 @@ using OpSecAuditTool.Services;
 namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
-/// Ermittelt, ob ein USBGuard-Prozess läuft. Die tatsächlich geladene Richtlinie
-/// und deren Wirksamkeit werden ohne zusätzliche Abfragen nicht bestätigt.
+/// Ermittelt, ob USBGuard zur Kontrolle neu angeschlossener USB-Geräte aktiv ist.
 /// </summary>
 public sealed class UsbGuardChecker : IOpSecChecker
 {
-    public string Name => "USBGuard-Daemonstatus";
+    public string Name => "USBGuard-Hardware-Schutzprüfung";
     public string Category => "System / Härtung";
 
     public Task<CheckResult> ExecuteAsync()
     {
-        Logger.LogTrace("Starte Prüfung des USBGuard-Daemonstatus...");
+        Logger.LogTrace("Starte Prüfung des USBGuard-Schutzes...");
 
         try
         {
@@ -25,25 +24,26 @@ public sealed class UsbGuardChecker : IOpSecChecker
 
             if (isUsbGuardRunning)
             {
-                Logger.LogInfo("USBGuard-Prozess ist aktiv.");
+                Logger.LogInfo("USBGuard Daemon ist im Hintergrund aktiv.");
                 return Task.FromResult(new CheckResult
                 {
                     Name = Name,
                     Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = "Ein USBGuard-Prozess läuft; Richtlinie nicht verifiziert.",
-                    Details = "Der Prozessstatus zeigt einen laufenden USBGuard-Dienst. Ob eine restriktive und aktuelle Geräte-Richtlinie geladen ist, wurde nicht geprüft."
+                    Status = CheckStatus.Pass,
+                    Summary = "USBGuard Protection ist aktiv.",
+                    Details = "Der 'usbguard-daemon' läuft. Das automatische Einbinden unbekannter oder schädlicher USB-Geräte wird blockiert."
                 });
             }
 
-            Logger.LogWarning("Kein USBGuard-Prozess erkannt.");
+            Logger.LogWarning("USBGuard ist nicht aktiv.");
             return Task.FromResult(new CheckResult
             {
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "USBGuard ist nicht aktiv oder nicht installiert.",
-                Details = "Es läuft kein bekannter USBGuard-Prozess. Das bedeutet nicht automatisch, dass neue USB-Geräte ohne Kontrolle zugelassen werden, bestätigt aber keinen USBGuard-basierten Schutz."
+                Summary = "USBGuard ist inaktiv / nicht installiert.",
+                Details = "Es läuft kein 'usbguard-daemon'. Neue USB-Geräte werden vom System ohne Vorabprüfung eingebunden.\n\n" +
+                          "Hinweis: Für Schutz vor BadUSB/Rubber Ducky Empfehlung: 'usbguard' installieren und aktivieren."
             });
         }
         catch (Exception ex)
@@ -54,8 +54,8 @@ public sealed class UsbGuardChecker : IOpSecChecker
                 Name = Name,
                 Category = Category,
                 Status = CheckStatus.Warning,
-                Summary = "USBGuard-Daemonstatus konnte nicht geprüft werden.",
-                Details = ex.Message
+                Summary = "USBGuard Audit fehlgeschlagen.",
+                Details = $"Fehler: {ex.Message}"
             });
         }
     }

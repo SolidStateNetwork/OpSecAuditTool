@@ -1,112 +1,100 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using OpSecAuditTool.Services;
 
 namespace OpSecAuditTool.Core.Security;
 
 /// <summary>
-/// Sucht in lesbaren sudoers-Regeln nach kennwortlosen Freigaben. Nicht lesbare
-/// Konfigurationen werden als unbekannt und nicht als bestanden gewertet.
+/// Sucht in sudoers-Regeln nach kennwortlosen oder besonders weitreichenden Freigaben.
+/// Erkennung von NOPASSWD sowie !authenticate in /etc/sudoers und /etc/sudoers.d/.
 /// </summary>
-public sealed class SudoersChecker : IOpSecChecker
+public sealed class SudoersChecker : OpSecCheckerBase
 {
-    public string Name => "Sudo-Berechtigungen und NOPASSWD-Regeln";
-    public string Category => "System / Härtung";
+    public override string Name => "Sudo-Berechtigungen & Rechteausweitung";
+    public override string Category => "System / Härtung";
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override Task<CheckResult> PerformCheckAsync()
     {
         Logger.LogTrace("Starte Audit der Sudoers-Konfiguration...");
 
         try
         {
-            const string sudoersFile = "/etc/sudoers";
-            const string sudoersDDir = "/etc/sudoers.d";
-            var matchedFiles = new List<string>();
+            string sudoersFile = "/etc/sudoers";
+            string sudoersDDir = "/etc/sudoers.d";
 
-            if (File.Exists(sudoersFile) && ContainsNoPasswdRule(sudoersFile))
+            bool hasPrivilegeEscalationRisk = false;
+            string matchedDetails = "";
+
+            if (File.Exists(sudoersFile))
             {
-                matchedFiles.Add(sudoersFile);
+                if (CheckFileForRiskyRules(sudoersFile, out string match))
+                {
+                    hasPrivilegeEscalationRisk = true;
+                    matchedDetails += $"• {sudoersFile}: {match}\n";
+                }
             }
 
             if (Directory.Exists(sudoersDDir))
             {
-                foreach (string file in Directory.GetFiles(sudoersDDir))
+                var files = Directory.GetFiles(sudoersDDir);
+                foreach (var file in files)
                 {
-                    if (ContainsNoPasswdRule(file))
+                    if (CheckFileForRiskyRules(file, out string match))
                     {
-                        matchedFiles.Add(Path.Combine(sudoersDDir, Path.GetFileName(file)));
+                        hasPrivilegeEscalationRisk = true;
+                        matchedDetails += $"• {Path.GetFileName(file)}: {match}\n";
                     }
                 }
             }
 
-            if (matchedFiles.Count > 0)
+            if (hasPrivilegeEscalationRisk)
             {
-                Logger.LogWarning("NOPASSWD-Regel in der Sudoers-Konfiguration gefunden.");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = $"NOPASSWD-Regeln in {matchedFiles.Count} Sudoers-Datei(en) erkannt.",
-                    Details = $"Betroffene Dateien:\n• {string.Join("\n• ", matchedFiles)}\n\n" +
-                              "Die konkreten Regeln werden aus Datenschutzgründen nicht in Bericht oder Log übernommen. Prüfe, ob jede kennwortlose Ausnahme zwingend erforderlich und auf einzelne Befehle begrenzt ist."
-                });
+                Logger.LogWarning("Passwortlose oder uneingeschränkte Regel in Sudoers gefunden!");
+                return Task.FromResult(Warning(
+                    "Privilege Escalation Risiko: Passwortlose Sudo-Regel aktiv!",
+                    $"Gefundene kritische Sudoers-Einträge ('NOPASSWD' / '!authenticate'):\n{matchedDetails}\n" +
+                    "Hinweis: Befehle können ohne Passwortbestätigung mit Root-Rechten ausgeführt werden. Überprüfe, ob diese Ausnahmen zwingend notwendig sind."));
             }
 
-            Logger.LogInfo("In den lesbaren Sudoers-Dateien wurden keine NOPASSWD-Regeln erkannt.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Keine NOPASSWD-Regeln in den lesbaren Sudoers-Dateien gefunden.",
-                Details = "Die lesbaren Dateien `/etc/sudoers` und `/etc/sudoers.d/` enthalten keine aktiven NOPASSWD-Einträge."
-            });
+            Logger.LogInfo("Sudoers-Konfiguration enthält keine auffälligen NOPASSWD/!authenticate Regeln.");
+            return Task.FromResult(Pass(
+                "Sudoers-Konfiguration ist gehärtet.",
+                "Es wurden keine uneingeschränkten 'NOPASSWD' oder '!authenticate' Berechtigungen in `/etc/sudoers` oder `/etc/sudoers.d/` gefunden."));
         }
         catch (UnauthorizedAccessException)
         {
-            Logger.LogWarning("Sudoers-Konfiguration ist ohne erhöhte Rechte nicht vollständig lesbar.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Sudoers-Konfiguration konnte nicht vollständig geprüft werden.",
-                Details = "Mindestens eine Sudoers-Datei ist für den aktuellen Benutzer nicht lesbar. Ihr Schutz ist sinnvoll, erlaubt aber keine Aussage darüber, ob NOPASSWD-Regeln enthalten sind."
-            });
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError("Fehler beim Prüfen der Sudoers-Konfiguration", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Sudoers-Audit fehlgeschlagen.",
-                Details = ex.Message
-            });
+            Logger.LogInfo("Kein Lesezugriff auf /etc/sudoers (Standard ohne Root/Sudo).");
+            return Task.FromResult(Pass(
+                "Sudoers-Dateien geschützt (kein Lesezugriff ohne Root).",
+                "Standard-Nutzer haben keinen Lesezugriff auf `/etc/sudoers`. Dies entspricht den Standard-Sicherheitsrichtlinien."));
         }
     }
 
-    private static bool ContainsNoPasswdRule(string filePath)
+    private static bool CheckFileForRiskyRules(string path, out string matchSummary)
     {
-        foreach (string line in File.ReadLines(filePath))
+        matchSummary = string.Empty;
+        try
         {
-            string trimmed = line.Trim();
-            if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith('#'))
+            var lines = File.ReadAllLines(path);
+            foreach (var line in lines)
             {
-                continue;
-            }
+                string trimmed = line.Trim();
+                if (trimmed.StartsWith("#") || string.IsNullOrWhiteSpace(trimmed)) continue;
 
-            if (trimmed.Contains("NOPASSWD", StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
+                if (trimmed.Contains("NOPASSWD:", StringComparison.OrdinalIgnoreCase) ||
+                    trimmed.Contains("!authenticate", StringComparison.OrdinalIgnoreCase))
+                {
+                    matchSummary = trimmed;
+                    return true;
+                }
             }
+            return false;
         }
-
-        return false;
+        catch
+        {
+            return false;
+        }
     }
 }

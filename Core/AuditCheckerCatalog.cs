@@ -10,8 +10,8 @@ namespace OpSecAuditTool.Core;
 
 /// <summary>
 /// Erstellt ausschließlich Checker, die auf dem aktuellen Betriebssystem sinnvoll
-/// ausgewertet werden können. Dadurch verfälschen plattformspezifische Prüfungen
-/// weder die Fehlerzahl noch die Prozentberechnung anderer Systeme.
+/// ausgewertet werden können. Dadurch verfälschen Linux-only-Prüfungen unter Windows
+/// weder die Fehlerzahl noch die Prozentberechnung.
 /// </summary>
 public static class AuditCheckerCatalog
 {
@@ -49,6 +49,7 @@ public static class AuditCheckerCatalog
     [
         new IpPublicChecker(),
         new DnsLeakChecker(),
+        new OpenPortsChecker(),
         new ExternalListenerChecker(),
         new HostnameTimezoneChecker(),
         new TorrentLeakChecker(),

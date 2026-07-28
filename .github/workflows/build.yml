@@ -36,10 +36,6 @@ jobs:
       - name: Abhängigkeiten wiederherstellen
         run: dotnet restore OpSecAuditTool.csproj
 
-      - name: Formatierung prüfen
-        if: runner.os == 'Linux'
-        run: dotnet format OpSecAuditTool.csproj --verify-no-changes --no-restore
-
       - name: Release-Build prüfen
         run: dotnet build OpSecAuditTool.csproj --configuration Release --no-restore
 

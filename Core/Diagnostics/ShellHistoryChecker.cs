@@ -9,117 +9,108 @@ namespace OpSecAuditTool.Core.Diagnostics;
 
 /// <summary>
 /// Untersucht bekannte Shell-History-Dateien auf persistente Befehlsverläufe.
+/// Nutzt asynchrones Streaming (OOM-resistent) und moderne Developer/AI-Keywords.
 /// </summary>
-public sealed class ShellHistoryChecker : IOpSecChecker
+public sealed class ShellHistoryChecker : OpSecCheckerBase
 {
-    public string Name => "Prüfung der Shell-Historie auf sensible Daten";
-    public string Category => "Anti-Forensik / Hygiene";
+    public override string Name => "Prüfung der Shell-Historie auf sensible Daten";
+    public override string Category => "Anti-Forensik / Hygiene";
 
-    private readonly string[] _sensitiveKeywords = new[]
+    private static readonly string[] SensitiveKeywords =
     {
         "api_key", "apikey",
         "password=", "passwd=",
         "bearer ", "token=",
         "private_key", "-----BEGIN",
-        "sudo -S", "curl -u"
+        "sudo -S", "curl -u",
+        "export AWS_ACCESS_KEY_ID=", "export AWS_SECRET_ACCESS_KEY=",
+        "export OPENAI_API_KEY=", "export GEMINI_API_KEY=",
+        "mysql -u", "pg_dump", "sshpass", "docker login", "npm login"
     };
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override async Task<CheckResult> PerformCheckAsync()
     {
-        Logger.LogTrace("Starte Prüfung der Shell-Historien...");
+        Logger.LogTrace("Starte speichereffiziente Prüfung der Shell-Historien...");
 
-        try
+        string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+        var historyFiles = new List<string>
         {
-            string homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            Path.Combine(homeDir, ".bash_history"),
+            Path.Combine(homeDir, ".zsh_history"),
+            Path.Combine(homeDir, ".local", "share", "fish", "fish_history")
+        };
 
-            var historyFiles = new List<string>
+        if (OperatingSystem.IsWindows())
+        {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            historyFiles.Add(Path.Combine(
+                appData, "Microsoft", "Windows", "PowerShell", "PSReadLine", "ConsoleHost_history.txt"));
+            historyFiles.Add(Path.Combine(
+                homeDir, "AppData", "Roaming", "Microsoft", "Windows", "PowerShell", "PSReadLine", "Visual Studio Code Host_history.txt"));
+        }
+
+        int totalFound = 0;
+        var detectedDetails = new List<string>();
+
+        foreach (var file in historyFiles)
+        {
+            if (!File.Exists(file)) continue;
+
+            Logger.LogTrace($"Prüfe History-Datei: {Path.GetFileName(file)}");
+
+            int matchCountForFile = 0;
+            int linesRead = 0;
+            const int maxLinesToScan = 15000;
+
+            try
             {
-                Path.Combine(homeDir, ".bash_history"),
-                Path.Combine(homeDir, ".zsh_history"),
-                Path.Combine(homeDir, ".local", "share", "fish", "fish_history")
-            };
-            if (OperatingSystem.IsWindows())
-            {
-                string appData = Environment.GetFolderPath(
-                    Environment.SpecialFolder.ApplicationData);
-                historyFiles.Add(Path.Combine(
-                    appData,
-                    "Microsoft",
-                    "Windows",
-                    "PowerShell",
-                    "PSReadLine",
-                    "ConsoleHost_history.txt"));
-                historyFiles.Add(Path.Combine(
-                    homeDir,
-                    "AppData",
-                    "Roaming",
-                    "Microsoft",
-                    "Windows",
-                    "PowerShell",
-                    "PSReadLine",
-                    "Visual Studio Code Host_history.txt"));
-            }
-
-            int totalFound = 0;
-            var detectedDetails = new List<string>();
-
-            foreach (var file in historyFiles)
-            {
-                if (!File.Exists(file)) continue;
-
-                Logger.LogTrace($"Prüfe History-Datei: {Path.GetFileName(file)}");
-                var lines = File.ReadAllLines(file);
-
-                var matches = lines
-                    .Where(line => _sensitiveKeywords.Any(kw => line.Contains(kw, StringComparison.OrdinalIgnoreCase)))
-                    .Distinct()
-                    .Take(5)
-                    .ToList();
-
-                if (matches.Count > 0)
+                await foreach (string line in File.ReadLinesAsync(file))
                 {
-                    totalFound += matches.Count;
-                    detectedDetails.Add($"• {Path.GetFileName(file)}: {matches.Count} verdächtige Eintrag/Einträge");
+                    linesRead++;
+                    if (linesRead > maxLinesToScan) break;
+
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    for (int i = 0; i < SensitiveKeywords.Length; i++)
+                    {
+                        if (line.Contains(SensitiveKeywords[i], StringComparison.OrdinalIgnoreCase))
+                        {
+                            matchCountForFile++;
+                            break;
+                        }
+                    }
+
+                    // Begrenze auf maximal 50 relevante Treffer pro Datei für performante Zählung
+                    if (matchCountForFile >= 50) break;
+                }
+
+                if (matchCountForFile > 0)
+                {
+                    totalFound += matchCountForFile;
+                    detectedDetails.Add($"• {Path.GetFileName(file)}: {matchCountForFile} verdächtige Eintrag/Einträge");
                 }
             }
-
-            if (totalFound > 0)
+            catch (Exception ex)
             {
-                string summaryDetails = string.Join("\n", detectedDetails);
-                Logger.LogWarning($"Verdächtige Einträge in der Shell-Historie gefunden ({totalFound} Treffer).");
-
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = $"{totalFound} potenzielle Zugangsdaten/Tokens in Shell-History!",
-                    Details = $"In folgenden Dateien wurden sensible Muster gefunden:\n{summaryDetails}\n\n" +
-                              "Hinweis: Bereinige deine Shell-History oder setze 'HISTSIZE=0' / 'HISTFILESIZE=0' für maximale Anonymität."
-                });
+                Logger.LogTrace($"Konnte {file} nicht vollständig parsen: {ex.Message}");
             }
+        }
 
-            Logger.LogTrace("Keine sensiblen Klartext-Muster in den Shell-Historien gefunden.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Pass,
-                Summary = "Shell-Historien sind unauffällig / sauber.",
-                Details = "In den vorhandenen Bash-, Zsh-, Fish- und PowerShell-Historien wurden keine typischen Klartext-Passwörter oder API-Keys entdeckt."
-            });
-        }
-        catch (Exception ex)
+        if (totalFound > 0)
         {
-            Logger.LogError("Fehler beim Prüfen der Shell-Historie", ex);
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Shell-History Check fehlgeschlagen.",
-                Details = $"Fehler: {ex.Message}"
-            });
+            string summaryDetails = string.Join("\n", detectedDetails);
+            Logger.LogWarning($"Verdächtige Einträge in der Shell-Historie gefunden ({totalFound} Treffer).");
+
+            return Warning(
+                $"{totalFound} potenzielle Zugangsdaten/Tokens in Shell-History!",
+                $"In folgenden Dateien wurden sensible Muster (API-Keys, AWS/AI-Tokens, Passwörter) gefunden:\n{summaryDetails}\n\n" +
+                "Hinweis: Bereinige deine Shell-History oder setze 'HISTSIZE=0' / 'HISTFILESIZE=0' in sensitiven Terminals für maximale Anonymität.");
         }
+
+        Logger.LogInfo("Keine bekannten Passwörter oder API-Tokens in den Shell-Historien gefunden.");
+        return Pass(
+            "Shell-Historien sind frei von typischen Zugangsdaten.",
+            "Die durchsuchten History-Dateien (bash/zsh/fish/PowerShell) wiesen keine verdächtigen Befehlsmuster mit Zugangsdaten auf.");
     }
 }

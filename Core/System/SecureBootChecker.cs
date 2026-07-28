@@ -7,80 +7,86 @@ namespace OpSecAuditTool.Core.System;
 
 /// <summary>
 /// Ermittelt den UEFI-Secure-Boot-Zustand unter Linux.
+/// Nutzt natives Sysfs-Parsing mit automatischem Fallback auf mokutil --sb-state.
 /// </summary>
-public sealed class SecureBootChecker : IOpSecChecker
+public sealed class SecureBootChecker : OpSecCheckerBase
 {
-    public string Name => "UEFI-Secure-Boot-Status";
-    public string Category => "System / Härtung";
+    public override string Name => "UEFI Secure Boot Statusprüfung";
+    public override string Category => "System / Härtung";
 
-    public Task<CheckResult> ExecuteAsync()
+    protected override async Task<CheckResult> PerformCheckAsync()
     {
         Logger.LogTrace("Starte Prüfung des Secure-Boot-Status...");
 
-        try
+        string efiPath = "/sys/firmware/efi";
+
+        if (!Directory.Exists(efiPath))
         {
-            const string efiPath = "/sys/firmware/efi";
+            Logger.LogWarning("System läuft im Legacy/CSM-Modus (kein UEFI).");
+            return Warning(
+                "Legacy BIOS Modus aktiv (Kein UEFI).",
+                "Das System wurde im Legacy-BIOS/CSM-Modus gebootet. Secure Boot steht in dieser Konfiguration nicht zur Verfügung.");
+        }
 
-            if (!Directory.Exists(efiPath))
+        string efivarsPath = "/sys/firmware/efi/efivars";
+        bool? isSecureBootEnabled = null;
+
+        if (Directory.Exists(efivarsPath))
+        {
+            try
             {
-                Logger.LogWarning("System läuft ohne erkennbare UEFI-Schnittstelle.");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Warning,
-                    Summary = "Kein UEFI-Secure-Boot-Status verfügbar.",
-                    Details = "Das System wurde möglicherweise im Legacy-BIOS-/CSM-Modus gestartet. Secure Boot steht in dieser Konfiguration nicht zur Verfügung."
-                });
-            }
-
-            const string efivarsPath = "/sys/firmware/efi/efivars";
-            bool isSecureBootEnabled = false;
-
-            if (Directory.Exists(efivarsPath))
-            {
-                string[] files = Directory.GetFiles(efivarsPath, "SecureBoot-*");
+                var files = Directory.GetFiles(efivarsPath, "SecureBoot-*");
                 if (files.Length > 0)
                 {
-                    byte[] data = File.ReadAllBytes(files[0]);
-                    isSecureBootEnabled = data.Length >= 5 && data[4] == 1;
+                    byte[] data = await File.ReadAllBytesAsync(files[0]);
+                    if (data.Length >= 5)
+                    {
+                        isSecureBootEnabled = (data[4] == 1);
+                    }
                 }
             }
-
-            if (isSecureBootEnabled)
+            catch (Exception ex)
             {
-                Logger.LogInfo("Secure Boot ist im UEFI aktiv.");
-                return Task.FromResult(new CheckResult
-                {
-                    Name = Name,
-                    Category = Category,
-                    Status = CheckStatus.Pass,
-                    Summary = "Secure Boot ist aktiviert.",
-                    Details = "Der UEFI-Secure-Boot-Status ist aktiv. Das erschwert das Starten nicht vertrauenswürdiger Boot-Komponenten."
-                });
+                Logger.LogTrace($"Direktes Lesen von efivars verwehrt: {ex.Message}");
             }
+        }
 
-            Logger.LogWarning("Secure Boot ist im UEFI deaktiviert oder nicht lesbar.");
-            return Task.FromResult(new CheckResult
-            {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Secure Boot ist deaktiviert oder nicht eindeutig lesbar.",
-                Details = "Das System läuft im UEFI-Modus, aber die Secure-Boot-Variable bestätigt keinen aktiven Schutz."
-            });
-        }
-        catch (Exception ex)
+        // Fallback über mokutil --sb-state, falls efivars ohne Root nicht zugänglich oder leer waren
+        if (isSecureBootEnabled == null)
         {
-            Logger.LogError("Fehler bei der Secure-Boot-Prüfung", ex);
-            return Task.FromResult(new CheckResult
+            try
             {
-                Name = Name,
-                Category = Category,
-                Status = CheckStatus.Warning,
-                Summary = "Secure-Boot-Audit fehlgeschlagen.",
-                Details = ex.Message
-            });
+                var mokResult = await ShellCommandService.ExecuteAsync("mokutil", "--sb-state");
+                if (mokResult.IsSuccess && !string.IsNullOrWhiteSpace(mokResult.StandardOutput))
+                {
+                    if (mokResult.StandardOutput.Contains("SecureBoot enabled", StringComparison.OrdinalIgnoreCase))
+                    {
+                        isSecureBootEnabled = true;
+                    }
+                    else if (mokResult.StandardOutput.Contains("SecureBoot disabled", StringComparison.OrdinalIgnoreCase))
+                    {
+                        isSecureBootEnabled = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogTrace($"mokutil Fallback nicht möglich: {ex.Message}");
+            }
         }
+
+        if (isSecureBootEnabled == true)
+        {
+            Logger.LogInfo("Secure Boot ist im UEFI aktiv und schützt den Boot-Prozess.");
+            return Pass(
+                "Secure Boot ist aktiv.",
+                "Der UEFI-Bootloader und der Kernel sind vor Manipulationen (Evil Maid / Bootkit-Angriffe) geschützt.");
+        }
+
+        Logger.LogWarning("Secure Boot ist im UEFI deaktiviert oder konnte nicht verifiziert werden.");
+        return Warning(
+            "Secure Boot ist deaktiviert oder inaktiv.",
+            "Das System läuft im UEFI-Modus, jedoch ist Secure Boot nicht aktiviert.\n\n" +
+            "Hinweis: Aktiviere Secure Boot im Mainboard-UEFI, um die Bootloader-Integrität zu sichern.");
     }
 }
