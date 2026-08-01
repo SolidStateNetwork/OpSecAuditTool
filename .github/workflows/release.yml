@@ -66,7 +66,7 @@ jobs:
           Compress-Archive -Path $packageDirectory -DestinationPath "release/$package.zip"
 
       - name: Release-Artefakt hochladen
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.platform }}
           path: release/OpSecAuditTool-${{ github.ref_name }}-${{ matrix.platform }}.*
